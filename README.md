@@ -1,46 +1,74 @@
-# Getting Started with Create React App
+# 💚 WEBTOON ERP PROJECT - Frontend 💚
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🔉 프로젝트 소개
 
-## Available Scripts
+> 
 
-In the project directory, you can run:
+<br />
 
-### `npm start`
+## 🌱 핵심 기능
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1️⃣ 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2️⃣ 
 
-### `npm test`
+3️⃣
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+<br />
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 👩🏻‍💻 We are
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+|                                    🌈 박지은 🌈                                 |                                   🍀 노소희 🍀                                   |
+| :------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/107592904?v=4" width="200px" /> | <img src="https://avatars.githubusercontent.com/u/109736890?v=4" width="200px" /> |
+|                     [@jieunyy](https://github.com/jieunyy)                       |                     [@SO-HUII](https://github.com/SO-HUII)                       |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+<br />
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## ⚒️ 기술 스택
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| 역할                 | 종류                                                                                                                                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Library              | ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black)                                                                                                                |
+| Programming Language | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black)                                                                                             |
+| Styling              | ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)                                                                           |
+| Data Fetching        |                                                                                                         |
+| Formatting           | ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white) |
+| Package Manager      | ![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)                                                                                                            |
+| Version Control      | ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)  |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<br />
 
-## Learn More
+## ✅ 커밋 컨벤션
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| 제목        | 내용                                                                             |
+| ----------- | -------------------------------------------------------------------------------- |
+| init        | 작업 세팅 커밋 (패키지 설치 등)                                                  |
+| feat        | 새로운 기능을 추가할 경우 커밋                                                   |
+| build       | 빌드 관련 파일 수정에 대한 커밋                                                  |
+| style       | 기능에 영향을 주지 않는 커밋 (코드 순서, 문법, 포맷 수정에 대한 커밋)             |
+| design      | CSS 등 사용자 UI 디자인 변경에 관한 커밋                                         |
+| fix         | 버그 수정에 대한 커밋                                                            |
+| refactor    | 코드 리팩토링에 대한 커밋                                                        |
+| docs        | 문서를 수정한 경우, 파일 삭제, 파일명 수정 등에 대한 커밋 ex) README.md           |
+| chore       | 패키지 매니저를 설정하는 경우, 주석 추가 등 자잘한 수정에 관한 커밋               |
+| test        | 테스트 코드 수정에 대한 커밋                                                     |
+| code review | 코드 리뷰 반영에 대한 커밋                                                       |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+<br />
+
+## 📦 폴더구조
+
+```
+📦
+
+```
+
