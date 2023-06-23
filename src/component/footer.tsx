@@ -1,5 +1,6 @@
 const Footer = () => {
-    <>
+    return(
+        <>
         <nav>
             <a href="" target='_blank'>Blog</a>
             <a href="" target='_blank'>Github</a>
@@ -10,6 +11,7 @@ const Footer = () => {
             <span>Copyright 2022. 저자. All Rights Reserved: </span>
         </p>
     </>
+    )
 }
 
 export default Footer;
