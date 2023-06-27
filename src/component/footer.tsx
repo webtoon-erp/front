@@ -6,9 +6,9 @@ const Footer = () => {
             <a href="" target='_blank'>Github</a>
         </nav>
         <p>
-            <span>저자: </span>
+            <span>기업명: </span>
             <span>이메일: </span>
-            <span>Copyright 2022. 저자. All Rights Reserved: </span>
+            <span>Copyright 2023. 기업명. All Rights Reserved: </span>
         </p>
     </>
     )
