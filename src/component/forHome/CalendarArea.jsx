@@ -30,7 +30,7 @@ const CalendarArea = () => {
   return (
     <div className={`calendar-area ${isLoading ? 'loading' : ''}`}>
       {isLoading ? (
-        <div className="skeleton-loader"></div>
+        <div className="skeleton-loader"/>
       ) : (
         <FullCalendar defaultView="dayGridMonth" plugins={[dayGridPlugin]} events={events} />
       )}
