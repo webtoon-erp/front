@@ -8,11 +8,11 @@ const MainContainer = styled.div`
 `;
 
 const CalendarContainer = styled.div`
-  width: 50%;
+  width: 60%;
 `;
 
 const NoticeContainer = styled.div`
-  width: 50%;
+  width: 40%;
 `;
 
 export default function Home (){
@@ -22,6 +22,9 @@ export default function Home (){
               <CalendarContainer>
                   <CalendarArea />
               </CalendarContainer>
+              <NoticeContainer>
+                <NoticeArea />
+              </NoticeContainer>
             </MainContainer>
             
         </>
