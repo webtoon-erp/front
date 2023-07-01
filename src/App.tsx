@@ -22,16 +22,18 @@ import ToonView from './pages/webtoon/toonView';
 import EpRequestAdd from './pages/electropayment/epRequestAdd';
 import EpRequestList from './pages/electropayment/epRequestList';
 import EpRequestView from './pages/electropayment/epRequestView';
+import NavBar from './component/navBar';
+import Header from './component/header';
 
 function App() {
   return (
     <>
     <Router>
       <header>
-
+        <Header />
       </header>
       <aside>
-
+        <NavBar />
       </aside>
       <main>
         <Routes>

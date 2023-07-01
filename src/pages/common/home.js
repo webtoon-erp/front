@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import CalendarArea from '../../component/forHome/CalendarArea';
 import NoticeArea from '../../component/forHome/NoticeArea';
+import Header from '../../component/header';
+import NavBar from '../../component/navBar';
 
 const MainContainer = styled.div`
   display: flex;
@@ -26,7 +28,6 @@ export default function Home (){
                 <NoticeArea />
               </NoticeContainer>
             </MainContainer>
-            
         </>
     )
 }
