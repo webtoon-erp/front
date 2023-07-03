@@ -13,22 +13,11 @@ const Header: React.FC = () => {
             <HeaderStyle>
                     <ContentStyle>
                     <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="images/Naver_Webtoon_logo.png" />
-                        <Space direction="vertical">
-                            <Search 
-                                placeholder="search anything!"
-                                allowClear
-                                enterButton={
-                                    <Button
-                                        type="primary"
-                                        style={{ backgroundColor: '#00D465' }}
-                                    >Search
-                                    </Button>
-                                }
-                                size="large"
-                                onSearch={onSearch}
-                            />
-                        </Space>
-                        <BellOutlined />
+                        <div>
+                            <CancelBtn>Logout</CancelBtn>
+                            <BellOutlined />
+                        </div>
+                        
                     </ContentStyle>
             </HeaderStyle>
     )
@@ -51,11 +40,27 @@ const ContentStyle = styled.div`
     height: 100%;
     margin: 0 auto;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 `;
 
 
 const ImgStyle = styled.img`
     width: 68px;
     height: 68px;
+`
+
+const CancelBtn = styled.button`
+    width: 70px;
+    height: 23px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 50px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 30px 0px 0px;
 `
