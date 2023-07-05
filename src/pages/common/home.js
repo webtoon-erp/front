@@ -4,10 +4,11 @@ import NoticeArea from '../../component/forHome/NoticeArea';
 
 const MainContainer = styled.div`
   display: flex;
-  justify-content: center;
 `;
 
 const CalendarContainer = styled.div`
+  margin-top: 80px;
+  margin-left: 20px;
   width: 60%;
 `;
 
@@ -26,7 +27,6 @@ export default function Home (){
                 <NoticeArea />
               </NoticeContainer>
             </MainContainer>
-            
         </>
     )
 }

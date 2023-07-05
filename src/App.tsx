@@ -22,45 +22,49 @@ import ToonView from './pages/webtoon/toonView';
 import EpRequestAdd from './pages/electropayment/epRequestAdd';
 import EpRequestList from './pages/electropayment/epRequestList';
 import EpRequestView from './pages/electropayment/epRequestView';
+import NavBar from './component/navBar';
+import Header from './component/header';
 
 function App() {
   return (
     <>
     <Router>
       <header>
-
+        <Header />
       </header>
-      <aside>
-
-      </aside>
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/notice" element={<Notice />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/hrAdd" element={<HrAdd />} />
-          <Route path="/hrAttendance" element={<HrAttendance/>} />
-          <Route path="/hrProfileListView" element={<HrProfileListView />} />
-          <Route path="/hrProfileState" element={<HrProfileState />} />
-          <Route path="/hrProfileView" element={<HrProfileView />} />
-          <Route path="/hrUpdate" element={<HrUpdate />} />
-          <Route path="/hrVacationRequest" element={<HrVacationRequest />} />
-          <Route path="/hrVacationView" element={<HrVacationView />} />
-          <Route path="/hrView" element={<HrView />} />
-          <Route path="/hrWholeState" element={<HrWholeState />} />
-          <Route path="/itPastRequestList" element={<ItPastReqeustList />} />
-          <Route path="/itRequestAdd" element={<ItRequestAdd />} />
-          <Route path="/itRequestListView" element={<ItRequestListView />} />
-          <Route path="/itRequestView" element={<ItRequestView />} />
-          <Route path="/toonAdd" element={<ToonAdd />} />
-          <Route path="/toonView" element={<ToonView />} />
-          <Route path="/epRequestAdd" element={<EpRequestAdd />} />
-          <Route path="/epRequestList" element={<EpRequestList />} />
-          <Route path="/epRequestView" element={<EpRequestView />} />
-
-        </Routes>
-      </main>
+        <div style={{ display: 'flex' }}>
+        <aside>
+            <NavBar />
+          </aside>
+        
+          <main style={{ flex: 1 }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/notice" element={<Notice />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/hrAdd" element={<HrAdd />} />
+              <Route path="/hrAttendance" element={<HrAttendance/>} />
+              <Route path="/hrProfileListView" element={<HrProfileListView />} />
+              <Route path="/hrProfileState" element={<HrProfileState />} />
+              <Route path="/hrProfileView" element={<HrProfileView />} />
+              <Route path="/hrUpdate" element={<HrUpdate />} />
+              <Route path="/hrVacationRequest" element={<HrVacationRequest />} />
+              <Route path="/hrVacationView" element={<HrVacationView />} />
+              <Route path="/hrView" element={<HrView />} />
+              <Route path="/hrWholeState" element={<HrWholeState />} />
+              <Route path="/itPastRequestList" element={<ItPastReqeustList />} />
+              <Route path="/itRequestAdd" element={<ItRequestAdd />} />
+              <Route path="/itRequestListView" element={<ItRequestListView />} />
+              <Route path="/itRequestView" element={<ItRequestView />} />
+              <Route path="/toonAdd" element={<ToonAdd />} />
+              <Route path="/toonView" element={<ToonView />} />
+              <Route path="/epRequestAdd" element={<EpRequestAdd />} />
+              <Route path="/epRequestList" element={<EpRequestList />} />
+              <Route path="/epRequestView" element={<EpRequestView />} />
+            </Routes>
+          </main>
+          </div>
       <footer>
         
       </footer>

@@ -8,6 +8,7 @@ const colors = {
   ph: "#16C79A",
   white: '#F8F1F1',
   ff: '#FFFFFF',
+  btn: '#00D465',
 };
 
 const fonts = {
