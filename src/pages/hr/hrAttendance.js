@@ -3,14 +3,14 @@ import DepartmentVacation from '../../component/forHr/forHrAttendance/Department
 import TodayAttendance from '../../component/forHr/forHrAttendance/TodayAttendance';
 import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain';
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
-import WholeVaction from '../../component/forHr/forHrAttendance/WholeVaction';
+import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  padding-top: 70px;
-  padding-left: 60px;
+  padding-top: 40px;
+  padding-left: 5%;
 `;
 
 const TodayContainer = styled.div`
@@ -32,6 +32,46 @@ const RightColumn = styled.div`
   flex-direction: column;
 `;
 
+const Title = styled.div`
+  font-size: 30px;
+  padding-top: 120px;
+  padding-left: 4%;
+  font-weight: bold;
+`;
+
+export default function HrAttendance() {
+  return (
+    <>
+        <Title>근태 관리</Title>
+    
+        <Container>
+            <LeftColumn>
+                <WholeAttendance />
+            </LeftColumn>
+
+            <RightColumn> 
+
+                <TodayContainer>
+                    <TodayAttendance />
+                </TodayContainer>
+            
+                <FlexContainer>
+                    <Container>
+                    <VacationRemain />
+                    <WorkExtension />
+                    </Container>
+
+                    <Container>
+                    <WholeVaction />
+                    <DepartmentVacation />
+                    </Container>
+                </FlexContainer>
+            </RightColumn>
+        </Container>
+    </>
+  );
+}
+=======
 export default function HrAttendance() {
   return (
     <Container>
@@ -60,5 +100,4 @@ export default function HrAttendance() {
     </Container>
   );
 }
-
 
