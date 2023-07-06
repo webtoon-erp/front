@@ -24,6 +24,7 @@ import EpRequestList from './pages/electropayment/epRequestList';
 import EpRequestView from './pages/electropayment/epRequestView';
 import NavBar from './component/navBar';
 import Header from './component/header';
+import HrMyAttendance from './pages/hr/hrMyAttendance';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/hrAdd" element={<HrAdd />} />
               <Route path="/hrAttendance" element={<HrAttendance/>} />
+              <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>
               <Route path="/hrProfileListView" element={<HrProfileListView />} />
               <Route path="/hrProfileState" element={<HrProfileState />} />
               <Route path="/hrProfileView" element={<HrProfileView />} />
