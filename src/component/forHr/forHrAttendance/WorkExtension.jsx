@@ -72,4 +72,3 @@ export default function WorkExtension() {
       <canvas ref={chartRef} width="200" height="300"></canvas>
   </div>)
   ;
-}
