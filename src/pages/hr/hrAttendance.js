@@ -3,8 +3,8 @@ import DepartmentVacation from '../../component/forHr/forHrAttendance/Department
 import TodayAttendance from '../../component/forHr/forHrAttendance/TodayAttendance';
 import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain';
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
-import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
+import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 
 const Container = styled.div`
   display: flex;
@@ -62,7 +62,7 @@ export default function HrAttendance() {
                     </Container>
 
                     <Container>
-                    <WholeVaction />
+                    <WholeVacation />
                     <DepartmentVacation />
                     </Container>
                 </FlexContainer>
@@ -71,33 +71,3 @@ export default function HrAttendance() {
     </>
   );
 }
-=======
-export default function HrAttendance() {
-  return (
-    <Container>
-        <LeftColumn>
-            <WholeAttendance />
-        </LeftColumn>
-
-        <RightColumn> 
-
-            <TodayContainer>
-                <TodayAttendance />
-            </TodayContainer>
-        
-            <FlexContainer>
-                <Container>
-                <VacationRemain />
-                <WorkExtension />
-                </Container>
-
-                <Container>
-                <WholeVaction />
-                <DepartmentVacation />
-                </Container>
-            </FlexContainer>
-        </RightColumn>
-    </Container>
-  );
-}
-

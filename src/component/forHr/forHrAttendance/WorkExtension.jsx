@@ -69,6 +69,6 @@ export default function WorkExtension() {
   return (
   <div className="ag-theme-alpine" style={{ height: '300px', width: '100%' }}>
       <h2>월별 연장근무 시간 추이</h2>
-      <canvas ref={chartRef} width="200" height="300"></canvas>
+      <canvas ref={chartRef} width="200" height="300" />
   </div>)
-  ;
+}
