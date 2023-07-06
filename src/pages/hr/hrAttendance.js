@@ -3,7 +3,6 @@ import DepartmentVacation from '../../component/forHr/forHrAttendance/Department
 import TodayAttendance from '../../component/forHr/forHrAttendance/TodayAttendance';
 import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain';
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
-import WholeVaction from '../../component/forHr/forHrAttendance/WholeVaction';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
 
 const Container = styled.div`

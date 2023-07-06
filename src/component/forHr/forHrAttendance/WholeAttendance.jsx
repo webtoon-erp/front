@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import './WholeAttendance.css';
 
 export default function WholeAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -34,6 +35,7 @@ export default function WholeAttendance() {
       <AgGridReact
         columnDefs={columnDefs}
         rowData={rowData}
+        suppressColumnVirtualisation
         rowClass="custom-row"
       />
     </div>
