@@ -1,12 +1,7 @@
 import styled from "styled-components";
 import theme from "../style/theme";
 import { BellOutlined } from '@ant-design/icons';
-import { Button, Input, Space } from 'antd';
 import React from 'react';
-
-const { Search } = Input;
-
-const onSearch = (value: string) => console.log(value);
 
 const Header: React.FC = () => {
     return (
@@ -14,10 +9,9 @@ const Header: React.FC = () => {
                     <ContentStyle>
                     <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="images/Naver_Webtoon_logo.png" />
                         <div>
-                            <CancelBtn>Logout</CancelBtn>
+                            <LogoutBtn>Logout</LogoutBtn>
                             <BellOutlined />
                         </div>
-                        
                     </ContentStyle>
             </HeaderStyle>
     )
@@ -49,7 +43,7 @@ const ImgStyle = styled.img`
     height: 68px;
 `
 
-const CancelBtn = styled.button`
+const LogoutBtn = styled.button`
     width: 70px;
     height: 23px;
     background-color: ${theme.colors.btn};
