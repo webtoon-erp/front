@@ -3,8 +3,8 @@ import DepartmentVacation from '../../component/forHr/forHrAttendance/Department
 import TodayAttendance from '../../component/forHr/forHrAttendance/TodayAttendance';
 import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain';
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
-import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
+import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 
 const Container = styled.div`
   display: flex;
@@ -70,5 +70,4 @@ export default function HrAttendance() {
         </Container>
     </>
   );
-}
-
+};
