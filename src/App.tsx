@@ -27,6 +27,7 @@ import EpRequestView from './pages/electropayment/epRequestView';
 import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
+import PasswordReset from './pages/common/passwordReset';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/passwordReset" element={<PasswordReset />}/>
               <Route path="/notice" element={<Notice />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/webtoon" element={<Webtoon />} />
