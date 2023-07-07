@@ -57,7 +57,7 @@ const BeforeUploadToon = () => {
             <Title>{month}월 {week}주차 업로드 예정 웹툰</Title>
             <CardGrid>
                 {FakeData.map((toon) => (
-                    <Link to={toon.url} key={toon.id}>
+                    <Link to={toon.url} key={toon.id} style={{ textDecoration: 'none' }}>
                     {isLoading ? (
                     <SkeletonCardButton>
                         <Skeleton width={80} height={120} />
