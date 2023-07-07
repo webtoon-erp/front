@@ -71,4 +71,4 @@ export default function WorkExtension() {
       <h2>월별 연장근무 시간 추이</h2>
       <canvas ref={chartRef} width="200" height="300"></canvas>
   </div>)
-  ;
+};

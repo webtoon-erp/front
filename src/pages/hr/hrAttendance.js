@@ -62,42 +62,13 @@ export default function HrAttendance() {
                     </Container>
 
                     <Container>
-                    <WholeVaction />
+                    <WholeVacation />
                     <DepartmentVacation />
                     </Container>
                 </FlexContainer>
             </RightColumn>
         </Container>
     </>
-  );
-}
-=======
-export default function HrAttendance() {
-  return (
-    <Container>
-        <LeftColumn>
-            <WholeAttendance />
-        </LeftColumn>
-
-        <RightColumn> 
-
-            <TodayContainer>
-                <TodayAttendance />
-            </TodayContainer>
-        
-            <FlexContainer>
-                <Container>
-                <VacationRemain />
-                <WorkExtension />
-                </Container>
-
-                <Container>
-                <WholeVaction />
-                <DepartmentVacation />
-                </Container>
-            </FlexContainer>
-        </RightColumn>
-    </Container>
   );
 }
 

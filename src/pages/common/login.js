@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 const BoldText = styled.span`
   font-weight: bold;
@@ -41,7 +42,11 @@ const CenteredContainer = styled.div`
   align-items: center;
 `;
 
-const LoginScreen = () => {
+const PasswordResetButton = styled(Button)`
+  margin-top: 8px;
+`;
+
+const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     // Handle login logic here
@@ -61,12 +66,16 @@ const LoginScreen = () => {
           <LoginButton type="primary" htmlType="submit">
             로그인
           </LoginButton>
+          <Link to="/passwordReset">
+            <PasswordResetButton type="link">
+              비밀번호 초기화
+            </PasswordResetButton>
+          </Link>
         </LoginForm>
       </LoginContainer>
     </CenteredContainer>
   );
 };
 
-export default LoginScreen;
-
+export default Login;
 
