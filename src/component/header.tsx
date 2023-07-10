@@ -25,6 +25,7 @@ const HeaderStyle = styled.header`
     top: 0;
     width: 83%;
     height: 80px;
+    z-index: 5;
 `;
 
 const ContentStyle = styled.div`
