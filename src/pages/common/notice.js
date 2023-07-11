@@ -1,7 +1,9 @@
+import NoticeComponent from "../../component/forNotice/NoticeComponent";
+
 export default function Notice (){
     return(
         <>
-        <div>notice</div>
+          <NoticeComponent />
         </>
     )
 }
