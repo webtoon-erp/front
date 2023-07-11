@@ -222,6 +222,7 @@ const NoticeComponent = () => {
     return (
     <>
      <Title>공지사항</Title>
+
       <NoticeContainer>
         <SelectDepContainer>
           <select value={selectedDep} onChange={selectDepHandler}>
@@ -241,6 +242,7 @@ const NoticeComponent = () => {
         </div>
       </NoticeContainer>
       </>
+
     );
   };
   
@@ -250,6 +252,7 @@ const NoticeComponent = () => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
     padding: 50px;
     padding-left: 70px;
   `;
@@ -262,6 +265,7 @@ const NoticeComponent = () => {
       height: 35px;
     }
   `;
+
 
   const Title = styled.div`
   font-size: 30px;
