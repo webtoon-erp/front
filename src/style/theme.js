@@ -9,6 +9,7 @@ const colors = {
   white: '#F8F1F1',
   ff: '#FFFFFF',
   btn: '#00D465',
+  textBox:'#f1f1f1',
 };
 
 const fonts = {

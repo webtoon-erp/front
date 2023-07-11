@@ -10,6 +10,8 @@ declare module 'styled-components' {
         ph;
         white;
         ff;
+        btn;
+        textBox;
     };
     fonts: {
         BalooChettan_head_regular_25;
