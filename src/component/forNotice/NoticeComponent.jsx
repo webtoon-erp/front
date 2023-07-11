@@ -220,6 +220,9 @@ const NoticeComponent = () => {
     }
   
     return (
+    <>
+     <Title>공지사항</Title>
+
       <NoticeContainer>
         <SelectDepContainer>
           <select value={selectedDep} onChange={selectDepHandler}>
@@ -228,7 +231,6 @@ const NoticeComponent = () => {
             <option value="회계부">회계부</option>
             <option value="영업부">영업부</option>
             <option value="기술부">기술부</option>
-            <option value="">기타</option>
           </select>
         </SelectDepContainer>
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
@@ -239,6 +241,8 @@ const NoticeComponent = () => {
           />
         </div>
       </NoticeContainer>
+      </>
+
     );
   };
   
@@ -248,7 +252,9 @@ const NoticeComponent = () => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
+
+    padding: 50px;
+    padding-left: 70px;
   `;
   
   const SelectDepContainer = styled.div`
@@ -259,3 +265,11 @@ const NoticeComponent = () => {
       height: 35px;
     }
   `;
+
+
+  const Title = styled.div`
+  font-size: 30px;
+  padding-top: 120px;
+  padding-left: 4%;
+  font-weight: bold;
+`;

@@ -1,3 +1,4 @@
+import NoticeComponent from "../../component/forNotice/NoticeComponent";
 import styled from 'styled-components';
 import NoticeComponent from '../../component/forNotice/NoticeComponent';
 
@@ -15,13 +16,11 @@ const Title = styled.div`
   font-weight: bold;
 `;
 
+
 export default function Notice (){
     return(
         <>
-        <Title>공지 사항</Title>
-            <Container>
-                <NoticeComponent />
-            </Container>
+          <NoticeComponent />
         </>
     )
 }
