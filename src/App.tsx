@@ -19,7 +19,6 @@ import ItPastReqeustList from './pages/itsm/itPastRequestList';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
 import ItRequestView from './pages/itsm/itRequestView';
-import ToonAdd from './pages/webtoon/toonAdd';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import ToonView from './pages/webtoon/toonView';
 import EpRequestAdd from './pages/electropayment/epRequestAdd';
@@ -29,6 +28,8 @@ import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
 import PasswordReset from './pages/common/passwordReset';
+import ToonWorkAdd from './pages/webtoon/toonWorkAdd';
+import ToonPieceAdd from './pages/webtoon/toonPieceAdd';
 
 function App() {
   return (
@@ -66,7 +67,8 @@ function App() {
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
               <Route path="/itRequestView" element={<ItRequestView />} />
-              <Route path="/toonAdd" element={<ToonAdd />} />
+              <Route path="/toonWorkAdd" element={<ToonWorkAdd/>} />
+              <Route path="/toonPieceAdd" element={<ToonPieceAdd/>} />
               <Route path="/episodeAdd" element={<EpisodeAdd />} />
               <Route path="/toonView" element={<ToonView />} />
               <Route path="/epRequestAdd" element={<EpRequestAdd />} />
