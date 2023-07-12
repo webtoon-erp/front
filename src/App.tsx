@@ -14,6 +14,7 @@ import HrVacationRequest from './pages/hr/hrVacationRequest';
 import HrVacationView from './pages/hr/hrVacationView';
 import HrView from './pages/hr/hrView';
 import HrWholeState from './pages/hr/hrWholeState';
+import HrPrice from './pages/hr/hrPrice';
 import ItPastReqeustList from './pages/itsm/itPastRequestList';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
@@ -60,6 +61,7 @@ function App() {
               <Route path="/hrVacationView" element={<HrVacationView />} />
               <Route path="/hrView" element={<HrView />} />
               <Route path="/hrWholeState" element={<HrWholeState />} />
+              <Route path="/hrPrice" element={<HrPrice />} />
               <Route path="/itPastRequestList" element={<ItPastReqeustList />} />
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
