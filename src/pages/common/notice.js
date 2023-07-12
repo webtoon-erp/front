@@ -1,6 +1,5 @@
 import NoticeComponent from "../../component/forNotice/NoticeComponent";
 import styled from 'styled-components';
-import NoticeComponent from '../../component/forNotice/NoticeComponent';
 
 const Container = styled.div`
   display: flex;
