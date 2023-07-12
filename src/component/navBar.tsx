@@ -4,7 +4,7 @@ import type { MenuProps } from 'antd';
 import { Menu, Avatar, Space } from 'antd';
 import styled from 'styled-components';
 import theme from '../style/theme';
-
+import { useNavigate } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -25,12 +25,12 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-    getItem('작품 관리', 'menu1', <AreaChartOutlined />),
+    getItem('작품 관리', 'webtoon', <AreaChartOutlined />),
 
     getItem('인사', 'menu2', <UserOutlined />, [
-        getItem('직원 관리', '1'),
-        getItem('근태관리', '2', null, [getItem('내 근태 관리', '3'), getItem('부서 근태 관리', '4')]),
-        getItem('급여 관리', '5'),
+        getItem('직원 관리', 'hrView'),
+        getItem('근태관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('부서 근태 관리', 'hrAttendance')]),
+        getItem('급여 관리', 'hrSalary'),
     ]),
 
 
@@ -46,14 +46,18 @@ const items: MenuProps['items'] = [
 
     getItem('시스템', 'menu5', <ToolOutlined />, [
         getItem('일정 관리', '10'),
-        getItem('공지사항 관리', '11'),
+        getItem('공지사항 관리', 'notice'),
     ]),
 ];
 
 const NavBar: React.FC = () => {
-    // const onClick: MenuProps['onClick'] = (e) => {
-        
-    // };
+    const navigate = useNavigate();
+
+    const onClick: MenuProps['onClick'] = (e) => {
+        const selectedKey = e.key;
+        const path = `/${selectedKey}`;
+        navigate(path);
+    };
 
     return (
         <Space direction="vertical" size={20}>
@@ -72,12 +76,12 @@ const NavBar: React.FC = () => {
                 <WorkBtn>퇴근</WorkBtn>
             </div>
             <Menu
-            //onClick={onClick}
-            style={{ width: 256 }}
-            defaultSelectedKeys={['0']}
-            defaultOpenKeys={['menu1']}
-            mode="inline"
-            items={items}
+                onClick={onClick}
+                style={{ width: 256 }}
+                defaultSelectedKeys={['0']}
+                defaultOpenKeys={['menu1']}
+                mode="inline"
+                items={items}
             />
         </Space>
     );
