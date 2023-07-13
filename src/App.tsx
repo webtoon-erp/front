@@ -18,7 +18,6 @@ import ItPastReqeustList from './pages/itsm/itPastRequestList';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
 import ItRequestView from './pages/itsm/itRequestView';
-import EpisodeAdd from './pages/webtoon/episodeAdd';
 import ToonView from './pages/webtoon/toonView';
 import EpRequestAdd from './pages/electropayment/epRequestAdd';
 import EpRequestList from './pages/electropayment/epRequestList';
@@ -30,6 +29,8 @@ import PasswordReset from './pages/common/passwordReset';
 import ToonWorkAdd from './pages/webtoon/toonAdd';
 import ToonAdd from './pages/webtoon/toonAdd';
 
+import EpisodeAddComponent from './component/forWebtoon/forToonAdd/EpisodeAddComponent';
+import EpisodeAdd from './pages/webtoon/episodeAdd';
 function App() {
   return (
     <>

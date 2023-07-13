@@ -6,7 +6,8 @@ const MainContainer = styled.div`
   display: flex;
   border: 1px solid #ccc;
   margin: 30px 50px;
-  height: 420px;
+  height: 300px;
+  padding-top: 50px;
 `;
 
 const Input = styled.input`
@@ -37,16 +38,13 @@ const RangeContainer = styled.div`
 `;
 
 const Div = styled.div`
-  padding: 25px;
+  padding: 18px;
 `;
 
 const Div2 = styled.div`
-  padding: 8px;
+  padding: 17px;
 `;
 
-const Div3 = styled.div`
-  padding: 18px;
-`;
 
 const Title = styled.div`
   font-size: 30px;
@@ -60,24 +58,6 @@ const Container = styled.div`
   flex-direction: row;
   padding-left: 18px;
   padding-top: 12px;
-`;
-
-const Select = styled.select`
-  width: inherit;
-  height: 30px;
-  background: transparent;
-  border: 0 none;
-  outline: 0 none;
-  padding: 0 10px;
-  padding-top: 2px;
-  cursor: pointer;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
-`;
-
-const Option = styled.option`
-  background: #ffffff;
-  font-size: 15px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
 `;
 
 const ImagePreview = styled.img`
@@ -108,17 +88,7 @@ const RegistBtn = styled.button`
 `
 
 const EpisodeAddComponent = () => {
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedKeyword, setSelectedKeyword] = useState('');
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
-
-  const SelectDayhandler = (e) => {
-    setSelectedDay(e.target.value);
-  };
-
-  const SelectKeywordhandler = (e) => {
-    setSelectedKeyword(e.target.value);
-  };
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
@@ -135,7 +105,7 @@ const EpisodeAddComponent = () => {
 
   return (
     <>
-      <Title>작품 등록</Title>
+      <Title>회차 등록</Title>
       <RegistBtnContainer>
                     <RegistBtn>임시 저장</RegistBtn>
                     <RegistBtn>업로드</RegistBtn>
@@ -143,49 +113,19 @@ const EpisodeAddComponent = () => {
       <MainContainer>
         <RangeContainer>
         <Container>
-              <InputTitle>제목</InputTitle><Div/><Input type="text" placeholder="제목" />
+              <InputTitle>작품 제목</InputTitle><Div/><Input type="text" placeholder="제목" />
           </Container>
           <Container>
-              <InputTitle>작가</InputTitle><Div/><Input type="text" placeholder="작가" />
-          </Container>
-          <Container>
-              <InputTitle>그림</InputTitle><Div/><Input type="text" placeholder="그림" />
-          </Container>
-          <Container>
-              <InputTitle>업로드 요일</InputTitle>
-              <Select value={selectedDay} onChange={SelectDayhandler}>
-                          <Option value="월">월</Option>
-                          <Option value="화">화</Option>
-                          <Option value="수">수</Option>
-                          <Option value="목">목</Option>
-                          <Option value="금">금</Option>
-                          <Option value="토">토</Option>
-                          <Option value="일">일</Option>
-              </Select>
-          </Container>
-          
-          <Container>
-              <InputTitle>키워드</InputTitle><Div3/>
-              <Select value={selectedKeyword} onChange={SelectKeywordhandler}>
-                          <Option value="로맨스">로맨스</Option>
-                          <Option value="판타지/SF">판타지/SF</Option>
-                          <Option value="시대/역사물">시대/역사물</Option>
-                          <Option value="미스터리/스릴러물">미스터리/스릴러물</Option>
-                          <Option value="캠퍼스물">캠퍼스물</Option>
-                          <Option value="학원물">학원물</Option>
-                          <Option value="드라마/일상물">드라마/일상물</Option>
-                          <Option value="코믹물">코믹물</Option>
-                          <Option value="액션/무협물">액션/무협물</Option>
-              </Select>
+              <InputTitle>회차 제목</InputTitle><Div/><Input type="text" placeholder="작가" />
           </Container>
 
           <Container>
-              <InputTitle>작품 설명</InputTitle><Div2/><TextArea placeholder="작품 설명" />
+              <InputTitle>작가의 말</InputTitle><Div2/><TextArea placeholder="작품 설명" />
           </Container>
         </RangeContainer>
         <RangeContainer>
           <Container>
-            <InputTitle>썸네일</InputTitle>
+            <InputTitle>작품 파일</InputTitle>
             <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
           </Container>
           {thumbnailPreview && (

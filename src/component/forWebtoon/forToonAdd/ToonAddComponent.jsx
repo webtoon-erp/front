@@ -1,4 +1,4 @@
-import React, { DragEvent, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
@@ -7,6 +7,7 @@ const MainContainer = styled.div`
   border: 1px solid #ccc;
   margin: 30px 50px;
   height: 420px;
+  padding-top: 10px;
 `;
 
 const Input = styled.input`
