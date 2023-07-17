@@ -1,5 +1,4 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
-import { CollapseProps } from 'antd';
 import { Collapse } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
 
@@ -67,8 +66,7 @@ const defaultColDef = useMemo( ()=> ({
                     columnDefs={columnDefs} // Column Defs for Columns
                     defaultColDef={defaultColDef} // Default Column Properties
 
-                    animateRows={true} // Optional - set to 'true' to have rows animate when sorted
-                    rowSelection='multiple' // Options - allows click selection of rows
+                    animateRows={true} 
 
                     />
             </div>

@@ -14,11 +14,13 @@ const CalendarArea = () => {
           title: '일정 1',
           start: '2023-06-28',
           end: '2023-06-29',
+          backgroundColor: 'green'
         },
         {
           title: '일정 2',
           start: '2023-07-01',
           end: '2023-07-02',
+          backgroundColor: 'green'
         },
         // Additional events...
       ];

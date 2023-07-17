@@ -58,7 +58,7 @@ const Login = () => {
         <BoldText>웹툰 erp</BoldText>
         <LoginForm onSubmit={handleLogin}>
           <InputWrapper>
-            <Input type="text" placeholder="아이디" />
+            <Input type="text" placeholder="사번" />
           </InputWrapper>
           <InputWrapper>
             <Input type="password" placeholder="비밀번호" />
