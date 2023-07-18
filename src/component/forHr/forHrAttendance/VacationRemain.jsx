@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import 'chartjs-plugin-datalabels';
+import HorizonLine from '../../horizonLine';
+import styled from 'styled-components';
 
 export default function VacationRemain() {
   const chartRef = useRef(null);
@@ -57,11 +59,31 @@ export default function VacationRemain() {
   const getRandomNumber = () => Math.floor(Math.random() * 101);
 
   return (
-    <div className="ag-theme-alpine" style={{ height: '300px', width: '100%' }}>
-      <h2>연차현황</h2>
-      <canvas ref={chartRef} width="200" height="300"></canvas>
-    </div>
+    <>
+        <VacationRemainContainer>
+          <Title>연차 현황</Title>
+          <HorizonLine />
+          <VacationRemainGrid className="ag-theme-alpine" style={{ height: '200px', width: '200px' }}>
+              <canvas ref={chartRef} width="200px" height="200px" ></canvas>
+          </VacationRemainGrid>
+      </VacationRemainContainer>
+    </>
   );
 }
 
+const VacationRemainContainer = styled.div`
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 190px;
+    width: 100%
+`;
 
+const Title = styled.h3`
+    margin-left: 10px;
+`;
+
+const VacationRemainGrid = styled.div`
+    width: 900px;
+    height: 110px;
+`

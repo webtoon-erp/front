@@ -2,41 +2,58 @@ import { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import HorizonLine from '../../horizonLine';
+import styled from 'styled-components';
 
-export default function TodayAttendance() {
-    const [rowData, setRowData] = useState([]);
-  
-    useEffect(() => {
-      generateRowData();
-    }, []);
-  
-    const generateRowData = () => {
-      const items = ['미출근', '지각', '휴가', '휴무', '연장근무'];
-      const generatedData = items.map((item) => ({
-        [item]: getRandomNumber(),
-      }));
-      setRowData(generatedData);
-    };
-  
-    const getRandomNumber = () => Math.floor(Math.random() * 101);
-  
-    const columnDefs = [
-      {
-        headerName: '근태현황',
-        children: [
-          { headerName: '미출근', field: '미출근' },
-          { headerName: '지각', field: '지각' },
-          { headerName: '휴가', field: '휴가' },
-          { headerName: '휴무', field: '휴무' },
-          { headerName: '연장근무', field: '연장근무' },
-        ],
-      },
-    ];
-  
-    return (
-      <div className="ag-theme-alpine" style={{ height: '200px', width: '600px' }}>
-        <h2>근태현황</h2>
-        <AgGridReact columnDefs={columnDefs} rowData={[rowData]} />
-      </div>
-    );
-  }
+export default function WholeAttendance() {
+
+    const rowData = [
+      {'미출근': 3, '지각': 4, '휴가': 1, '연장근무': 2},
+  ];
+
+  const columnDefs = [
+      {field: '미출근'},
+      {field: '지각'},
+      {field: '휴가'},
+      {field: '연장근무'},
+  ];
+
+  // useEffect(() => {
+  //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
+  //     .then(result => result.json())
+  //     .then(rowData => setRowData(rowData))
+  // }, []);
+
+  return (
+      <TodayAttendanceContainer>
+          <Title>근태 현황</Title>
+          <HorizonLine />
+          <TodayAttendanceGrid className="ag-theme-alpine" style={{ height: '100px', width: '1050px' }}>
+              <AgGridReact 
+                  rowData={rowData}
+                  columnDefs={columnDefs}
+                  animateRows={true}
+                  rowSelection='multiple'
+              />
+          </TodayAttendanceGrid>
+      </TodayAttendanceContainer>
+      
+  );
+}
+
+const TodayAttendanceContainer = styled.div`
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 190px;
+    width: 100%
+`;
+
+const Title = styled.h3`
+    margin-left: 10px;
+`;
+
+const TodayAttendanceGrid = styled.div`
+    width: 900px;
+    height: 110px;
+`
