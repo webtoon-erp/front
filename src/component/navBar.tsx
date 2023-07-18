@@ -25,7 +25,10 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-    getItem('작품 관리', 'webtoon', <AreaChartOutlined />),
+    getItem('작품', 'menu1', <AreaChartOutlined />, [
+        getItem('작품 관리', 'webtoon'),
+        getItem('작품 조회', '1'),
+    ]), 
 
     getItem('인사', 'menu2', <UserOutlined />, [
         getItem('직원 관리', 'hrView'),
@@ -35,7 +38,7 @@ const items: MenuProps['items'] = [
 
 
     getItem('ITSM', 'menu3', <LaptopOutlined />, [
-        getItem('서비스 요청', '6'),
+        getItem('서비스 요청', 'itRequestAdd'),
         getItem('서비스 조회', '7'),
     ]),
 
