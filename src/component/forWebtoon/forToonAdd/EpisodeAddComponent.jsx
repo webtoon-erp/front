@@ -113,14 +113,14 @@ const EpisodeAddComponent = () => {
       <MainContainer>
         <RangeContainer>
         <Container>
-              <InputTitle>작품 제목</InputTitle><Div/><Input type="text" placeholder="제목" />
+              <InputTitle>작품 제목</InputTitle><Div/><Input type="text" placeholder="작품 제목" />
           </Container>
           <Container>
-              <InputTitle>회차 제목</InputTitle><Div/><Input type="text" placeholder="작가" />
+              <InputTitle>회차 제목</InputTitle><Div/><Input type="text" placeholder="회차 제목" />
           </Container>
 
           <Container>
-              <InputTitle>작가의 말</InputTitle><Div2/><TextArea placeholder="작품 설명" />
+              <InputTitle>작가의 말</InputTitle><Div2/><TextArea placeholder="작가의 말" />
           </Container>
         </RangeContainer>
         <RangeContainer>
