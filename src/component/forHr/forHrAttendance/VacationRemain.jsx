@@ -75,8 +75,9 @@ const VacationRemainContainer = styled.div`
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    height: 190px;
+    height: 300px;
     width: 100%
+    align-items: center;
 `;
 
 const Title = styled.h3`
@@ -84,6 +85,6 @@ const Title = styled.h3`
 `;
 
 const VacationRemainGrid = styled.div`
-    width: 900px;
+    width: 700px;
     height: 110px;
 `
