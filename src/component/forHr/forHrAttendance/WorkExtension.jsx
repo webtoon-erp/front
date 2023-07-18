@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
+import HorizonLine from '../../horizonLine';
+import styled from 'styled-components';
 
 export default function WorkExtension() {
   const chartRef = useRef(null);
@@ -67,8 +69,32 @@ export default function WorkExtension() {
   };
 
   return (
-  <div className="ag-theme-alpine" style={{ height: '300px', width: '100%' }}>
-      <h2>월별 연장근무 시간 추이</h2>
-      <canvas ref={chartRef} width="200" height="300" />
-  </div>)
+  <>
+      <WorkExtensionContainer>
+        <Title>월별 연장근무 시간 추이</Title>
+        <HorizonLine />
+        <WorkExtensionGrid className="ag-theme-alpine" style={{ height: '800px', width: '350px' }}>
+            <canvas ref={chartRef} width="800px" height="500px" />
+        </WorkExtensionGrid>
+    </WorkExtensionContainer>
+  </>
+  )
 };
+
+const WorkExtensionContainer = styled.div`
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 300px;
+    width: 100%
+    align-items: center;
+`;
+
+const Title = styled.h3`
+    margin-left: 10px;
+`;
+
+const WorkExtensionGrid = styled.div`
+    width: 900px;
+    height: 110px;
+`

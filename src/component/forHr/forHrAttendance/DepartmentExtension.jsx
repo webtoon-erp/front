@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import 'chartjs-plugin-datalabels'; // Import the datalabels plugin
+import 'chartjs-plugin-datalabels';
+import HorizonLine from '../../horizonLine';
+import styled from 'styled-components';
 
 export default function DepartmentVacation() {
   const chartRef = useRef(null);
@@ -86,9 +88,34 @@ export default function DepartmentVacation() {
   };
 
   return (
-    <div className="ag-theme-alpine" style={{ height: '300px', width: '100%' }}>
-      <h2>그룹별 연장근무시간(월계)</h2>
-      <canvas ref={chartRef} width="200" height="300"></canvas>
-    </div>
+    <>
+      
+
+      <DepartmentVacationContainer>
+      <Title>그룹별 연장근무시간(월계)</Title>
+      <HorizonLine />
+        <DepartmentVacationGrid className="ag-theme-alpine" style={{ height: '1000px', width: '400px' }}>
+            <canvas ref={chartRef} width="1000px" height="500px"></canvas>
+        </DepartmentVacationGrid>
+      </DepartmentVacationContainer>
+    </>
   );
 }
+
+const DepartmentVacationContainer = styled.div`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: 300px;
+  width: 100%
+  align-items: center;
+`;
+
+const Title = styled.h3`
+    margin-left: 10px;
+`;
+
+const DepartmentVacationGrid = styled.div`
+    width: 1200px;
+    height: 600px;
+`
