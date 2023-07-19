@@ -39,7 +39,7 @@ const items: MenuProps['items'] = [
 
     getItem('ITSM', 'menu3', <LaptopOutlined />, [
         getItem('서비스 요청', 'itRequestAdd'),
-        getItem('서비스 조회', '7'),
+        getItem('서비스 조회', 'itRequestListView'),
     ]),
 
     getItem('전자결재', 'menu4', <FileTextOutlined />, [
