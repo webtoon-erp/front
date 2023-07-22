@@ -50,7 +50,13 @@ export default function WorkExtension() {
     };
   }, []);
 
-  const getRandomNumber = () => Math.floor(Math.random() * 101);
+  // useEffect(() => {
+    //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
+    //     .then(result => result.json())
+    //     .then(Data => setData(Data))
+    // }, []);
+
+  const getRandomNumber = () => Math.floor(Math.random() * 101);  //
 
   const getRecentMonthsData = () => {
     const currentYearMonth = new Date().toISOString().slice(0, 7);
@@ -62,7 +68,7 @@ export default function WorkExtension() {
       date.setMonth(date.getMonth() - i);
       const yearMonth = date.toISOString().slice(0, 7).replace(/-/g, '');
       months.push(yearMonth);
-      data.push(getRandomNumber());
+      data.push(getRandomNumber()); //
     }
 
     return { labels: months, data };

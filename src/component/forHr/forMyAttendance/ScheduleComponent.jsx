@@ -61,7 +61,7 @@ const defaultColDef = useMemo( ()=> ({
                 <AgGridReact
                     ref={gridRef} // Ref for accessing Grid's API
 
-                    rowData={[randomRowData]} // Row Data for Rows
+                    rowData={rowData} // Row Data for Rows
 
                     columnDefs={columnDefs} // Column Defs for Columns
                     defaultColDef={defaultColDef} // Default Column Properties

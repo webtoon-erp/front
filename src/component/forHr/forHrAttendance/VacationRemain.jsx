@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import 'chartjs-plugin-datalabels';
 import HorizonLine from '../../horizonLine';
@@ -6,10 +6,21 @@ import styled from 'styled-components';
 
 export default function VacationRemain() {
   const chartRef = useRef(null);
+  const [selectedUsedVacation, setSelectedUsedVacation] = useState();
+  const [selectedRemainVacation, setSelectedRemainVacation] = useState();
 
   useEffect(() => {
     const chartCanvas = chartRef.current;
-    const chartData = [getRandomNumber(), getRandomNumber()];
+    const chartData = [selectedUsedVacation, selectedRemainVacation];
+
+  // useEffect(() => {
+  //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
+  //     .then(result => result.json())
+  //     .then(result => {
+  //         usedVacation => setSelectedUsedVacation(usedVacation)
+  //         remainVacation => setSelectedRemainVacation(remainVacation)
+  // })
+  // }, []);
 
     const chart = new Chart(chartCanvas, {
       type: 'doughnut',
@@ -56,7 +67,7 @@ export default function VacationRemain() {
     };
   }, []);
 
-  const getRandomNumber = () => Math.floor(Math.random() * 101);
+  const getRandomNumber = () => Math.floor(Math.random() * 101); //
 
   return (
     <>
