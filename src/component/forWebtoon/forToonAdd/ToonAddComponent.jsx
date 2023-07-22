@@ -1,6 +1,154 @@
 import { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+
+
+const ToonAddComponent = () => {
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [selectedDrawer, setSelectedDrawer] = useState('');
+  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedKeyword, setSelectedKeyword] = useState('');
+  const [selectedContent, setSelectedContent] = useState('');
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+
+  
+  const SelectTitlehandler = (e) => {
+    setSelectedTitle(e.target.value);
+  };
+
+  const SelectAuthorhandler = (e) => {
+    setSelectedAuthor(e.target.value);
+  };
+
+  const SelectDrawerhandler = (e) => {
+    setSelectedDrawer(e.target.value);
+  };
+
+  const SelectDayhandler = (e) => {
+    setSelectedDay(e.target.value);
+  };
+
+  const SelectKeywordhandler = (e) => {
+    setSelectedKeyword(e.target.value);
+  };
+
+  const SelectContenthandler = (e) => {
+    setSelectedContent(e.target.value);
+  };
+
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setThumbnailPreview(event.target.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmitClick = () => {
+     //console.log(finalId, "finalId 결과값"); 
+
+    axios.post('http://localhost:5050/register',
+      {
+        selectedTitle: selectedTitle,           
+        selectedAuthor: selectedAuthor,  
+        selectedDrawer: selectedDrawer,  
+        selectedDay: selectedDay,           
+        selectedKeyword: selectedKeyword,
+        selectedContent: selectedContent,
+        thumbnailPreview: thumbnailPreview,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((result) => {
+        console.log(result);
+        console.log("enroll!");
+        window.alert('작품이 정상적으로 등록되었습니다.');
+        //window.location.replace("/login"); 
+      })
+      .catch((error) => {
+        window.alert('작품이 정상적으로 등록되지 않았습니다.');
+        console.log(error);
+      })
+  };
+  
+  return (
+    <>
+      <Title>작품 등록</Title>
+      <RegistBtnContainer>
+                    <RegistBtn>임시 저장</RegistBtn>
+                    <RegistBtn onClick={handleSubmitClick}>업로드</RegistBtn>
+      </RegistBtnContainer>
+      <MainContainer>
+        <RangeContainer>
+        <Container>
+              <InputTitle>제목</InputTitle><Div/><Input type="text" placeholder="제목" onChange={SelectTitlehandler}/>
+          </Container>
+          <Container>
+              <InputTitle>작가</InputTitle><Div/><Input type="text" placeholder="작가" onChange={SelectAuthorhandler}/>
+          </Container>
+          <Container>
+              <InputTitle>그림</InputTitle><Div/><Input type="text" placeholder="그림" onChange={SelectDrawerhandler}/>
+          </Container>
+          <Container>
+              <InputTitle>업로드 요일</InputTitle>
+              <Select value={selectedDay} onChange={SelectDayhandler}>
+                          <Option value="월">월</Option>
+                          <Option value="화">화</Option>
+                          <Option value="수">수</Option>
+                          <Option value="목">목</Option>
+                          <Option value="금">금</Option>
+                          <Option value="토">토</Option>
+                          <Option value="일">일</Option>
+              </Select>
+          </Container>
+          
+          <Container>
+              <InputTitle>키워드</InputTitle><Div3/>
+              <Select value={selectedKeyword} onChange={SelectKeywordhandler}>
+                          <Option value="로맨스">로맨스</Option>
+                          <Option value="판타지/SF">판타지/SF</Option>
+                          <Option value="시대/역사물">시대/역사물</Option>
+                          <Option value="미스터리/스릴러물">미스터리/스릴러물</Option>
+                          <Option value="캠퍼스물">캠퍼스물</Option>
+                          <Option value="학원물">학원물</Option>
+                          <Option value="드라마/일상물">드라마/일상물</Option>
+                          <Option value="코믹물">코믹물</Option>
+                          <Option value="액션/무협물">액션/무협물</Option>
+              </Select>
+          </Container>
+
+          <Container>
+              <InputTitle>작품 설명</InputTitle><Div2/><TextArea placeholder="작품 설명" onChange={SelectContenthandler}/>
+          </Container>
+        </RangeContainer>
+        <RangeContainer>
+          <Container>
+            <InputTitle>썸네일</InputTitle>
+            <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
+          </Container>
+          {thumbnailPreview && (
+            <Container>
+              <ImagePreview src={thumbnailPreview} alt="Thumbnail Preview" />
+            </Container>
+          )}
+        </RangeContainer>
+      </MainContainer>
+    </>
+  );
+};
+
+export default ToonAddComponent;
+
 
 const MainContainer = styled.div`
   display: flex;
@@ -107,99 +255,3 @@ const RegistBtn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 15px;
 `
-
-const ToonAddComponent = () => {
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedKeyword, setSelectedKeyword] = useState('');
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
-
-  const SelectDayhandler = (e) => {
-    setSelectedDay(e.target.value);
-  };
-
-  const SelectKeywordhandler = (e) => {
-    setSelectedKeyword(e.target.value);
-  };
-
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setThumbnailPreview(event.target.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  return (
-    <>
-      <Title>작품 등록</Title>
-      <RegistBtnContainer>
-                    <RegistBtn>임시 저장</RegistBtn>
-                    <RegistBtn>업로드</RegistBtn>
-      </RegistBtnContainer>
-      <MainContainer>
-        <RangeContainer>
-        <Container>
-              <InputTitle>제목</InputTitle><Div/><Input type="text" placeholder="제목" />
-          </Container>
-          <Container>
-              <InputTitle>작가</InputTitle><Div/><Input type="text" placeholder="작가" />
-          </Container>
-          <Container>
-              <InputTitle>그림</InputTitle><Div/><Input type="text" placeholder="그림" />
-          </Container>
-          <Container>
-              <InputTitle>업로드 요일</InputTitle>
-              <Select value={selectedDay} onChange={SelectDayhandler}>
-                          <Option value="월">월</Option>
-                          <Option value="화">화</Option>
-                          <Option value="수">수</Option>
-                          <Option value="목">목</Option>
-                          <Option value="금">금</Option>
-                          <Option value="토">토</Option>
-                          <Option value="일">일</Option>
-              </Select>
-          </Container>
-          
-          <Container>
-              <InputTitle>키워드</InputTitle><Div3/>
-              <Select value={selectedKeyword} onChange={SelectKeywordhandler}>
-                          <Option value="로맨스">로맨스</Option>
-                          <Option value="판타지/SF">판타지/SF</Option>
-                          <Option value="시대/역사물">시대/역사물</Option>
-                          <Option value="미스터리/스릴러물">미스터리/스릴러물</Option>
-                          <Option value="캠퍼스물">캠퍼스물</Option>
-                          <Option value="학원물">학원물</Option>
-                          <Option value="드라마/일상물">드라마/일상물</Option>
-                          <Option value="코믹물">코믹물</Option>
-                          <Option value="액션/무협물">액션/무협물</Option>
-              </Select>
-          </Container>
-
-          <Container>
-              <InputTitle>작품 설명</InputTitle><Div2/><TextArea placeholder="작품 설명" />
-          </Container>
-        </RangeContainer>
-        <RangeContainer>
-          <Container>
-            <InputTitle>썸네일</InputTitle>
-            <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
-          </Container>
-          {thumbnailPreview && (
-            <Container>
-              <ImagePreview src={thumbnailPreview} alt="Thumbnail Preview" />
-            </Container>
-          )}
-        </RangeContainer>
-      </MainContainer>
-    </>
-  );
-};
-
-export default ToonAddComponent;
-
-
