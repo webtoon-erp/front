@@ -4,11 +4,84 @@ import theme from '../../style/theme';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+const ServiceRequest = () => {
+  //달력(요청, 납기일)
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
+
+  const [selectedRequestType, setSelectedRequestType] = useState('');
+  
+  const SelectRequestTypehandler = (e) => {
+    setSelectedRequestType(e.target.value);
+  };
+
+
+  return (
+    <>
+      <Title>서비스 요청</Title>
+      <RegistBtnContainer>
+                    <RegistBtn>요청</RegistBtn>
+      </RegistBtnContainer>
+      <MainContainer>
+        <RangeContainer1>
+        <Container>
+            <InputTitle>요청일</InputTitle>
+            <Div />
+            <DatePicker
+              selected={startDate}
+              dateFormat="yyyy-MM-dd"
+              disabled
+            />
+          </Container>
+          <Container>
+              <InputTitle>처리자</InputTitle><Div/><Input type="text" placeholder="처리자" required/>
+          </Container>
+          <Container>
+              <InputTitle>제목</InputTitle><Div4/><Input type="text" placeholder="제목" />
+          </Container>
+          <Container>
+              <InputTitle>요청 사항</InputTitle><Div2/><TextArea placeholder="요청 사항" />
+          </Container>
+        </RangeContainer1>
+        <RangeContainer2>
+        <Container>
+            <InputTitle>납기일</InputTitle>
+            <Div />
+            <DatePicker
+                selected={selectedDeliveryDate}
+                onChange={(date) => setSelectedDeliveryDate(date)}
+                dateFormat="yyyy-MM-dd"
+                minDate={new Date()}
+                placeholderText="납기일"
+                />
+        </Container>
+        <Container>
+              <InputTitle>요청 타입</InputTitle><Div2/>
+              <Select value={selectedRequestType} onChange={SelectRequestTypehandler}>
+                          <Option value="구매">구매 </Option>
+                          <Option value="업무 지원">업무 지원</Option>
+              </Select>
+          </Container>
+         <Container>
+              <InputTitle>승인자</InputTitle><Div/><Input type="text" placeholder="승인자" />
+          </Container>
+
+
+        </RangeContainer2>
+      </MainContainer>
+    </>
+  );
+};
+
+export default ServiceRequest;
+
 const MainContainer = styled.div`
   display: flex;
   border: 1px solid #ccc;
   margin: 30px 50px;
-  height: 450px;
+  height: 350px;
+  padding-top: 50px;
 `;
 
 const Input = styled.input`
@@ -70,7 +143,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding-left: 18px;
-  padding-top: 10px;
+  margin: 20px;
 `;
 
 const Select = styled.select`
@@ -111,81 +184,3 @@ const RegistBtn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 15px;
 `
-
-const ServiceRequest = () => {
-  //달력(요청, 납기일)
-  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
-  const [selectedRequestDate, setSelectedRequestDate] = useState(null);
-
-  const [selectedRequestType, setSelectedRequestType] = useState('');
-  
-  const SelectRequestTypehandler = (e) => {
-    setSelectedRequestType(e.target.value);
-  };
-
-
-  return (
-    <>
-      <Title>서비스 요청</Title>
-      <RegistBtnContainer>
-                    <RegistBtn>요청</RegistBtn>
-      </RegistBtnContainer>
-      <MainContainer>
-        <RangeContainer1>
-        <Container>
-            <InputTitle>요청일</InputTitle>
-            <Div />
-            <DatePicker
-              selected={selectedRequestDate}
-              onChange={(date) => setSelectedRequestDate(date)}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="요청일"
-            />
-          </Container>
-          <Container>
-              <InputTitle>시스템</InputTitle><Div/><Input type="text" placeholder="시스템" />
-          </Container>
-          <Container>
-              <InputTitle>처리자</InputTitle><Div/><Input type="text" placeholder="처리자" required/>
-          </Container>
-          <Container>
-              <InputTitle>제목</InputTitle><Div4/><Input type="text" placeholder="제목" />
-          </Container>
-          <Container>
-              <InputTitle>요청 사항</InputTitle><Div2/><TextArea placeholder="요청 사항" />
-          </Container>
-          <Container>
-              <InputTitle>특이 사항</InputTitle><Div2/><TextArea placeholder="특이 사항" />
-          </Container>
-        </RangeContainer1>
-        <RangeContainer2>
-        <Container>
-            <InputTitle>요청일</InputTitle>
-            <Div />
-            <DatePicker
-                selected={selectedDeliveryDate}
-                onChange={(date) => setSelectedDeliveryDate(date)}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="납기일"
-                />
-        </Container>
-        <Container>
-              <InputTitle>요청 타입</InputTitle><Div2/>
-              <Select value={selectedRequestType} onChange={SelectRequestTypehandler}>
-                          <Option value="타입1">타입1</Option>
-                          <Option value="타입2">타입2</Option>
-                          <Option value="타입3">타입3</Option>
-              </Select>
-          </Container>
-         <Container>
-              <InputTitle>승인자</InputTitle><Div/><Input type="text" placeholder="승인자" />
-          </Container>
-
-
-        </RangeContainer2>
-      </MainContainer>
-    </>
-  );
-};
-
-export default ServiceRequest;

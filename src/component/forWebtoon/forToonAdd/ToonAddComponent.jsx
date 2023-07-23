@@ -84,8 +84,7 @@ const ToonAddComponent = () => {
   return (
     <>
       <Title>작품 등록</Title>
-      <RegistBtnContainer>
-                    <RegistBtn>임시 저장</RegistBtn>
+      <RegistBtnContainer> 
                     <RegistBtn onClick={handleSubmitClick}>업로드</RegistBtn>
       </RegistBtnContainer>
       <MainContainer>
@@ -237,7 +236,7 @@ const ImagePreview = styled.img`
 
 const RegistBtnContainer = styled.div`
     display: flex;
-    padding-left: 75%;
+    padding-left: 85%;
 `;
 
 const RegistBtn = styled.button`
