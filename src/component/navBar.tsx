@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeOutlined, AreaChartOutlined, LaptopOutlined, UserOutlined, FileTextOutlined, ToolOutlined } from '@ant-design/icons';
+import { AreaChartOutlined, LaptopOutlined, UserOutlined, FileTextOutlined, ToolOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu, Avatar, Space } from 'antd';
 import styled from 'styled-components';
@@ -25,9 +25,6 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-    getItem('홈', 'menu1', <HomeOutlined />, [
-        getItem('공지사항', 'notice'),
-    ]),
 
     getItem('작품', 'menu2', <AreaChartOutlined />, [
         getItem('작품 관리', 'webtoon'),
@@ -50,7 +47,7 @@ const items: MenuProps['items'] = [
         getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', '10'), getItem('부서 문서 조회', '11'), getItem('결재 대기 문서 조회', '12'), getItem('참조 문서 조회', '13')]),
     ]),
 
-    getItem('시스템', 'menu5', <ToolOutlined />, [
+    getItem('시스템', 'menu6', <ToolOutlined />, [
         getItem('일정 관리', '14'),
         getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', '16')]),
     ]),
