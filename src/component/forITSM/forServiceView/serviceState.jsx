@@ -11,18 +11,18 @@ const ServiceState = () => {
     useEffect(() => {
 
         const chartCanvas = chartRef.current;
-        const chartData = [1, 3];
+        const chartData = [2, 3, 1];
     
         const chart = new Chart(chartCanvas, {
             type: 'doughnut',
             data: {
-                labels: ['대기', '승인'],
+                labels: ['미완료', '완료', '진행'],
                 datasets: [
                     {
                         label: '개수',
                         data: chartData,
-                        backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)'],
-                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                        backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(145,242,155,0.7)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(145,242,155,1)'],
                         borderWidth: 1,
                     },
                 ],
@@ -63,16 +63,23 @@ const ServiceState = () => {
             <Title>요청 상태 현황</Title>
             <HorizonLine />
             <FlexBox>
-                <OuterBox>
+                <MoreOuterBox>
+                    <OuterBox>
+                        <Box>
+                            <h3 style={{ 'margin-top': '0' }}>완료</h3>
+                            <Count style={{ 'background-color': '#91CDF2' }}>3</Count>
+                        </Box>
+                        <Box>
+                            <h3 style={{ 'margin-top': '0' }}>미완료</h3>
+                            <Count style={{ 'background-color': '#F2ACBF' }}>2</Count>
+                        </Box>
+                    </OuterBox>
                     <Box>
-                        <h3 style={{ 'margin-top': '0' }}>승인</h3>
-                        <Count style={{ 'background-color': '#91CDF2' }}>3</Count>
+                        <h3 style={{ 'margin-top': '0' }}>진행</h3>
+                        <Count style={{ 'background-color': '#91F29B' }}>1</Count>
                     </Box>
-                    <Box>
-                        <h3 style={{ 'margin-top': '0' }}>대기</h3>
-                        <Count style={{ 'background-color': '#F2ACBF' }}>1</Count>
-                    </Box>
-                </OuterBox>
+                </MoreOuterBox>
+                
 
                 <RequestStateGrid className="ag-theme-alpine" style={{ height: '200px', width: '200px' }}>
                     <canvas ref={chartRef} width="200px" height="200px" />
@@ -89,7 +96,7 @@ const RequestStateContainer = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     height: 350px;
-    width: 600px;
+    width: 490px;
 `;
 
 const FlexBox = styled.div`
@@ -103,13 +110,18 @@ const Title = styled.h3`
 `;
 
 const RequestStateGrid = styled.div`
-    width: 500px;
+    width: 400px;
     height: 110px;
     margin-top: 30px;
-    margin-left: 30px;
+    margin-left: 10px;
 `
+
+const MoreOuterBox = styled.div`
+`
+
 const OuterBox = styled.div`
     display : flex;
+    margin-bottom: 25px;
 `
 
 const Box = styled.div`
