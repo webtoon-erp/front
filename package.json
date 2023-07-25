@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "^30.0.5",
+    "@ag-grid-community/core": "^30.0.5",
+    "@ag-grid-enterprise/column-tool-panel": "^30.0.5",
+    "@ag-grid-enterprise/menu": "^30.0.5",
     "@ant-design/icons": "^5.1.4",
     "@egjs/react-grid": "^1.15.1",
     "@fullcalendar/daygrid": "^6.1.8",
@@ -67,6 +71,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-datepicker": "^4.11.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",

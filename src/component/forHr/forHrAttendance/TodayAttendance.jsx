@@ -7,9 +7,7 @@ import styled from 'styled-components';
 
 export default function WholeAttendance() {
 
-    const rowData = [
-      {'미출근': 3, '지각': 4, '휴가': 1, '연장근무': 2},
-  ];
+    
 
   const columnDefs = [
       {field: '미출근'},
@@ -17,6 +15,10 @@ export default function WholeAttendance() {
       {field: '휴가'},
       {field: '연장근무'},
   ];
+
+  const rowData = [
+    {'미출근': 3, '지각': 4, '휴가': 1, '연장근무': 2},
+];
 
   // useEffect(() => {
   //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
