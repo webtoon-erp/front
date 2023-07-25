@@ -6,25 +6,30 @@ import styled from 'styled-components';
 const ViewList = () => {
 
     const rowData = [
-        {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '승인'},
-        {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '승인'},
-        {제목: 'title3', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '승인'},
-        {제목: 'title4', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '대기'},
+        {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '완료'},
+        {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '완료'},
+        {제목: 'title3', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee4', 상태: '완료'},
+        {제목: 'title4', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '진행'},
+        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '요청'},
+        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '반려'},
     ];
 
     const columnDefs = [
-        {field: '제목', sortable: true, filter: true},
-        {field: '요청자', sortable: true, filter: true},
-        {field: '납기일', sortable: true, filter: true},
-        {field: '승인자', sortable: true, filter: true},
+        {field: '제목', sortable: true, filter: true, width: '150px'},
+        {field: '요청자', sortable: true, filter: true, width: '130px'},
+        {field: '납기일', sortable: true, filter: true, width: '130px'},
+        {field: '승인자', sortable: true, filter: true, width: '130px'},
         {
             field: '상태',
             sortable: true,
             filter: true,
+            width: '80px',
             cellStyle: params=> {
-                if(params.value === '승인' ) {
+                if(params.value === '완료') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
-                }else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
+                } else if(params.value === '진행') {
+                    return {color:'#F8F1F1', 'background-color':'#91F29B', 'font-weight': 'bold'}
+                } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
             }
         },
     ];

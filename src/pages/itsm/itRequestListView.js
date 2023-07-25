@@ -6,12 +6,15 @@ export default function ItRequestListView (){
     return(
         <>
             <Title>서비스 조회</Title>
-            <ServiceStateContainer>
-                <ServiceState />
-            </ServiceStateContainer>
-            <ViewListContainer>
-                <ViewList />
-            </ViewListContainer>
+            <FlexBox>
+                <ViewListContainer>
+                    <ViewList />
+                </ViewListContainer>
+                <ServiceStateContainer>
+                    <ServiceState />
+                </ServiceStateContainer>
+            </FlexBox>
+            
         </>
     )
 }
@@ -19,17 +22,24 @@ export default function ItRequestListView (){
 const Title = styled.div`
     font-size: 30px;
     padding-top: 120px;
-    padding-left: 4%;
+    padding-left: 2%;
     font-weight: bold;
 `;
 
+const FlexBox = styled.div`
+    display : flex;
+    justify-content : center;
+    align-items : center;
+`
+
 const ServiceStateContainer = styled.div`
-    padding-left: 4%;
+    padding-left: 2%;
     margin-top: 30px; 
+    width: 40%
 `
 
 const ViewListContainer = styled.div`
-    padding-left: 4%;
+    padding-left: 2%;
     margin-top: 30px; 
-    width: 85%
+    width: 55%
 `
