@@ -62,10 +62,14 @@ const NavBar: React.FC = () => {
         navigate(path);
     };
 
+    const toMyPage = () => {
+        navigate("/myPage");
+    };
+
     return (
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
-            <Avatar size={64} style={{ marginLeft: '45px' }} icon={<UserOutlined />} />
+            <Avatar onClick={toMyPage} size={64} style={{ marginLeft: '45px', cursor: 'pointer' }} icon={<UserOutlined />} />
                 <div style={{ display: 'flex', alignItems: 'center', padding: '16px' }}>
                     <div style={{ marginLeft: '10px' }}>
                         <div style={{ fontWeight: 'bold' }}>이름</div>
