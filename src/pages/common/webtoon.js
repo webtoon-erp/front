@@ -39,7 +39,6 @@ export default function Webtoon (){
                     <AfterUploadToon />
                 </AfterUploadToonContainer>
             </WebtoonContainer>
-            
         </>
     )
 }

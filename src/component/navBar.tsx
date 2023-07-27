@@ -25,28 +25,31 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-    getItem('작품 관리', 'webtoon', <AreaChartOutlined />),
 
-    getItem('인사', 'menu2', <UserOutlined />, [
+    getItem('작품', 'menu2', <AreaChartOutlined />, [
+        getItem('작품 관리', 'webtoon'),
+        getItem('작품 조회', '1'),
+    ]), 
+
+    getItem('인사', 'menu3', <UserOutlined />, [
         getItem('직원 관리', 'hrView'),
-        getItem('근태관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('부서 근태 관리', 'hrAttendance')]),
-        getItem('급여 관리', 'hrSalary'),
+        getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
+        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', '4')]),
     ]),
 
-
-    getItem('ITSM', 'menu3', <LaptopOutlined />, [
-        getItem('서비스 요청', '6'),
-        getItem('서비스 조회', '7'),
+    getItem('ITSM', 'menu4', <LaptopOutlined />, [
+        getItem('서비스 요청', 'itRequestAdd'),
+        getItem('서비스 조회', 'itRequestListView'),
     ]),
 
-    getItem('전자결재', 'menu4', <FileTextOutlined />, [
+    getItem('전자결재', 'menu5', <FileTextOutlined />, [
         getItem('결재 요청', '8'),
-        getItem('내역 조회', '9'),
+        getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', '10'), getItem('부서 문서 조회', '11'), getItem('결재 대기 문서 조회', '12'), getItem('참조 문서 조회', '13')]),
     ]),
 
-    getItem('시스템', 'menu5', <ToolOutlined />, [
-        getItem('일정 관리', '10'),
-        getItem('공지사항 관리', 'notice'),
+    getItem('시스템', 'menu6', <ToolOutlined />, [
+        getItem('일정 관리', '14'),
+        getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', '16')]),
     ]),
 ];
 
@@ -59,10 +62,14 @@ const NavBar: React.FC = () => {
         navigate(path);
     };
 
+    const toMyPage = () => {
+        navigate("/myPage");
+    };
+
     return (
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
-            <Avatar size={64} style={{ marginLeft: '45px' }} icon={<UserOutlined />} />
+            <Avatar onClick={toMyPage} size={64} style={{ marginLeft: '45px', cursor: 'pointer' }} icon={<UserOutlined />} />
                 <div style={{ display: 'flex', alignItems: 'center', padding: '16px' }}>
                     <div style={{ marginLeft: '10px' }}>
                         <div style={{ fontWeight: 'bold' }}>이름</div>

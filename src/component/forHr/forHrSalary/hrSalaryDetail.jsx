@@ -48,6 +48,7 @@ const DetailContentContainer = styled.div`
 
 const SalaryInfoBox = styled.div`
     display: flex;
+    align-items: center;
     margin: 10px;
 `
 const SalaryInfoData = styled.div`
@@ -58,4 +59,7 @@ const SalaryInfoData = styled.div`
     margin-left: 10px;
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.05), 0 2px 2px rgba(0,0,0,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
