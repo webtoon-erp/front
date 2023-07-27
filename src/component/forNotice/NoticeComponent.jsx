@@ -198,7 +198,7 @@ const NoticeComponent = () => {
     };
   
     // 선택된 부서에 해당하는 프로필 필터링
-    const filteredNotices = selectedTag === '전체' ? fakeData : fakeData.filter((emp) => emp.tag === selectedTag);
+    const filteredNotices = fakeData.filter((emp) => emp.tag === selectedTag);
   
     // ag-grid
     const columnDefs = [
