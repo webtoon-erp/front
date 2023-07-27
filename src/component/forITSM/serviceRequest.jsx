@@ -121,7 +121,7 @@ const ServiceRequest = () => {
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
   
   const rowData = [
-    {'-': '', '요청 품목': '품목', '요청 수량': 0, '가격': 0},
+    {'item': '품목', 'quantity': 0, 'price': 0},
   ];
 
   const onCellValueChanged = useCallback((event) => {
@@ -134,39 +134,29 @@ const ServiceRequest = () => {
     var data = event.data;
     console.log(
       'onRowValueChanged: (' +
-        data.make +
+        data.item +
         ', ' +
-        data.model +
+        data.quantity +
         ', ' +
         data.price +
-        ', ' +
-        data.field5 +
         ')'
     );
   }, []);
 
   
   const [columnDefs, setColumnDefs] = useState([
-    { field: '-', cellEditor: 'agCheckboxCellEditor', cellDataType: true,},
-    { field: '요청 품목', editable: true },
-    { field: '요청 수량', editable: true },
-    { field: '가격', editable: true },
+    { headerName: '요청 품목', field: 'item', editable: true,
+          headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
+    { headerName: '요청 수량', field: 'quantity', editable: true , width: 100 },
+    { headerName: '예상 비용(단위:만원)', field: 'price', editable: true , width: 200 },
   ]);
+
   const defaultColDef = useMemo(() => {
     return {
       flex: 1,
       editable: true,
       cellDataType: false,
     };
-  }, []);
-
-  const getRowData = useCallback(() => {
-    const rowData = [];
-    gridRef.current.api.forEachNode(function (node) {
-      rowData.push(node.data);
-   });
-    console.log('Row Data:');
-    console.table(rowData);
   }, []);
 
   const clearData = useCallback(() => {
@@ -183,8 +173,6 @@ const ServiceRequest = () => {
     count++;
     const newItems = [
       createNewRowData(),
-      createNewRowData(),
-      createNewRowData(),
     ];
     const res = gridRef.current.api.applyTransaction({
       add: newItems,
@@ -192,24 +180,8 @@ const ServiceRequest = () => {
     });
   }, []);
 
-  const updateItems = useCallback(() => {
-    // update the first 2 items
-    const itemsToUpdate = [];
-    gridRef.current.api.forEachNodeAfterFilterAndSort(function (
-      rowNode,
-      index
-    ) {
-      // only do first 2
-      if (index >= 2) {
-        return;
-      }
-      const data = rowNode.data;
-      data.price = Math.floor(Math.random() * 20000 + 20000);
-      itemsToUpdate.push(data);
-    });
-    const res = gridRef.current.api.applyTransaction({
-      update: itemsToUpdate,
-    });
+  const onBtStopEditing = useCallback(() => {
+    gridRef.current.api.stopEditing();
   }, []);
 
   const onRemoveSelected = useCallback(() => {
@@ -277,40 +249,38 @@ const ServiceRequest = () => {
           <Container>
             <InputTitle>요청 사항</InputTitle><Div2/><TextArea placeholder="요청 사항" onChange={SelectRequesthandler}/>
           </Container>
-          <Container> 
+          <Container>
             <InputTitle>요청 상품</InputTitle><Div2/>
-                <div style={{ height: '200px', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ marginBottom: '4px' }}>
-                    <button onClick={() => addItems(count)}>Add Items Index</button>
-                    <button onClick={updateItems}>Update Top 2</button>
-                    <button onClick={onRemoveSelected}>Remove Selected</button>
-                    <button onClick={clearData}>Clear Data</button>
+            <GridContainer> 
+                  <div style={{ height: '200px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginBottom: '4px' }}>
+                      <button onClick={() => addItems(count)}>Add Items Index</button>
+                      <button onClick={onRemoveSelected}>Remove Selected</button>
+                      <button onClick={clearData}>Clear Data</button>
+                      <button onClick={onBtStopEditing}>stop ()</button>
+                    </div>
+                    <div style={{ flexGrow: '1' }}>
+                      <div style={gridStyle} className="ag-theme-alpine">
+                        <AgGridReact
+                          ref={gridRef}
+                          rowData={rowData}
+                          columnDefs={columnDefs}
+                          defaultColDef={defaultColDef}
+                          rowSelection={'multiple'}
+                          animateRows={true}
+                          editType={'fullRow'}
+                          onCellValueChanged={onCellValueChanged}
+                          onRowValueChanged={onRowValueChanged}
+                        />
+                    </div>
                   </div>
-                  <div style={{ flexGrow: '1' }}>
-                    <div style={gridStyle} className="ag-theme-alpine">
-                      <AgGridReact
-                        ref={gridRef}
-                        rowData={rowData}
-                        columnDefs={columnDefs}
-                        defaultColDef={defaultColDef}
-                        rowSelection={'multiple'}
-                        animateRows={true}
-                        editType={'fullRow'}
-                        onCellValueChanged={onCellValueChanged}
-                        onRowValueChanged={onRowValueChanged}
-                      />
                   </div>
-                </div>
-                </div>
+              </GridContainer>
             </Container>
+            <Div3 />
             <Container>
             <InputTitle>첨부 파일</InputTitle><Div2/>
             <Input type="file" accept="image/*" onChange={SelectThumbnailhandler} />
-              {selectedthumbnail && (
-                <Container>
-                  <ImagePreview src={selectedthumbnail} alt="Thumbnail Preview" />
-                </Container>
-              )}
           </Container>
         </RangeContainer4>
       </MainContainer>
@@ -320,6 +290,15 @@ const ServiceRequest = () => {
 };
 
 export default ServiceRequest;
+
+const FileContainer = styled.div`
+    margin-top: 20px;
+`
+
+const GridContainer = styled.div`
+    width: 400px;
+    height: 100px;
+`
 
 const MainContainer = styled.div`
   display: flex;
@@ -370,6 +349,10 @@ const Div = styled.div`
 
 const Div2 = styled.div`
   padding: 13px;
+`;
+
+const Div3 = styled.div`
+  padding: 40px;
 `;
 
 
