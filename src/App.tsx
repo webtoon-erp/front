@@ -32,6 +32,8 @@ import ToonAdd from './pages/webtoon/toonAdd';
 
 import EpisodeAddComponent from './component/forWebtoon/forToonAdd/EpisodeAddComponent';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
+import AllToonView from './pages/webtoon/allToonView';
+import ToonDetail from './pages/webtoon/toonDetail';
 function App() {
   return (
     <>
@@ -71,6 +73,8 @@ function App() {
               <Route path="/toonAdd" element={<ToonAdd/>} />
               <Route path="/episodeAdd" element={<EpisodeAdd />} />
               <Route path="/toonView" element={<ToonView />} />
+              <Route path="/toonDetail" element={<ToonDetail />} />
+              <Route path="/allToonView" element={<AllToonView />} />
               <Route path="/epRequestAdd" element={<EpRequestAdd />} />
               <Route path="/epRequestList" element={<EpRequestList />} />
               <Route path="/epRequestView" element={<EpRequestView />} />

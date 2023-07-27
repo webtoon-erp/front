@@ -33,16 +33,9 @@ export default function HrAttendance() {
         <Container>
                 <WholeAttendance />
         </Container>
-        <Container>      
-                    <TodayAttendance />
-        </Container>
         <Container> 
             <WorkExtension />
-            <DepartmentVacation />
-            <VacationRemain /> 
-        </Container>
-        <Container> 
-              <WholeVacation />
+            <DepartmentVacation /> 
         </Container>
     </>
   );
