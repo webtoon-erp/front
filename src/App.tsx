@@ -4,6 +4,7 @@ import Login from './pages/common/login';
 import Profile from './pages/common/profile';
 import Notice from './pages/common/notice';
 import Webtoon from './pages/common/webtoon';
+import MyPage from './pages/common/myPage';
 import HrAdd from './pages/hr/hrAdd';
 import HrAttendance from './pages/hr/hrAttendance';
 import HrProfileListView from './pages/hr/hrProfileListView';
@@ -29,11 +30,11 @@ import HrMyAttendance from './pages/hr/hrMyAttendance';
 import PasswordReset from './pages/common/passwordReset';
 import ToonWorkAdd from './pages/webtoon/toonAdd';
 import ToonAdd from './pages/webtoon/toonAdd';
-
 import EpisodeAddComponent from './component/forWebtoon/forToonAdd/EpisodeAddComponent';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import AllToonView from './pages/webtoon/allToonView';
 import ToonDetail from './pages/webtoon/toonDetail';
+
 function App() {
   return (
     <>
@@ -54,6 +55,7 @@ function App() {
               <Route path="/notice" element={<Notice />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/webtoon" element={<Webtoon />} />
+              <Route path="/myPage" element={<MyPage />} />
               <Route path="/hrAdd" element={<HrAdd />} />
               <Route path="/hrAttendance" element={<HrAttendance/>} />
               <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>

@@ -128,7 +128,7 @@ const EmployeeView = () => {
                         <Btn>추 가</Btn>
                     </Link>
                     <Link to="/hrUpdate">
-                        <Btn>수 정</Btn>
+                        <Btn>삭 제</Btn>
                     </Link>
                 </BtnContainer>
             </SelectAndBtnContainer>
