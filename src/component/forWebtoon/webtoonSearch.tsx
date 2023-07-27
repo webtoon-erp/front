@@ -2,20 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from '../../style/theme';
-import SearchComponent from "../search";
 
 const WebtoonSearch = () => {
     return(
         <WebtoonSearchContainer>
-            <SearchComponent />
-            <RegistBtnContainer>
-                <Link to="/toonAdd">
-                    <RegistBtn>작품 등록</RegistBtn>
-                </Link>
-                <Link to="/episodeAdd">
-                    <RegistBtn>회차 등록</RegistBtn>
-                </Link>
-            </RegistBtnContainer>
+                <Title>작품 관리</Title>
+                <ButtonContainer>
+                    <Link to="/allToonView">
+                        <Btn>전체 웹툰 리스트 보기</Btn>
+                    </Link>
+                </ButtonContainer>
         </WebtoonSearchContainer>       
     );
 };
@@ -23,16 +19,21 @@ export default WebtoonSearch;
 
 const WebtoonSearchContainer = styled.div`
     display: flex;
-    width: 870px;
+    width: 800px;
     justify-content: space-between;
 `;
 
-const RegistBtnContainer = styled.div`
+const Title = styled.div`
+    font-size: 30px;
+    font-weight: bold;
+`;
+
+const ButtonContainer = styled.div`
     display: flex;
 `;
 
-const RegistBtn = styled.button`
-    width: 100px;
+const Btn = styled.button`
+    width: 150px;
     height: 40px;
     background-color: ${theme.colors.btn};
     border: none;
@@ -45,4 +46,5 @@ const RegistBtn = styled.button`
     }
     cursor: pointer;
     margin: 0px 15px 0px 15px;
+    float: right;
 `
