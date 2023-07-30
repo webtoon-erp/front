@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -6,12 +7,12 @@ import styled from 'styled-components';
 const ViewList = () => {
 
     const rowData = [
-        {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '완료'},
-        {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '완료'},
-        {제목: 'title3', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee4', 상태: '완료'},
-        {제목: 'title4', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '진행'},
-        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '요청'},
-        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '반려'},
+        {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '완료', url: '/title1'},
+        {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '완료', url: '/title2'},
+        {제목: 'title3', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee4', 상태: '완료', url: '/title3'},
+        {제목: 'title4', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '진행', url: '/title4'},
+        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '요청', url: '/title5'},
+        {제목: 'title6', 요청자: 'employee2', 납기일: '2023-07-14', 승인자: '', 상태: '반려', url: '/title6'},
     ];
 
     const columnDefs = [
@@ -33,6 +34,15 @@ const ViewList = () => {
             }
         },
     ];
+
+    function handleCellClick(event) {
+        const column = event.colDef.field;
+        const requests = event.data;
+        const url = requests.url;
+        if (column  && url) {
+            window.location.href = url;
+        }
+    }
     
     return(
         <ViewListContainer>
@@ -41,10 +51,12 @@ const ViewList = () => {
                     rowData={rowData}
                     columnDefs={columnDefs}
                     animateRows={true}
-                    rowSelection='multiple'
+                    rowSelection='single'
                     domLayout= 'autoHeight'
                     pagination= {true}
                     paginationPageSize= '10'
+                    onCellClicked= {handleCellClick}
+
                 />
             </RequestListGrid>
         </ViewListContainer>
