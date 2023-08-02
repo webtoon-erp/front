@@ -34,7 +34,7 @@ const items: MenuProps['items'] = [
     getItem('인사', 'menu3', <UserOutlined />, [
         getItem('직원 관리', 'hrView'),
         getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
-        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', '4')]),
+        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', 'hrAllSalaryView')]),
     ]),
 
     getItem('ITSM', 'menu4', <LaptopOutlined />, [
@@ -44,7 +44,7 @@ const items: MenuProps['items'] = [
 
     getItem('전자결재', 'menu5', <FileTextOutlined />, [
         getItem('결재 요청', '8'),
-        getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', '10'), getItem('부서 문서 조회', '11'), getItem('결재 대기 문서 조회', '12'), getItem('참조 문서 조회', '13')]),
+        getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', 'myDocsView'), getItem('부서 문서 조회', 'depDocsView'), getItem('결재 대기 문서 조회', 'holdenDocsView'), getItem('참조 문서 조회', 'refDocsView')]),
     ]),
 
     getItem('시스템', 'menu6', <ToolOutlined />, [

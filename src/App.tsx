@@ -16,6 +16,7 @@ import HrVacationView from './pages/hr/hrVacationView';
 import HrView from './pages/hr/hrView';
 import HrWholeState from './pages/hr/hrWholeState';
 import HrSalary from './pages/hr/hrSalary';
+import HrAllSalaryView from './pages/hr/hrAllSalaryView';
 import ItPastReqeustList from './pages/itsm/itPastRequestList';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
@@ -28,16 +29,18 @@ import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
 import PasswordReset from './pages/common/passwordReset';
-import ToonWorkAdd from './pages/webtoon/toonAdd';
 import ToonAdd from './pages/webtoon/toonAdd';
-import EpisodeAddComponent from './component/forWebtoon/forToonAdd/EpisodeAddComponent';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import AllToonView from './pages/webtoon/allToonView';
 import ToonDetail from './pages/webtoon/toonDetail';
+import MyDocsView from './pages/electropayment/myDocsView';
+import DepDocsView from './pages/electropayment/depDocsView';
+import HoldenDocsView from './pages/electropayment/holdenDocsView';
+import RefDocsView from './pages/electropayment/refDocsView';
+
 
 function App() {
   return (
-    <>
     <Router>
       <header>
         <Header />
@@ -46,7 +49,6 @@ function App() {
         <aside>
             <NavBar />
           </aside>
-        
           <main style={{ flex: 1 }}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -68,6 +70,7 @@ function App() {
               <Route path="/hrView" element={<HrView />} />
               <Route path="/hrWholeState" element={<HrWholeState />} />
               <Route path="/hrSalary" element={<HrSalary />} />
+              <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
               <Route path="/itPastRequestList" element={<ItPastReqeustList />} />
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
@@ -80,14 +83,17 @@ function App() {
               <Route path="/epRequestAdd" element={<EpRequestAdd />} />
               <Route path="/epRequestList" element={<EpRequestList />} />
               <Route path="/epRequestView" element={<EpRequestView />} />
+              <Route path="/myDocsView" element={<MyDocsView />} />
+              <Route path="/depDocsView" element={<DepDocsView />} />
+              <Route path="/holdenDocsView" element={<HoldenDocsView />} />
+              <Route path="/refDocsView" element={<RefDocsView />} />
             </Routes>
           </main>
           </div>
       <footer>
-        
+
       </footer>
     </Router>
-    </>
   );
 }
 
