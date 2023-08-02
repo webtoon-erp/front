@@ -72,7 +72,7 @@ const BeforeUploadToon = () => {
     return(
         <BeforeUploadToonContainer>
             <FlexBox>
-                <Title>{month}월 {week}주차 업로드 완료 웹툰</Title>
+                <Title>{month}월 {week}주차 업로드 예정 웹툰</Title>
                 <SelectWeekContainer>
                     <SelectWeek value={selectedWeek} onChange={SelectWeekhandler}>
                         <OptionWeek value="요일">요일</OptionWeek>
