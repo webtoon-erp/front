@@ -33,10 +33,10 @@ import ToonAdd from './pages/webtoon/toonAdd';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import AllToonView from './pages/webtoon/allToonView';
 import ToonDetail from './pages/webtoon/toonDetail';
-import MyDocsView from './pages/electropayment/myDocsView';
-import DepDocsView from './pages/electropayment/depDocsView';
-import HoldenDocsView from './pages/electropayment/holdenDocsView';
-import RefDocsView from './pages/electropayment/refDocsView';
+import EpMyDocsView from './pages/electropayment/epMyDocsView';
+import EpDepDocsView from './pages/electropayment/epDepDocsView';
+import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
+import EpRefDocsView from './pages/electropayment/epRefDocsView';
 
 
 function App() {
@@ -83,10 +83,10 @@ function App() {
               <Route path="/epRequestAdd" element={<EpRequestAdd />} />
               <Route path="/epRequestList" element={<EpRequestList />} />
               <Route path="/epRequestView" element={<EpRequestView />} />
-              <Route path="/myDocsView" element={<MyDocsView />} />
-              <Route path="/depDocsView" element={<DepDocsView />} />
-              <Route path="/holdenDocsView" element={<HoldenDocsView />} />
-              <Route path="/refDocsView" element={<RefDocsView />} />
+              <Route path="/epMyDocsView" element={<EpMyDocsView />} />
+              <Route path="/epDepDocsView" element={<EpDepDocsView />} />
+              <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
+              <Route path="/epRefDocsView" element={<EpRefDocsView />} />
             </Routes>
           </main>
           </div>
