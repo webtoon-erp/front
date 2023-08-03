@@ -9,7 +9,7 @@ const AllSalaryView = () => {
     const gridRef = useRef(null);
 
     const columnDefs = [      
-        {field: '이름', sortable: true, filter: true, width: '155px', headerCheckboxSelection: true, checkboxSelection: true},
+        {field: '이름', sortable: true, filter: true, width: '155px', headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: false},
         {field: '사번', sortable: true, filter: true, width: '140px'},
         {field: '부서', sortable: true, filter: true, width: '150px'},
         {field: '팀', sortable: true, filter: true, width: '120px'},
@@ -35,6 +35,10 @@ const AllSalaryView = () => {
         gridApi.setColumnDefs(columnDefs.map(col => col.field === '급여 지급일' ? { ...col, editable: true } : col));
     };
 
+    const isRowSelectable = params => {
+        return params.data['지급 상태'] !== '지급'; // '지급 상태'가 '지급'인 행은 선택 불가능하도록 설정
+    };
+
     return (
         <>
             <FlexBox>
@@ -51,6 +55,7 @@ const AllSalaryView = () => {
                             columnDefs={columnDefs}
                             animateRows={true}
                             rowSelection='multiple'
+                            isRowSelectable={isRowSelectable}
                         />
                 </EntitlementGrid>
         </>
