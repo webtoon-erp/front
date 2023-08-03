@@ -54,7 +54,7 @@ const ViewList = () => {
                     rowSelection='single'
                     domLayout= 'autoHeight'
                     pagination= {true}
-                    paginationPageSize= '10'
+                    paginationPageSize= {5}
                     onCellClicked= {handleCellClick}
 
                 />
