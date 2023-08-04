@@ -7,7 +7,6 @@ import EntitlementPayDetail from "../../component/forHr/forHrSalary/entitlementP
 export default function HrSalary (){
     return(
         <HrSalaryContainer>
-            <Title>급여 관리</Title>
             <ProfileContainer>
                 <ProfileInHrSalary />
             </ProfileContainer>
@@ -31,15 +30,9 @@ const HrSalaryContainer = styled.div`
     width: 100%;
 `;
 
-const Title = styled.div`
-    font-size: 30px;
-    padding-top: 120px;
-    font-weight: bold;
-`;
-
 const ProfileContainer = styled.div`
     width: 100%;
-    margin-top: 30px;
+    margin-top: 120px;
     margin-bottom: 30px;
 `;
 
