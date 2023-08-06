@@ -20,7 +20,7 @@ const ProfileInHrSalary = () => {
         <>
             <FlexBox>
                 <Title>내 급여 관리</Title>
-                <Btn>저 장</Btn>
+                <Btn>수 정</Btn>
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>

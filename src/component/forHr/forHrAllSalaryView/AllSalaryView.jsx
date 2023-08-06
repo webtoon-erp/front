@@ -24,10 +24,19 @@ const AllSalaryView = () => {
     ];
 
     const rowData = [
-        {이름: '안유진', 사번 : '1234', 부서: '영업부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급'},
-        {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급'},
-        {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급'},
+        {이름: '안유진', 사번 : '1234', 부서: '영업부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content1'},
+        {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content2'},
+        {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급', url: '/content3'},
     ];
+
+    function handleCellClick(event) {
+        const column = event.colDef.field;
+        const requests = event.data;
+        const url = requests.url;
+        if (column  && url) {
+            window.location.href = url;
+        }
+    }
 
     const handleEditClick = () => {
         // '급여 지급일' 편집 
@@ -56,6 +65,7 @@ const AllSalaryView = () => {
                             animateRows={true}
                             rowSelection='multiple'
                             isRowSelectable={isRowSelectable}
+                            onCellClicked= {handleCellClick}
                         />
                 </EntitlementGrid>
         </>

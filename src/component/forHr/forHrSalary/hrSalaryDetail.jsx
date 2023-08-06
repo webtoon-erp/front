@@ -5,7 +5,7 @@ import HorizonLine from '../../horizonLine';
 const FakeSalData = [
     {
         id: 1,
-        account: '12345-67-890',
+        account: '국민은행 12345-67-890',
         anuSal: '36,000,000',
         monSal: '2,084,669',
         extraPay: '130,050',
@@ -43,7 +43,7 @@ const Title = styled.h3`
 
 const DetailContentContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     padding: 10px;
 `;
 
