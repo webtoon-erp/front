@@ -5,6 +5,7 @@ import HorizonLine from '../../horizonLine';
 const FakeSalData = [
     {
         id: 1,
+        account: '국민은행 12345-67-890',
         anuSal: '36,000,000',
         monSal: '2,084,669',
         extraPay: '130,050',
@@ -18,13 +19,13 @@ const HrSalaryDetail = () => {
             <Title>급여 상세</Title>
             <HorizonLine />
             <DetailContentContainer>
+                <SalaryInfoBox>지급계좌 <SalaryInfoData>{FakeSalData[0].account}</SalaryInfoData></SalaryInfoBox>
                 <SalaryInfoBox>연봉 <SalaryInfoData>{FakeSalData[0].anuSal}</SalaryInfoData></SalaryInfoBox>
                 <SalaryInfoBox>월급 <SalaryInfoData>{FakeSalData[0].monSal}</SalaryInfoData></SalaryInfoBox>
                 <SalaryInfoBox>추가수당 <SalaryInfoData>{FakeSalData[0].extraPay}</SalaryInfoData></SalaryInfoBox>
                 <SalaryInfoBox>자격수당 <SalaryInfoData>{FakeSalData[0].entitlementPay}</SalaryInfoData></SalaryInfoBox>
             </DetailContentContainer>
         </HrSalaryDetailContainer>
-        
     )
 };
 
@@ -42,7 +43,7 @@ const Title = styled.h3`
 
 const DetailContentContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     padding: 10px;
 `;
 

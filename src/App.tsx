@@ -16,6 +16,7 @@ import HrVacationView from './pages/hr/hrVacationView';
 import HrView from './pages/hr/hrView';
 import HrWholeState from './pages/hr/hrWholeState';
 import HrSalary from './pages/hr/hrSalary';
+import HrAllSalaryView from './pages/hr/hrAllSalaryView';
 import ItPastReqeustList from './pages/itsm/itPastRequestList';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
@@ -28,9 +29,7 @@ import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
 import PasswordReset from './pages/common/passwordReset';
-import ToonWorkAdd from './pages/webtoon/toonAdd';
 import ToonAdd from './pages/webtoon/toonAdd';
-import EpisodeAddComponent from './component/forWebtoon/forToonAdd/EpisodeAddComponent';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import AllToonView from './pages/webtoon/allToonView';
 import ToonDetail from './pages/webtoon/toonDetail';
@@ -42,7 +41,6 @@ import NoticeAdd from './pages/system/noticeAdd';
 
 function App() {
   return (
-    <>
     <Router>
       <header>
         <Header />
@@ -51,7 +49,6 @@ function App() {
         <aside>
             <NavBar />
           </aside>
-        
           <main style={{ flex: 1 }}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -73,6 +70,7 @@ function App() {
               <Route path="/hrView" element={<HrView />} />
               <Route path="/hrWholeState" element={<HrWholeState />} />
               <Route path="/hrSalary" element={<HrSalary />} />
+              <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
               <Route path="/itPastRequestList" element={<ItPastReqeustList />} />
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
@@ -94,10 +92,9 @@ function App() {
           </main>
           </div>
       <footer>
-        
+
       </footer>
     </Router>
-    </>
   );
 }
 

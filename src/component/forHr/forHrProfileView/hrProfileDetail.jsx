@@ -23,16 +23,16 @@ const FakeProfileData = [
 
 const HrProfileDetail = () => {
     const rowData = [
-        {자격증명: '정보처리기사', '자격증 상세' : '', 취득일자: '2022-09-01'},
-        {자격증명: 'SQLD', '자격증 상세' : '', 취득일자: '2023-02-10'},
-        {자격증명: 'TOEIC', '자격증 상세' : '920', 취득일자: '2023-05-18'},
-        {자격증명: 'JLPT', '자격증 상세' : 'N2', 취득일자: '2021-08-31'},
+        {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
+        {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
+        {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
+        {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
     ];
 
     const columnDefs = [
         {field: '자격증명', sortable: true, filter: true, width: '390px'},
         {field: '자격증 상세', sortable: true, filter: true, width: '380px'},
-        {field: '취득일자', sortable: true, filter: true},
+        {field: '만료일자', sortable: true, filter: true},
     ];
 
     return (

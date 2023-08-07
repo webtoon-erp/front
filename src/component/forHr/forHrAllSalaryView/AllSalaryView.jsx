@@ -9,7 +9,7 @@ const AllSalaryView = () => {
     const gridRef = useRef(null);
 
     const columnDefs = [      
-        {field: '이름', sortable: true, filter: true, width: '155px', headerCheckboxSelection: true, checkboxSelection: true},
+        {field: '이름', sortable: true, filter: true, width: '155px', headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: false},
         {field: '사번', sortable: true, filter: true, width: '140px'},
         {field: '부서', sortable: true, filter: true, width: '150px'},
         {field: '팀', sortable: true, filter: true, width: '120px'},
@@ -24,15 +24,28 @@ const AllSalaryView = () => {
     ];
 
     const rowData = [
-        {이름: '안유진', 사번 : '1234', 부서: '영업부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급'},
-        {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급'},
-        {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급'},
+        {이름: '안유진', 사번 : '1234', 부서: '영업부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content1'},
+        {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content2'},
+        {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급', url: '/content3'},
     ];
+
+    function handleCellClick(event) {
+        const column = event.colDef.field;
+        const requests = event.data;
+        const url = requests.url;
+        if (column  && url) {
+            window.location.href = url;
+        }
+    }
 
     const handleEditClick = () => {
         // '급여 지급일' 편집 
         const gridApi = gridRef.current.api;
         gridApi.setColumnDefs(columnDefs.map(col => col.field === '급여 지급일' ? { ...col, editable: true } : col));
+    };
+
+    const isRowSelectable = params => {
+        return params.data['지급 상태'] !== '지급'; // '지급 상태'가 '지급'인 행은 선택 불가능하도록 설정
     };
 
     return (
@@ -51,6 +64,8 @@ const AllSalaryView = () => {
                             columnDefs={columnDefs}
                             animateRows={true}
                             rowSelection='multiple'
+                            isRowSelectable={isRowSelectable}
+                            onCellClicked= {handleCellClick}
                         />
                 </EntitlementGrid>
         </>
