@@ -49,7 +49,7 @@ const items: MenuProps['items'] = [
 
     getItem('시스템', 'menu6', <ToolOutlined />, [
         getItem('일정 관리', '14'),
-        getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', '16')]),
+        getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', 'noticeAdd')]),
     ]),
 ];
 
