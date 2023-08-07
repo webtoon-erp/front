@@ -37,7 +37,7 @@ import EpMyDocsView from './pages/electropayment/epMyDocsView';
 import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
-
+import NoticeAdd from './pages/system/noticeAdd';
 
 function App() {
   return (
@@ -87,6 +87,7 @@ function App() {
               <Route path="/epDepDocsView" element={<EpDepDocsView />} />
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
+              <Route path="/noticeAdd" element={<NoticeAdd />} />
             </Routes>
           </main>
           </div>
