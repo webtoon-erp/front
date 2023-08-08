@@ -24,6 +24,9 @@ import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-mod
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 //import NumericCellEditor from './numericCellEditor';
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadProps } from 'antd';
+import { Button, Upload, message, Modal } from 'antd';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -75,22 +78,21 @@ const ServiceRequest = () => {
        },
      })
      .then((result) => {
-       console.log(result);
-       console.log("enroll!");
-       window.alert('[ITSM] 요청이 정상적으로 등록되었습니다.');
-       //window.location.replace("/login"); 
+       if (result.status === 'done') {
+        message.success(`[ITSM] 요청이 정상적으로 등록되었습니다.`);
+      } 
      })
      .catch((error) => {
-       window.alert('[ITSM] 요청이 정상적으로 등록되지 않았습니다.');
-       console.log(error);
+      message.error('[ITSM] 요청이 정상적으로 등록되지 않았습니다.');
      })
  };
-  
-  const SelectRequesterhandler = (e) => {
-    setSelectedRequester(e.target.value);
-  };
-  const SelectAssignerhandler = (e) => {
-    setSelectedAssigner(e.target.value);
+
+ const assigners = []
+
+  const SelectAssignerhandler = (value) => {
+    setSelectedAssigner(value);
+    console.log(value);
+    assigners.push(value);
   };
   const SelectTitlehandler = (e) => {
     setSelectedTitle(e.target.value);
@@ -119,10 +121,6 @@ const ServiceRequest = () => {
   const gridRef = useRef(null);
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  
-  const rowData = [
-    {'item': '품목', 'quantity': 0, 'price': 0},
-  ];
 
   const onCellValueChanged = useCallback((event) => {
     console.log(
@@ -143,13 +141,31 @@ const ServiceRequest = () => {
     );
   }, []);
 
-  
+  //요청 상품
   const [columnDefs, setColumnDefs] = useState([
     { headerName: '요청 품목', field: 'item', editable: true,
           headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
     { headerName: '요청 수량', field: 'quantity', editable: true , width: 100 },
     { headerName: '예상 비용(단위:만원)', field: 'price', editable: true , width: 200 },
   ]);
+
+  const rowData = [
+    {'item': '품목', 'quantity': 0, 'price': 0},
+  ];
+
+  //담당자
+  const [columnDefs2, setColumnDefs2] = useState([
+    { headerName: '이름', field: 'name', editable: false,
+          headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
+    { headerName: '부서', field: 'dept', editable: false , width: 150 },
+    { headerName: '직급', field: 'responsibilities ', editable: false , width: 100 },
+  ]);
+
+  const rowData2 = [
+    {'name': '김민수', 'dept': '인사 1팀', 'responsibilities': '부장'},
+    {'name': '김민정', 'dept': '인사 1팀', 'responsibilities': '차장'},
+    {'name': '김민자', 'dept': '인사 1팀', 'responsibilities': '과장'},
+  ];
 
   const defaultColDef = useMemo(() => {
     return {
@@ -191,7 +207,56 @@ const ServiceRequest = () => {
     });
   }, []);
 
+  const onAssignerSelected = useCallback(() => {
+    const selectedData = gridRef.current.api.getSelectedRows();
+    SelectAssignerhandler(selectedData);
+  }, []);
+
+  const [fileList, setFileList] = useState([]);
+
+  const [setInfo, setSelectedInfo] = useState(null);
+
+  const handleChange = (info) => {
+    let newFileList = [...info.fileList];
+
+    // 1. Limit the number of uploaded files
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    newFileList = newFileList.slice(-2);
+
+    // 2. Read from response and show file link
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+    setFileList(newFileList);
+
+    setSelectedInfo(info.url);
+
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  };
+
+  // 아래 action 부분 setInfo 데이터로 바꿔볼 예정
+
+  const props = {
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    onChange: handleChange,
+    multiple: true,
+  };
+
   var count = 1;
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>
@@ -223,13 +288,42 @@ const ServiceRequest = () => {
                   placeholderText="납기일"
                   />
           </Container>
-
             <Container>
-                <InputTitle>처리자</InputTitle><Div/><Input type="text" placeholder="처리자" required onChange={SelectRequesterhandler}/>
-            </Container>
-
-            <Container>
-                <InputTitle>승인자</InputTitle><Div/><Input type="text" placeholder="승인자" onChange={SelectAssignerhandler}/>
+                <InputTitle>담당자</InputTitle><Div/>
+                <Button type="primary" onClick={() => setModalOpen(true)}>
+                    담당자
+                  </Button>
+                  <Modal
+                    title="담당자 선택"
+                    centered
+                    open={modalOpen}
+                    onOk={() => setModalOpen(false)}
+                    onCancel={() => setModalOpen(false)}
+                  >
+                    <GridContainer> 
+                          <div style={{ height: '150px', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ marginBottom: '4px' }}>
+                              <button onClick={onAssignerSelected}>Selected</button>
+                            </div>
+                            <div>
+                              {[assigners]}
+                            </div>
+                            <div style={{ flexGrow: '1' }}>
+                              <div style={gridStyle} className="ag-theme-alpine">
+                                <AgGridReact
+                                  ref={gridRef}
+                                  rowData={rowData2}
+                                  columnDefs={columnDefs2}
+                                  defaultColDef={defaultColDef}
+                                  rowSelection={'multiple'}
+                                  animateRows={true}
+                                  onRowValueChanged={onRowValueChanged}
+                                />
+                            </div>
+                          </div>
+                          </div>
+                      </GridContainer>
+                  </Modal>
             </Container>
 
             <Container>
@@ -243,12 +337,12 @@ const ServiceRequest = () => {
             <Container>
                 <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" onChange={SelectTitlehandler}/>
             </Container>
-          </RangeContainer1>
-
-        <RangeContainer4>
-          <Container>
-            <InputTitle>요청 사항</InputTitle><Div2/><TextArea placeholder="요청 사항" onChange={SelectRequesthandler}/>
+            <Container>
+            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" onChange={SelectRequesthandler}/>
           </Container>
+
+          </RangeContainer1>
+        <RangeContainer4>
           <Container>
             <InputTitle>요청 상품</InputTitle><Div2/>
             <GridContainer> 
@@ -278,10 +372,15 @@ const ServiceRequest = () => {
               </GridContainer>
             </Container>
             <Div3 />
-            <Container>
-            <InputTitle>첨부 파일</InputTitle><Div2/>
-            <Input type="file" accept="image/*" onChange={SelectThumbnailhandler} />
-          </Container>
+            
+          <Container>
+            <InputTitle>첨부 파일</InputTitle><Div2 />
+              <Container2>
+                <Upload {...props} fileList={fileList}>
+                  <Button icon={<UploadOutlined />}>Upload</Button>
+                </Upload>
+              </Container2>
+           </Container> 
         </RangeContainer4>
       </MainContainer>
       
@@ -290,10 +389,6 @@ const ServiceRequest = () => {
 };
 
 export default ServiceRequest;
-
-const FileContainer = styled.div`
-    margin-top: 20px;
-`
 
 const GridContainer = styled.div`
     width: 400px;
@@ -304,7 +399,7 @@ const MainContainer = styled.div`
   display: flex;
   border: 1px solid #ccc;
   margin: 30px 50px;
-  height: 500px;
+  height: 540px;
   padding-top: 50px;
 `;
 
@@ -315,8 +410,8 @@ const Input = styled.input`
 `;
 
 const TextArea = styled.textarea`
-  height: 100px;
-  width: 400px;
+  height: 150px;
+  width: 350px;
   border: transparent;
   background: transparent;
   box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
@@ -355,7 +450,6 @@ const Div3 = styled.div`
   padding: 40px;
 `;
 
-
 const Title = styled.div`
   font-size: 30px;
   padding-top: 120px;
@@ -370,10 +464,10 @@ const Container = styled.div`
   margin: 20px;
 `;
 
-const ImagePreview = styled.img`
-  max-width: 300px;
-  max-height: 200px;
-  margin-top: 10px;
+const Container2 = styled.div`
+  border: 1px solid #ccc;
+  width: 360px;
+  padding: 20px;
 `;
 
 const Select = styled.select`

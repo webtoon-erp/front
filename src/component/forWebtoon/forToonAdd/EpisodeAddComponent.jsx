@@ -2,12 +2,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import theme from '../../../style/theme';
+import { Button, Upload, message } from 'antd';
 
 const EpisodeAddComponent = () => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedEpisode, setSelectedEpisode] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
   const [selectedthumbnail, setSelectedThumbnail] = useState(null);
+  const [selectedWorks, setSelectedWorks] = useState(null);
 
   const handleSubmitClick = () => {
     //console.log(finalId, "finalId 결과값"); 
@@ -18,6 +20,7 @@ const EpisodeAddComponent = () => {
        selectedEpisode: selectedEpisode,  
        selectedContent: selectedContent,  
        selectedthumbnail: selectedthumbnail,
+       selectedWorks: selectedWorks,
      },
      {
        headers: {
@@ -25,15 +28,13 @@ const EpisodeAddComponent = () => {
        },
      })
      .then((result) => {
-       console.log(result);
-       console.log("enroll!");
-       window.alert('회차가 정상적으로 등록되었습니다.');
-       //window.location.replace("/login"); 
-     })
-     .catch((error) => {
-       window.alert('회차가 정상적으로 등록되지 않았습니다.');
-       console.log(error);
-     })
+      if (result.status === 'done') {
+       message.success(`회차가 정상적으로 등록되었습니다.`);
+     } 
+    })
+    .catch((error) => {
+     message.error('회차가 정상적으로 등록되지 않았습니다.');
+    })
  };
 
   const SelectTitlehandler = (e) => {
@@ -54,6 +55,19 @@ const EpisodeAddComponent = () => {
 
     reader.onload = (event) => {
       setSelectedThumbnail(event.target.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const SelectWorkshandler = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setSelectedWorks(event.target.result);
     };
 
     if (file) {
@@ -82,12 +96,21 @@ const EpisodeAddComponent = () => {
         </RangeContainer>
         <RangeContainer>
           <Container>
-            <InputTitle>작품 파일</InputTitle>
+            <InputTitle>썸네일 파일</InputTitle>
             <Input type="file" accept="image/*" onChange={SelectThumbnailhandler} />
           </Container>
           {selectedthumbnail && (
             <Container>
               <ImagePreview src={selectedthumbnail} alt="Thumbnail Preview" />
+            </Container>
+          )}
+          <Container>
+            <InputTitle>작품 파일</InputTitle><Div3 />
+            <Input type="file" accept="image/*" onChange={SelectWorkshandler} />
+          </Container>
+          {selectedWorks && (
+            <Container>
+              <ImagePreview src={selectedWorks} alt="Works Preview" />
             </Container>
           )}
         </RangeContainer>
@@ -139,6 +162,10 @@ const Div = styled.div`
 
 const Div2 = styled.div`
   padding: 17px;
+`;
+
+const Div3 = styled.div`
+  padding: 8px;
 `;
 
 
