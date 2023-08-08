@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import { Button, Upload, message } from 'antd';
 
 
 const ToonAddComponent = () => {
@@ -70,14 +71,12 @@ const ToonAddComponent = () => {
         },
       })
       .then((result) => {
-        console.log(result);
-        console.log("enroll!");
-        window.alert('작품이 정상적으로 등록되었습니다.');
-        //window.location.replace("/login"); 
+        if (result.status === 'done') {
+         message.success(`작품이 정상적으로 등록되었습니다.`);
+       } 
       })
       .catch((error) => {
-        window.alert('작품이 정상적으로 등록되지 않았습니다.');
-        console.log(error);
+       message.error('작품이 정상적으로 등록되지 않았습니다.');
       })
   };
   
