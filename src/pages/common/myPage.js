@@ -1,7 +1,15 @@
+import styled from 'styled-components';
+import MyPageView from '../../component/forMyPage/myPageView';
+
 export default function myPage (){
     return(
-        <>
-            <div>마이페이지</div>
-        </>
+        <HrProfileDetailContainer>
+            <MyPageView />
+        </HrProfileDetailContainer>
     )
 }
+
+const HrProfileDetailContainer = styled.div`
+    margin-top: 120px;
+    margin-left: 30px;
+`
