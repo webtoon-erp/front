@@ -28,13 +28,13 @@ const items: MenuProps['items'] = [
 
     getItem('작품', 'menu2', <AreaChartOutlined />, [
         getItem('작품 관리', 'webtoon'),
-        getItem('작품 조회', '1'),
+        getItem('작품 조회', 'allToonView'),
     ]), 
 
     getItem('인사', 'menu3', <UserOutlined />, [
         getItem('직원 관리', 'hrView'),
         getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
-        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', '4')]),
+        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', 'hrAllSalaryView')]),
     ]),
 
     getItem('ITSM', 'menu4', <LaptopOutlined />, [
@@ -44,12 +44,12 @@ const items: MenuProps['items'] = [
 
     getItem('전자결재', 'menu5', <FileTextOutlined />, [
         getItem('결재 요청', '8'),
-        getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', '10'), getItem('부서 문서 조회', '11'), getItem('결재 대기 문서 조회', '12'), getItem('참조 문서 조회', '13')]),
+        getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', 'epMyDocsView'), getItem('부서 문서 조회', 'epDepDocsView'), getItem('결재 대기 문서 조회', 'epHoldenDocsView'), getItem('참조 문서 조회', 'epRefDocsView')]),
     ]),
 
     getItem('시스템', 'menu6', <ToolOutlined />, [
         getItem('일정 관리', '14'),
-        getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', '16')]),
+        getItem('공지사항 관리', '15', null, [getItem('공지사항 조회', 'notice'), getItem('공지사항 등록', 'noticeAdd')]),
     ]),
 ];
 

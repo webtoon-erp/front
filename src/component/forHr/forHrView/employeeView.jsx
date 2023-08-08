@@ -127,13 +127,10 @@ const EmployeeView = () => {
                     <Link to="/hrAdd">
                         <Btn>추 가</Btn>
                     </Link>
-                    <Link to="/hrUpdate">
                         <Btn>삭 제</Btn>
-                    </Link>
                 </BtnContainer>
             </SelectAndBtnContainer>
             
-
             <CardGrid>
                 {isLoading ? (
                 Array.from({ length: 10 }).map((_, index) => (

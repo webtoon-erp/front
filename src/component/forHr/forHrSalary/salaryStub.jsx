@@ -15,10 +15,10 @@ const SalaryStub = () => {
     ];
 
     const columnDefs = [
-        {field: '급여월'},
-        {field: '급여 지급일'},
-        {field: '지급 합계'},
-        {field: '공제 후 지급액'},
+        {field: '급여월', sortable: true, filter: true, width: '150px'},
+        {field: '급여 지급일', sortable: true, filter: true, width: '180px'},
+        {field: '지급 합계', sortable: true, filter: true, width: '180px'},
+        {field: '공제 후 지급액', sortable: true, filter: true, width: '180px'},
     ];
 
     // useEffect(() => {
@@ -40,7 +40,6 @@ const SalaryStub = () => {
                 />
             </SalaryStubGrid>
         </SalaryStubContainer>
-        
     )
 };
 
@@ -58,5 +57,5 @@ const Title = styled.h3`
 
 const SalaryStubGrid = styled.div`
     width: 720px;
-    height: 260px;
+    height: 300px;
 `
