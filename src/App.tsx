@@ -38,8 +38,21 @@ import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import NoticeAdd from './pages/system/noticeAdd';
+import Tab from './component/Tab';
+import { useState } from 'react';
 
 function App() {
+  const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
+
+  const handleCloseTab = (index: number) => {
+    setTabElements(tabElements.filter((_, i) => i !== index));
+  };
+
+  const handleAddTab = () => {
+    // Add tab logic here
+    setTabElements([...tabElements, { title: 'New Tab', fixed: false }]);
+  };
+  
   return (
     <Router>
       <header>
@@ -49,7 +62,8 @@ function App() {
         <aside>
             <NavBar />
           </aside>
-          <main style={{ flex: 1 }}>
+          <main style={{ flex: 1, marginTop: '80px'}}>
+          <Tab tabElements={tabElements} onClose={handleCloseTab} onAdd={handleAddTab}/>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
