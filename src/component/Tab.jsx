@@ -13,11 +13,6 @@ const Tab = ({ tabElements, onClose, onAdd }) => {
           )}
         </div>
       ))}
-      {onAdd && (
-        <button onClick={onAdd} className="add-button">
-          +
-        </button>
-      )}
     </div>
   );
 };

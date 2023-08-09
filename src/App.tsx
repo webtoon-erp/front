@@ -43,14 +43,21 @@ import { useState } from 'react';
 
 function App() {
   const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
+  const [activeTab, setActiveTab] = useState<string | null>(null);
 
   const handleCloseTab = (index: number) => {
     setTabElements(tabElements.filter((_, i) => i !== index));
+    setActiveTab((prevActiveTab) => {
+      if (prevActiveTab === tabElements[index].title) {
+        return null;
+      }
+      return prevActiveTab;
+    });
   };
 
-  const handleAddTab = () => {
-    // Add tab logic here
-    setTabElements([...tabElements, { title: 'New Tab', fixed: false }]);
+  const handleAddTab = (title: string) => {
+    setTabElements([...tabElements, { title, fixed: false }]);
+    setActiveTab(title);
   };
   
   return (
@@ -60,10 +67,11 @@ function App() {
       </header>
         <div style={{ display: 'flex' }}>
         <aside>
-            <NavBar />
+          <NavBar onAddTab={handleAddTab} />
           </aside>
           <main style={{ flex: 1, marginTop: '80px'}}>
-          <Tab tabElements={tabElements} onClose={handleCloseTab} onAdd={handleAddTab}/>
+          <Tab tabElements={tabElements} onClose={handleCloseTab} onAdd={handleAddTab} />
+          
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
