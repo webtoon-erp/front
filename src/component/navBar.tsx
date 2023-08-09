@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AreaChartOutlined, LaptopOutlined, UserOutlined, FileTextOutlined, ToolOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu, Avatar, Space } from 'antd';
 import styled from 'styled-components';
 import theme from '../style/theme';
 import { useNavigate } from 'react-router-dom';
+import Tab from './Tab'; 
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -53,13 +54,25 @@ const items: MenuProps['items'] = [
     ]),
 ];
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+    onAddTab: (title: string) => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
     const navigate = useNavigate();
+    //여기 수정함
+    const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
+    const [activeTab, setActiveTab] = useState<string | null>(null);
 
     const onClick: MenuProps['onClick'] = (e) => {
         const selectedKey = e.key;
         const path = `/${selectedKey}`;
         navigate(path);
+
+        // Tab 추가 로직을 상위 컴포넌트로 전달
+        if (onAddTab) {
+            onAddTab(selectedKey);
+        }
     };
 
     const toMyPage = () => {
@@ -67,6 +80,7 @@ const NavBar: React.FC = () => {
     };
 
     return (
+        <>
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
             <Avatar onClick={toMyPage} size={64} style={{ marginLeft: '45px', cursor: 'pointer' }} icon={<UserOutlined />} />
@@ -91,6 +105,8 @@ const NavBar: React.FC = () => {
                 items={items}
             />
         </Space>
+          
+        </>
     );
 };
 
