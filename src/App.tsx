@@ -1,4 +1,5 @@
 import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Home from './pages/common/home';
 import Login from './pages/common/login';
 import Profile from './pages/common/profile';
@@ -39,27 +40,46 @@ import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import NoticeAdd from './pages/system/noticeAdd';
 import Tab from './component/Tab';
-import { useState } from 'react';
+import TabComponent from './component/TabComponent';
+
 
 function App() {
-  const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
-  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [tabElements, setTabElements] = useState([{ title: 'Home', fixed: true }]);
+  const [activeTab, setActiveTab] = useState<string | null>(tabElements[0]?.title || null);
+
+  useEffect(() => {
+    const savedTabs = JSON.parse(localStorage.getItem('tabs') || '[]');
+    setTabElements(savedTabs);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tabs', JSON.stringify(tabElements));
+  }, [tabElements]);
 
   const handleCloseTab = (index: number) => {
-    setTabElements(tabElements.filter((_, i) => i !== index));
-    setActiveTab((prevActiveTab) => {
-      if (prevActiveTab === tabElements[index].title) {
-        return null;
-      }
-      return prevActiveTab;
-    });
+    if (tabElements[index].fixed) {
+      return;
+    }
+
+    const newTabElements = [...tabElements];
+    newTabElements.splice(index, 1);
+
+    if (tabElements[index].title === activeTab) {
+      setActiveTab(newTabElements[newTabElements.length - 1]?.title || null);
+    }
+
+    setTabElements(newTabElements);
   };
 
   const handleAddTab = (title: string) => {
-    setTabElements([...tabElements, { title, fixed: false }]);
-    setActiveTab(title);
+    if (!tabElements.some((tab) => tab.title === title)) {
+      const newTabElements = [...tabElements, { title, fixed: false }];
+      setTabElements(newTabElements);
+      setActiveTab(title);
+    }
   };
-  
+
+
   return (
     <Router>
       <header>
@@ -70,7 +90,7 @@ function App() {
           <NavBar onAddTab={handleAddTab} />
           </aside>
           <main style={{ flex: 1, marginTop: '80px'}}>
-          <Tab tabElements={tabElements} onClose={handleCloseTab} onAdd={handleAddTab} />
+          <Tab tabElements={tabElements} onClose={handleCloseTab} />
           
             <Routes>
               <Route path="/" element={<Home />} />
@@ -110,6 +130,13 @@ function App() {
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
               <Route path="/noticeAdd" element={<NoticeAdd />} />
+              {tabElements.map((tab, index) => (
+              <Route
+                  key={index}
+                  path={`/${tab.title.toLowerCase()}`}
+                  element={<TabComponent title={tab.title} />}
+                />
+              ))}
             </Routes>
           </main>
           </div>
