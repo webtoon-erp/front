@@ -32,7 +32,7 @@ const HrSalaryContainer = styled.div`
 
 const ProfileContainer = styled.div`
     width: 100%;
-    margin-top: 120px;
+    margin-top: 50px;
     margin-bottom: 30px;
 `;
 

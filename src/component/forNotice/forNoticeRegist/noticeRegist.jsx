@@ -43,7 +43,7 @@ const NoticeRegist = () => {
 export default NoticeRegist;
 
 const NoticeRegistContainer = styled.div`
-    margin-top: 120px;
+    margin-top: 40px;
     padding: 10px;
 `;
 

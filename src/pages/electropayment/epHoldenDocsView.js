@@ -11,6 +11,6 @@ export default function EpHoldenDocsView (){
 
 const HoldenDocsViewContainer = styled.div`
     margin-left: 40px;
-    margin-top: 120px;
+    margin-top: 50px;
     width: 100%;
 `;
