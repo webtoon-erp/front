@@ -452,7 +452,7 @@ const Div3 = styled.div`
 
 const Title = styled.div`
   font-size: 30px;
-  padding-top: 120px;
+  padding-top: 40px;
   padding-left: 4%;
   font-weight: bold;
 `;

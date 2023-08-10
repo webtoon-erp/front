@@ -41,6 +41,8 @@ import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import NoticeAdd from './pages/system/noticeAdd';
 import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
+import ScheduleAdd from './pages/system/scheduleAdd';
+import Schedule from './pages/common/schedule';
 
 
 function App() {
@@ -130,6 +132,8 @@ function App() {
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
               <Route path="/noticeAdd" element={<NoticeAdd />} />
+              <Route path="/scheduleAdd" element={<ScheduleAdd />} />
+              <Route path="/schedule" element={<Schedule />} />
               {tabElements.map((tab, index) => (
               <Route
                   key={index}
