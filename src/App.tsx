@@ -43,6 +43,7 @@ import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
 import ScheduleAdd from './pages/system/scheduleAdd';
 import Schedule from './pages/common/schedule';
+import EpisodeDetail from './pages/webtoon/episodeDetail';
 
 
 function App() {
@@ -134,6 +135,7 @@ function App() {
               <Route path="/noticeAdd" element={<NoticeAdd />} />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
+              <Route path="/episodeDetail" element={<EpisodeDetail />} />
               {tabElements.map((tab, index) => (
               <Route
                   key={index}

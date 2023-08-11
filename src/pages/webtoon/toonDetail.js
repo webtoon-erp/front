@@ -2,9 +2,9 @@ import ToonDetailComponent from "../../component/forWebtoon/forToonDetail/toonDe
 import styled from 'styled-components'
 import ToonGrid from "../../component/forWebtoon/forToonDetail/toonGrid";
 import theme from '../../style/theme';
-import axios from 'axios';
 
 export default function ToonDetail (){
+    
 
     return(
         <>
@@ -36,7 +36,7 @@ width: 500px;
 
 const Title = styled.div`
 font-size: 30px;
-padding-top: 120px;
+padding-top: 30px;
 padding-left: 4%;
 font-weight: bold;
 `;

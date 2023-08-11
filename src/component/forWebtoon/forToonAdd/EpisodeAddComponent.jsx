@@ -83,9 +83,6 @@ const EpisodeAddComponent = () => {
       </RegistBtnContainer>
       <MainContainer>
         <RangeContainer>
-        <Container>
-              <InputTitle>작품 제목</InputTitle><Div/><Input type="text" placeholder="작품 제목" onChange={SelectTitlehandler}/>
-          </Container>
           <Container>
               <InputTitle>회차 제목</InputTitle><Div/><Input type="text" placeholder="회차 제목" onChange={SelectEpisodehandler}/>
           </Container>

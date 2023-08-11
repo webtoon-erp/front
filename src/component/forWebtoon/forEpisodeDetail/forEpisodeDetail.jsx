@@ -3,27 +3,22 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import CommentComponent from '../../comments/commentComponent';
 
 const FakeProfileData = [
     {
         id: 1,
-        title: '엔딩, 바꿔보려합니다',
-        author: 'author',
-        drawer: 'drawer',
-        day: '월요일',
-        keyword: '코미디',
-        content: '010-1234-1234',
-        rank: 'title 1 썸네일',
+        title: '엔딩, 바꿔보려합니다 1화 제목',
+        author: '나는 작가',
+        manager: '담당자1',
         thumnailPreview: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbxgxO2HlWpJnmMF19T9mPjPypU5Q7R5Dcfg&usqp=CAU',
-        content: `배드엔딩만 쓰는 피폐소설작가 변수아는
-        누군가의 저주로 인해 현재 연재중인 ‘청춘의 끝에’의 악녀 최세화로 빙의된다.
-        인성파탄자, 소시오패스, 이중인격자, 싸이코패스뿐인 소설 속에서
-        과연 수아는 살아서 원래 세계로 돌아갈 수 있을까?`,
+        content: `엔딩, 바꿔보려합니다 1화입니다.
+        잘 부탁드립니다.`,
     },
 ];
 
 
-const ToonDetailComponent = (Id) => {
+const ForEpisodeDetail = (Id) => {
     //수정 가능 여부
     const [editable, setEditable] = useState('false');
     const [enrollable, setEnrollable] = useState('false');
@@ -111,11 +106,11 @@ const ToonDetailComponent = (Id) => {
           .then((result) => {
             console.log(result);
             console.log("enroll!");
-            window.alert('작품 상세정보가 정상적으로 수정되었습니다.');
+            window.alert('회차 상세정보가 정상적으로 수정되었습니다.');
             //window.location.replace("/login"); 
           })
           .catch((error) => {
-            window.alert('작품 상세정보가 정상적으로 수정되지 않았습니다.');
+            window.alert('회차 상세정보가 정상적으로 수정되지 않았습니다.');
             console.log(error);
           })
       };
@@ -137,20 +132,26 @@ const ToonDetailComponent = (Id) => {
                             
                             <ToonInfoContainer>
                                 <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>그림 <ToonInfoData>{FakeProfileData[0].drawer}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>업로드 요일 <ToonInfoData>{FakeProfileData[0].day}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>키워드 <ToonInfoData>{FakeProfileData[0].keyword}</ToonInfoData></ToonInfoBox>
+                                <ToonInfoBox>담당자 <ToonInfoData>{FakeProfileData[0].manager}</ToonInfoData></ToonInfoBox>
                             </ToonInfoContainer>
                             <ToonInsideInfoTextBox>
-                                <ToonInfoBox>작품 설명 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
+                                <ToonInfoBox>작가의 말 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
                             </ToonInsideInfoTextBox>
                         </ToonInsideInfoBox>
             </WebtoonContainer>
+            <WebtoonWorksContainer>
+                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
+            </WebtoonWorksContainer>
+            
+            <CommentContainer>
+              <CommentComponent />
+            </CommentContainer>
+
         </>
     )
 };
 
-export default ToonDetailComponent;
+export default ForEpisodeDetail;
 
 const RegistBtnContainer = styled.div`
     display: flex;
@@ -181,6 +182,13 @@ const WebtoonContainer = styled.div`
     border-radius: 8px;
 `;
 
+const CommentContainer = styled.div`
+    display: flex;
+    padding: 20px;
+    width: 1000px;
+    padding-left: 30px;
+`;
+
 const WebtoonImgContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -191,9 +199,24 @@ const WebtoonImgContainer = styled.div`
     border-radius: 8px;
 `
 
+//수정 필요
+const WebtoonWorksContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #eee;
+    width: 100%;
+`
+
 const Img = styled.img`
     width: 180px;
     height: 270px;
+`;
+
+const ToonImg = styled.img`
+    padding: 20px;
+    width: 480px;
+    height: 700px;
 `;
 
 const ToonInfoContainer = styled.div`
