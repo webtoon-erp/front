@@ -37,7 +37,10 @@ const MyPageView = () => {
 
     return (
         <>
-            <Title>마이페이지</Title>
+            <FlexBox>
+                <Title>마이페이지</Title>
+                <Btn>유급휴가 신청</Btn>
+            </FlexBox>            
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
                     <Img src={FakeProfileData[0].imageUrl} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
@@ -88,6 +91,10 @@ const EntitlementGridContainer = styled.div`
     border-radius: 8px;
 `;
 
+const FlexBox = styled.div`
+    display: flex;
+`
+
 const Title = styled.div`
     font-size: 30px;
     font-weight: bold;
@@ -98,6 +105,22 @@ const Title2 = styled.div`
     font-size: 22px;
     font-weight: bold;
 `;
+
+const Btn = styled.button`
+    width: 100px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 770px;
+`
 
 const ProfileImgContainer = styled.div`
     display: flex;
