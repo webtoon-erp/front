@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { Button, Modal } from 'antd';
 
 const CalendarArea = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,15 +28,25 @@ const CalendarArea = () => {
       ];
       setEvents(fetchedEvents);
       setIsLoading(false);
-    }, ); // Simulating a 2-second loading delay
+    }, ); 
   }, []);
+  
 
   return (
     <div className={`calendar-area ${isLoading ? 'loading' : ''}`}>
       {isLoading ? (
         <div className="skeleton-loader"/>
       ) : (
-        <FullCalendar defaultView="dayGridMonth" plugins={[dayGridPlugin]} events={events} />
+        <FullCalendar 
+          defaultView="dayGridMonth" 
+          plugins={[dayGridPlugin, timeGridPlugin]} 
+          events={events}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek'
+          }}
+        />
       )}
     </div>
   );

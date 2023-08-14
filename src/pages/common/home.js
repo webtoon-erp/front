@@ -7,13 +7,13 @@ const MainContainer = styled.div`
 `;
 
 const CalendarContainer = styled.div`
-  margin-top: 80px;
+  margin-top: 40px;
   margin-left: 20px;
-  width: 60%;
+  width: 70%;
 `;
 
 const NoticeContainer = styled.div`
-  width: 40%;
+  width: 30%;
 `;
 
 export default function Home (){
