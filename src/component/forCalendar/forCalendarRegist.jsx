@@ -1,12 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import theme from '../../style/theme';
-import DatePicker from 'react-datepicker';
+import dayjs from 'dayjs';
+import { TimePicker, DatePicker, Space, message } from 'antd';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { ModuleRegistry } from '@ag-grid-community/core';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { Button, Upload, message, Modal } from 'antd';
 
 
 const ForCalendarRegist = () => {
@@ -18,6 +16,8 @@ const ForCalendarRegist = () => {
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedRequest, setSelectedRequest] = useState('');
+  const [selectedStartTime, setSelectedStartTime] = useState('10:00');
+  const [selectedEndTime, setSelectedEndTime] = useState('12:00');
 
   const handleSubmitClick = () => {
     //console.log(finalId, "finalId 결과값"); 
@@ -25,8 +25,10 @@ const ForCalendarRegist = () => {
    axios.post('http://localhost:5050/register',
      {
       registDate: registDate,
-      selectedStartDate: selectedStartDate,  
-      selectedEndDate: selectedEndDate,  
+      selectedStartDate: selectedStartDate,
+      selectedStartTime: selectedStartTime,
+      selectedEndDate: selectedEndDate, 
+      selectedEndTime: selectedEndTime,  
       selectedDeliveryDate: selectedDeliveryDate,  
       selectedTitle: selectedTitle,
       selectedRequest: selectedRequest,
@@ -51,6 +53,26 @@ const ForCalendarRegist = () => {
     setSelectedTitle(e.target.value);
   };
 
+  const format = 'HH:mm';
+
+  const disabledDate = current => {
+    // 오늘 이전의 날짜를 비활성화
+    return current && current < dayjs().startOf('day');
+  };
+
+  const todayDate = new Date();
+
+  const CustomDatePicker = (props) => {
+    const todayDate = new Date();
+    const formattedTodayDate = todayDate.toISOString().split('T')[0];
+  
+    return (
+      <DatePicker {...props} placeholder={formattedTodayDate} disabled />
+    );
+  };
+  
+  
+
   return (
     <>
       <Title>일정 등록</Title>
@@ -59,18 +81,20 @@ const ForCalendarRegist = () => {
       </RegistBtnContainer>
       
       <MainContainer>
+        <GridContainer1>
           <Container>
               <InputTitle>등록일</InputTitle>
               <Div3 />
-              <DatePicker
-                selected={registDate}
-                dateFormat="yyyy-MM-dd"
-                disabled
+              <CustomDatePicker
+              selected={todayDate}
+              dateFormat="yyyy-MM-dd"
               />
             </Container>
             <Container>
                 <InputTitle>일정 제목</InputTitle><Div2/><Input type="text" placeholder="제목" onChange={SelectTitlehandler}/>
             </Container>
+          </GridContainer1>
+          <GridContainer2>
             <Container>
               <InputTitle>시작일자</InputTitle>
               <Div />
@@ -78,9 +102,14 @@ const ForCalendarRegist = () => {
                   selected={selectedDeliveryDate}
                   onChange={(date) => setSelectedStartDate(date)}
                   dateFormat="yyyy-MM-dd"
-                  minDate={new Date()}
-                  placeholderText="납기일"
+                  disabledDate={disabledDate}
+                  placeholderText="시작일자"
                   />
+              <TimePicker defaultValue={dayjs('12:08', format)} 
+                          format={format}
+                          onChange={(time) => setSelectedStartTime(time)}
+                          size="small" />
+                  
           </Container>
           <Container>
               <InputTitle>종료일자</InputTitle>
@@ -89,12 +118,16 @@ const ForCalendarRegist = () => {
                   selected={selectedDeliveryDate}
                   onChange={(date) => setSelectedEndDate(date)}
                   dateFormat="yyyy-MM-dd"
-                  minDate={new Date()}
-                  placeholderText="납기일"
+                  disabledDate={disabledDate}
+                  placeholderText="종료일자"
                   />
+                  
+                  <TimePicker defaultValue={dayjs('12:08', format)} 
+                              format={format}
+                              onChange={(time) => setSelectedEndTime(time)}
+                              size="small" />
           </Container>
-          
-
+        </GridContainer2> 
       </MainContainer>
       
     </>
@@ -108,11 +141,24 @@ const MainContainer = styled.div`
   display: flex;
   border: 1px solid #ccc;
   margin: 30px 50px;
-  height: 300px;
-  padding: 20px;
-  padding-left: 30%;
+  height: 200px;
+  padding: 120px;
+  display: flex;
+  flex-direction: row;
+`;
+
+const GridContainer1 = styled.div`
+  display: flex;
   display: flex;
   flex-direction: column;
+  width: 40%
+`;
+
+const GridContainer2 = styled.div`
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  width: 60%
 `;
 
 const Input = styled.input`
@@ -150,7 +196,6 @@ const Title = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  padding-left: 13px;
   margin: 20px;
 `;
 
