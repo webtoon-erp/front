@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
@@ -17,19 +17,10 @@ const FakeProfileData = [
 ];
 
 const ProfileInHrSalary = () => {
-    const [isEditing, setIsEditing] = useState(false); // 상태 추가
-
-    const handleToggleEdit = () => {
-        setIsEditing((prevState) => !prevState);
-    };
-
     return (
         <>
             <FlexBox>
                 <Title>내 급여 관리</Title>
-                <Btn onClick={handleToggleEdit}>
-                    {isEditing ? '등 록' : '수 정'}
-                </Btn>
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>

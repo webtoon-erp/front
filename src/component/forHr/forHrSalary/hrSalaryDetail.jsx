@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
@@ -14,9 +15,20 @@ const FakeSalData = [
 ];
 
 const HrSalaryDetail = () => {
+    const [isEditing, setIsEditing] = useState(false); // 상태 추가
+
+    const handleToggleEdit = () => {
+        setIsEditing((prevState) => !prevState);
+    };
+
     return (
         <HrSalaryDetailContainer>
-            <Title>급여 상세</Title>
+            <FlexBox>
+                <Title>급여 상세</Title>
+                <Btn onClick={handleToggleEdit}>
+                        {isEditing ? '등 록' : '수 정'}
+                </Btn>
+            </FlexBox>
             <HorizonLine />
             <DetailContentContainer>
                 <SalaryInfoBox>지급계좌 <SalaryInfoData>{FakeSalData[0].account}</SalaryInfoData></SalaryInfoBox>
@@ -63,4 +75,25 @@ const SalaryInfoData = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`
+
+const Btn = styled.button`
+    width: 100px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 800px;
+`
+
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
 `
