@@ -120,7 +120,6 @@ const ForEpisodeDetail = (Id) => {
             <RegistBtnContainer>
                         <RegistBtn onClick={handleSubmitClick}>수정</RegistBtn>
                         <RegistBtn onClick={handleSubmitClick}>등록</RegistBtn>
-                        <RegistBtn onClick={handleClick}>회차 등록</RegistBtn>
             </RegistBtnContainer>
             
             <WebtoonContainer>
@@ -155,7 +154,7 @@ export default ForEpisodeDetail;
 
 const RegistBtnContainer = styled.div`
     display: flex;
-    padding-left: 58%;
+    padding-left: 75%;
     margin-bottom: 20px;
 `;
 

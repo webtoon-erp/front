@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use strict';
+
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
@@ -82,102 +84,7 @@ const fakeData = [
               keyword: '코미디',
               url: '/data3',
             },
-            {
-                day: '목',
-                title: '목요일웹툰1',
-                author: 'author 1',
-                drawer: 'drawer 1',
-                keyword: '코미디',
-                url: '/data1',
-              },
-              {
-                  day: '목',
-                  title: '목요일웹툰2',
-                  author: 'author 2',
-                  drawer: 'drawer 2',
-                  keyword: '코미디',
-                  url: '/data2',
-                },
-                {
-                  day: '목',
-                  title: '목요일웹툰3',
-                  author: 'author 3',
-                  drawer: 'drawer 3',
-                  keyword: '코미디',
-                  url: '/data3',
-                },
-                {
-                    day: '금',
-                    title: '금요일웹툰1',
-                    author: 'author 1',
-                    drawer: 'drawer 1',
-                    keyword: '코미디',
-                    url: '/data1',
-                  },
-                  {
-                      day: '금',
-                      title: '금요일웹툰2',
-                      author: 'author 2',
-                      drawer: 'drawer 2',
-                      keyword: '코미디',
-                      url: '/data2',
-                    },
-                    {
-                      day: '금',
-                      title: '금요일웹툰3',
-                      author: 'author 3',
-                      drawer: 'drawer 3',
-                      keyword: '코미디',
-                      url: '/data3',
-                    },
-                    {
-                        day: '토',
-                        title: '토요일웹툰1',
-                        author: 'author 1',
-                        drawer: 'drawer 1',
-                        keyword: '코미디',
-                        url: '/data1',
-                      },
-                      {
-                          day: '토',
-                          title: '토요일웹툰2',
-                          author: 'author 2',
-                          drawer: 'drawer 2',
-                          keyword: '코미디',
-                          url: '/data2',
-                        },
-                        {
-                          day: '토',
-                          title: '토요일웹툰3',
-                          author: 'author 3',
-                          drawer: 'drawer 3',
-                          keyword: '코미디',
-                          url: '/data3',
-                        },
-                        {
-                            day: '일',
-                            title: '일요일웹툰1',
-                            author: 'author 1',
-                            drawer: 'drawer 1',
-                            keyword: '코미디',
-                            url: '/data1',
-                          },
-                          {
-                              day: '일',
-                              title: '일요일웹툰2',
-                              author: 'author 2',
-                              drawer: 'drawer 2',
-                              keyword: '코미디',
-                              url: '/data2',
-                            },
-                            {
-                              day: '일',
-                              title: '일요일웹툰3',
-                              author: 'author 3',
-                              drawer: 'drawer 3',
-                              keyword: '코미디',
-                              url: '/data3',
-                            },
+            
   ];
 
 const AllWebtoonListView = () => {
@@ -200,6 +107,18 @@ const AllWebtoonListView = () => {
       { headerName: '키워드', field: 'keyword', width: 280 },
     ];
   
+
+    // 검색 기능
+
+    const handleCellClick = (event) => {
+      const column = event.colDef.field;
+      const rowData = event.data;
+      const url = rowData.url;
+      if (column && url) {
+        window.location.href = url;
+      }
+    };
+
     const gridOptions = {
       columnDefs: columnDefs,
       rowData: filteredDays,
@@ -209,16 +128,28 @@ const AllWebtoonListView = () => {
       paginationPageSize: 10,
       onCellClicked: handleCellClick,
     };
-  
-    // 셀 클릭 핸들러
-    function handleCellClick(event) {
-      const column = event.colDef.field;
-      const rowData = event.data;
-      const url = rowData.url;
-      if (column  && url) {
-        window.location.href = url;
-      }
-    }
+
+    const gridRef = useRef(null);
+
+      useEffect(() => {
+        gridRef.current = gridOptions.api;
+      }, []);
+
+      const onFilterTextBoxChanged = useCallback(() => {
+        gridRef.current.setQuickFilter(
+          document.getElementById('filter-text-box').value
+        );
+      }, []);
+      
+
+      const onPrintQuickFilterTexts = useCallback(() => {
+        gridRef.current.forEachNode((rowNode, index) => {
+          console.log(
+            'Row ' + index + ' quick filter text is ' + rowNode.quickFilterAggregateText
+          );
+        });
+      }, []);
+      
 
     return (
         <>
@@ -236,15 +167,24 @@ const AllWebtoonListView = () => {
                     <option value="일">일</option>
                 </select>
                 <Container />
-                    <SearchComponent />
+                  <input
+                        type="text"
+                        id="filter-text-box"
+                        placeholder="Filter..."
+                        onInput={onFilterTextBoxChanged}
+                      />
                 </SelectTagContainer>
+
+                
                 
                 <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
                 <AgGridReact
-                    columnDefs={columnDefs}
-                    rowData={filteredDays}
-                    gridOptions={gridOptions}
+                  columnDefs={columnDefs}
+                  rowData={filteredDays}
+                  gridOptions={gridOptions}
+                  ref={gridRef}
                 />
+
                 </div>
             </ToonContainer>
         </>
