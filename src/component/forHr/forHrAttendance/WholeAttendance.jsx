@@ -1,62 +1,92 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import HorizonLine from '../../horizonLine';
-import styled from 'styled-components';
 
-export default function WholeAttendance() {
+const EmployeeAttendanceView = () => {
+    const [selectedCell, setSelectedCell] = useState(null);
 
-    const rowData = [
-      {'전체 직원': 69, '출근': 66, '퇴근': 50, '미출근': 0, '지각': 6, '휴가': 6, '연장근무': 6},
+    const leftPanelData = [
+        {'전체 직원': 69},
+        {'출근': 66},
+        {'퇴근': 50},
+        {'미출근': 0},
+        {'지각': 6},
+        {'휴가': 6},
+        {'연장근무': 6},
+      ];
+
+  const leftPanelColumnDefs = [
+    {field: '전체 직원'},
+    {field: '출근'},
+    {field: '퇴근'},
+    {field: '미출근'},
+    {field: '지각'},
+    {field: '휴가'},
+    {field: '연장근무'},
   ];
 
-  const columnDefs = [
-      {field: '전체 직원'},
-      {field: '출근'},
-      {field: '퇴근'},
-      {field: '미출근'},
-      {field: '지각'},
-      {field: '휴가'},
-      {field: '연장근무'},
+  const rightPanelColumnDefs = [
+    { headerName: '직원명', field: 'employeeName', width: 150 },
+    { headerName: '부서', field: 'dept', width: 150 },
+    { headerName: '직급', field: 'position', width: 150 },
+    // ... (other columns)
   ];
 
-  // useEffect(() => {
-  //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
-  //     .then(result => result.json())
-  //     .then(rowData => setRowData(rowData))
-  // }, []);
+  const rowColumnData = [
+    // ... (rowData for right panel)
+  ];
+
+  const handleCellClick = (params) => {
+    setSelectedCell(params.column.getColDef().field);
+    console.log(selectedCell);
+  };
 
   return (
-      <WholeAttendanceContainer>
-          <Title>전체 현황</Title>
-          <HorizonLine />
-          <WholeAttendanceGrid className="ag-theme-alpine" style={{ height: '100px', width: '1050px' }}>
-              <AgGridReact 
-                  rowData={rowData}
-                  columnDefs={columnDefs}
-                  animateRows={true}
-                  rowSelection='multiple'
-              />
-          </WholeAttendanceGrid>
-      </WholeAttendanceContainer>
-      
+    <Container>
+      <LeftPanel>
+        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
+          <AgGridReact
+            columnDefs={leftPanelColumnDefs}
+            rowData={leftPanelData}
+            onCellClicked={handleCellClick}
+          />
+        </div>
+      </LeftPanel>
+      <RightPanel>
+        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
+          <AgGridReact
+            columnDefs={rightPanelColumnDefs}
+            rowData={rowColumnData.filter(data => data[selectedCell] !== undefined)}
+          />
+        </div>
+      </RightPanel>
+    </Container>
   );
-}
+};
 
-const WholeAttendanceContainer = styled.div`
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    height: 210px;
-    width: 100%
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 800px;
 `;
 
-const Title = styled.h3`
-    margin-left: 10px;
+const Panel = styled.div`
+  padding: 20px;
 `;
 
-const WholeAttendanceGrid = styled.div`
-    width: 900px;
-    height: 140px;
-`
+const LeftPanel = styled(Panel)`
+  background-color: #f0f0f0;
+  height: 110px;  
+  width: 1000px;
+`;
+
+const RightPanel = styled(Panel)`
+  background-color: #ffffff;
+  height: 500px;
+  width: 1000px;
+`;
+
+export default EmployeeAttendanceView;
+
