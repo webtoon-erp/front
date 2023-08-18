@@ -21,7 +21,7 @@ export default function ItRequestListView (){
 
 const Title = styled.div`
     font-size: 30px;
-    padding-top: 120px;
+    padding-top: 50px;
     padding-left: 2%;
     font-weight: bold;
 `;
