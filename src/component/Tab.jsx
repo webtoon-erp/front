@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from './modal';
 import styled from 'styled-components';
 import theme from '../style/theme';
 
-const Tab = ({ tabElements, onClose }) => {
+const Tab = ({ tabElements, onClose, onOpenModal }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(null);
 
   const handleOpenModal = (index) => {

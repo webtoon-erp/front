@@ -44,11 +44,15 @@ import TabComponent from './component/TabComponent';
 import ScheduleAdd from './pages/system/scheduleAdd';
 import Schedule from './pages/common/schedule';
 import EpisodeDetail from './pages/webtoon/episodeDetail';
-
+import Modal from './component/modal'; // Assuming you have a Modal component
 
 function App() {
-  const [tabElements, setTabElements] = useState([{ title: 'Home', fixed: true }]);
+  const [tabElements, setTabElements] = useState([
+    { title: 'Home', fixed: true }
+  ]);
   const [activeTab, setActiveTab] = useState<string | null>(tabElements[0]?.title || null);
+  const [activeModal, setActiveModal] = useState<{ title: string; fixed: boolean } | null>(null);
+
 
   useEffect(() => {
     const savedTabs = JSON.parse(localStorage.getItem('tabs') || '[]');
@@ -82,20 +86,31 @@ function App() {
     }
   };
 
+  const handleOpenModal = (index: number) => {
+    setActiveModal(tabElements[index]);
+  };
+
+  const handleCloseModal = () => {
+    setActiveModal(null);
+  };
 
   return (
     <Router>
       <header>
         <Header />
       </header>
-        <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' }}>
         <aside>
           <NavBar onAddTab={handleAddTab} />
-          </aside>
-          <main style={{ flex: 1, marginTop: '80px'}}>
-          <Tab tabElements={tabElements} onClose={handleCloseTab} />
-          
-            <Routes>
+        </aside>
+        <main style={{ flex: 1, marginTop: '80px' }}>
+        <Tab
+          tabElements={tabElements}
+          onClose={handleCloseTab}
+          onOpenModal={handleOpenModal}
+        />
+
+          <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/passwordReset" element={<PasswordReset />}/>
@@ -136,21 +151,29 @@ function App() {
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/episodeDetail" element={<EpisodeDetail />} />
+   
               {tabElements.map((tab, index) => (
-              <Route
+                <Route
                   key={index}
                   path={`/${tab.title}`}
-                  element={<TabComponent title={tab.title} />}
+                  element={
+                    <TabComponent
+                      title={tab.title}
+                      modalContent={activeModal}
+                      onOpenModal={() => handleOpenModal(index)}
+                      onCloseModal={handleCloseModal}
+                    />
+                  }
                 />
               ))}
-            </Routes>
-          </main>
-          </div>
-      <footer>
 
-      </footer>
+          </Routes>
+        </main>
+      </div>
+      <footer></footer>
     </Router>
   );
 }
 
 export default App;
+           
