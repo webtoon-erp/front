@@ -43,7 +43,7 @@ const items: MenuProps['items'] = [
     ]),
 
     getItem('전자결재', 'menu5', <FileTextOutlined />, [
-        getItem('결재 요청', '8'),
+        getItem('결재 요청', 'epRequestView'),
         getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', 'epMyDocsView'), getItem('부서 문서 조회', 'epDepDocsView'), getItem('결재 대기 문서 조회', 'epHoldenDocsView'), getItem('참조 문서 조회', 'epRefDocsView')]),
     ]),
 
