@@ -1,21 +1,27 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Modal from './modal';
 import styled from 'styled-components';
 import theme from '../style/theme';
 
 const Tab = ({ tabElements, onClose }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(null);
+
+  const handleOpenModal = (index) => {
+    setActiveTabIndex(index);
+  };
+
+  const handleCloseModal = () => {
+    setActiveTabIndex(null);
+  };
+
   const handleCloseTab = (index) => {
     if (tabElements[index].fixed) {
       return;
     }
 
-    const newTabElements = [...tabElements];
-    newTabElements.splice(index, 1);
-    localStorage.setItem('tabs', JSON.stringify(newTabElements));
-
-    if (tabElements[index].title === localStorage.getItem('activeTab')) {
-      const newActiveTab = newTabElements[newTabElements.length - 1]?.title || null;
-      localStorage.setItem('activeTab', newActiveTab);
+    if (activeTabIndex === index) {
+      handleCloseModal();
     }
 
     onClose(index);
@@ -29,11 +35,21 @@ const Tab = ({ tabElements, onClose }) => {
           className={`tab ${tab.fixed ? 'fixed' : ''}`}
           style={{ border: '1px solid #ccc', padding: '5px' }}
         >
-          <Link to={ tab.title === 'Home'? `/` : `/${tab.title.toLowerCase()}`} className="tab-link" style={{ textDecoration: "none" }}>
+
+          <Link to={ tab.title === 'Home'? `/` : `/${tab.title}`} className="tab-link" style={{ textDecoration: "none" }}>
+
             {tab.title}
           </Link>
           {!tab.fixed && (
             <DeleteBtn onClick={() => handleCloseTab(index)} className="close-button" />
+          )}
+          {!tab.fixed && (
+            <button onClick={() => handleOpenModal(index)} className="open-modal-button">
+              Open Modal
+            </button>
+          )}
+          {activeTabIndex === index && (
+            <Modal onClose={handleCloseModal} tabInfo={tab} />
           )}
         </div>
       ))}
@@ -42,6 +58,7 @@ const Tab = ({ tabElements, onClose }) => {
 };
 
 export default Tab;
+
 
 const DeleteBtn = styled.button`
   border: none;

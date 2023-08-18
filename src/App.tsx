@@ -139,7 +139,7 @@ function App() {
               {tabElements.map((tab, index) => (
               <Route
                   key={index}
-                  path={`/${tab.title.toLowerCase()}`}
+                  path={`/${tab.title}`}
                   element={<TabComponent title={tab.title} />}
                 />
               ))}
