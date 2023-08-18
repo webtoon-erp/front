@@ -10,6 +10,6 @@ export default function HrProfileView (){
 }
 
 const HrProfileDetailContainer = styled.div`
-    margin-top: 120px;
+    margin-top: 50px;
     margin-left: 30px;
 `

@@ -4,7 +4,7 @@ import BeforeUploadToon from "../../component/forWebtoon/beforeUploadToon";
 import AfterUploadToon from "../../component/forWebtoon/afterUploadToon";
 
 const WebtoonSearchContainer = styled.div`
-    margin-top: 120px;
+    margin-top: 40px;
     margin-left: 40px;
     width: 100%;
 `;

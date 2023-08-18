@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
@@ -20,7 +21,6 @@ const ProfileInHrSalary = () => {
         <>
             <FlexBox>
                 <Title>내 급여 관리</Title>
-                <Btn>수 정</Btn>
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>

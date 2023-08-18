@@ -78,7 +78,6 @@ const NoticeRegist = () => {
                     'image media codesample emoticons fullscreen preview | ' +
                     'removeformat | help',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                    
                 }}
             />
             <FileInput />
@@ -89,7 +88,7 @@ const NoticeRegist = () => {
 export default NoticeRegist;
 
 const NoticeRegistContainer = styled.div`
-    margin-top: 120px;
+    margin-top: 40px;
     padding: 10px;
 `;
 
