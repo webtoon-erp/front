@@ -17,6 +17,7 @@ const NoticeContainer = styled.div`
 `;
 
 export default function Home (){
+  
     return(
         <>
             <MainContainer>

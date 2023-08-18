@@ -5,7 +5,6 @@ import { Menu, Avatar, Space } from 'antd';
 import styled from 'styled-components';
 import theme from '../style/theme';
 import { useNavigate } from 'react-router-dom';
-import Tab from './Tab'; 
 
 type MenuItem = Required<MenuProps>['items'][number];
 
