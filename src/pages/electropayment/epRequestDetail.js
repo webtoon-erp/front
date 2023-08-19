@@ -1,4 +1,4 @@
-export default function EpRequestView (){
+export default function EpRequestDetail (){
     return(
         <>
         <div>epRequestView</div>
