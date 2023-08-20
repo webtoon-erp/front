@@ -17,7 +17,6 @@ import ItRequestListView from './pages/itsm/itRequestListView';
 import ItRequestView from './pages/itsm/itRequestView';
 import ToonView from './pages/webtoon/toonView';
 import EpRequestAdd from './pages/electropayment/epRequestAdd';
-import EpRequestDetail from './pages/electropayment/epRequestDetail';
 import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
@@ -126,7 +125,6 @@ function App() {
               <Route path="/toonDetail" element={<ToonDetail />} />
               <Route path="/allToonView" element={<AllToonView />} />
               <Route path="/epRequestAdd" element={<EpRequestAdd />} />
-              <Route path="/EpRequestDetail" element={<EpRequestDetail /> } />
               <Route path="/epMyDocsView" element={<EpMyDocsView />} />
               <Route path="/epDepDocsView" element={<EpDepDocsView />} />
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
@@ -135,7 +133,7 @@ function App() {
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/episodeDetail" element={<EpisodeDetail />} />
-   
+
               {tabElements.map((tab, index) => (
                 <Route
                   key={index}
