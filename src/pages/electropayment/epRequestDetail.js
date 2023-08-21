@@ -1,7 +1,7 @@
 export default function EpRequestDetail (){
     return(
         <>
-        <div>epRequestView</div>
+        <div>epRequestDetail</div>
         </>
     )
 }
