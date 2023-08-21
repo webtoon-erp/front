@@ -28,9 +28,13 @@ const EmployeeAttendanceView = () => {
   ];
 
   const rightPanelColumnDefs = [
-    { headerName: '직원명', field: 'employeeName', width: 150 },
-    { headerName: '부서', field: 'dept', width: 150 },
-    { headerName: '직급', field: 'position', width: 150 },
+    { headerName: '부서명', field: 'dept', width: 100 },
+    { headerName: '팀번호', field: 'dept', width: 100 },
+    { headerName: '직급', field: 'position', width: 100 },
+    { headerName: '사번', field: 'id', width: 150 },
+    { headerName: '이름', field: 'name', width: 100 },
+    { headerName: '전화번호', field: 'phoneNumber', width: 200 },
+    { headerName: '이메일', field: 'email', width: 200 },
     // ... (other columns)
   ];
 

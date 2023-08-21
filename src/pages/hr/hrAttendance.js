@@ -5,6 +5,8 @@ import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
 import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
+import DepartmentExtension from '../../component/forHr/forHrAttendance/DepartmentExtension';
+import DepartmentAvgExtension from '../../component/forHr/forHrAttendance/DepartmentAvgExtension';
 
 const Container = styled.div`
   display: flex;
@@ -35,7 +37,8 @@ export default function HrAttendance() {
         </Container>
         <Container> 
             <WorkExtension />
-            <DepartmentVacation /> 
+            <DepartmentExtension />
+            <DepartmentAvgExtension /> 
         </Container>
     </>
   );
