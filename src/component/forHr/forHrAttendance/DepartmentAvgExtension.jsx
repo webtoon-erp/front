@@ -4,7 +4,7 @@ import 'chartjs-plugin-datalabels';
 import HorizonLine from '../../horizonLine';
 import styled from 'styled-components';
 
-export default function DepartmentExtension() {
+export default function DepartmentAvgExtension() {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -58,10 +58,10 @@ export default function DepartmentExtension() {
   return (
     <>
       <DepartmentVacationContainer>
-        <Title>그룹별 연장근무시간(월계)</Title>
+        <Title>그룹별 연장근무시간(월계평균)</Title>
         <HorizonLine />
-        <DepartmentVacationGrid className="ag-theme-alpine" style={{ height: '300px', width: '400px' }}>
-          <canvas ref={chartRef} width="400" height="200"></canvas>
+        <DepartmentVacationGrid className="ag-theme-alpine" style={{ height: '300px', width: '300px' }}>
+          <canvas ref={chartRef} width="300" height="200"></canvas>
         </DepartmentVacationGrid>
       </DepartmentVacationContainer>
     </>
@@ -84,4 +84,5 @@ const Title = styled.h3`
 const DepartmentVacationGrid = styled.div`
     width: 1200px;
     height: 50px;
+    padding-top: 45px;
 `

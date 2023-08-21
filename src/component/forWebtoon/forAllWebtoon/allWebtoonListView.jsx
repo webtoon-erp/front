@@ -1,12 +1,13 @@
 'use strict';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import SearchComponent from '../../search';
+import theme from '../../../style/theme';
 
 const fakeData = [
     {
@@ -89,6 +90,7 @@ const fakeData = [
 
 const AllWebtoonListView = () => {
     const [selectedDay, setSelectedDay] = useState('전체');
+    const [filterText, setFilterText] = useState(''); // New state for filter text
   
     // 태그 선택 핸들러
     const selectDayHandler = (e) => {
@@ -109,7 +111,6 @@ const AllWebtoonListView = () => {
   
 
     // 검색 기능
-
     const handleCellClick = (event) => {
       const column = event.colDef.field;
       const rowData = event.data;
@@ -149,6 +150,13 @@ const AllWebtoonListView = () => {
           );
         });
       }, []);
+
+      //
+      const navigate = useNavigate();
+
+      const handleClick = () => {
+        navigate("/toonAdd");
+    }
       
 
     return (
@@ -173,6 +181,9 @@ const AllWebtoonListView = () => {
                         placeholder="Filter..."
                         onInput={onFilterTextBoxChanged}
                       />
+                  <RegistBtnContainer>
+                        <RegistBtn onClick={handleClick}>작품 등록</RegistBtn>
+                  </RegistBtnContainer>
                 </SelectTagContainer>
 
                 
@@ -193,6 +204,27 @@ const AllWebtoonListView = () => {
 
 export default AllWebtoonListView;
 
+const RegistBtnContainer = styled.div`
+    display: flex;
+    padding-left: 5%;
+    margin-bottom: 20px;
+`;
+
+const RegistBtn = styled.button`
+    width: 100px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`
 
 const ToonContainer = styled.div`
 display: flex;
