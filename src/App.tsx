@@ -29,6 +29,7 @@ import EpMyDocsView from './pages/electropayment/epMyDocsView';
 import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
+import EpRequestDetail from './pages/electropayment/epRequestDetail';
 import NoticeAdd from './pages/system/noticeAdd';
 import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
@@ -129,6 +130,7 @@ function App() {
               <Route path="/epDepDocsView" element={<EpDepDocsView />} />
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
+              <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
               <Route path="/noticeAdd" element={<NoticeAdd />} />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
