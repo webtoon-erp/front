@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import SearchComponent from '../search';
 
 const fakeData = [
   {
@@ -239,6 +238,28 @@ const NoticeComponent = () => {
         <Link to={url}>{title}</Link>
       );
     }
+
+    //검색
+    const gridRef = useRef(null);
+
+      useEffect(() => {
+        gridRef.current = gridOptions.api;
+      }, []);
+
+      const onFilterTextBoxChanged = useCallback(() => {
+        gridRef.current.setQuickFilter(
+          document.getElementById('filter-text-box').value
+        );
+      }, []);
+      
+
+      const onPrintQuickFilterTexts = useCallback(() => {
+        gridRef.current.forEachNode((rowNode, index) => {
+          console.log(
+            'Row ' + index + ' quick filter text is ' + rowNode.quickFilterAggregateText
+          );
+        });
+      }, []);
   
     return (
     <>
@@ -253,7 +274,12 @@ const NoticeComponent = () => {
             <option value="행사">행사</option>
           </select>
           <Container />
-            <SearchComponent />
+            <input
+                        type="text"
+                        id="filter-text-box"
+                        placeholder="Filter..."
+                        onInput={onFilterTextBoxChanged}
+                      />
         </SelectDepContainer>
         
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
@@ -293,7 +319,7 @@ const NoticeComponent = () => {
 
   const Title = styled.div`
   font-size: 30px;
-  padding-top: 120px;
+  padding-top: 40px;
   padding-left: 4%;
   font-weight: bold;
 `;

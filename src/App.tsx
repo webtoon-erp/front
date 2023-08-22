@@ -37,6 +37,7 @@ import ScheduleAdd from './pages/system/scheduleAdd';
 import Schedule from './pages/common/schedule';
 import EpisodeDetail from './pages/webtoon/episodeDetail';
 import Modal from './component/modal'; // Assuming you have a Modal component
+import NoticeDetail from './pages/system/noticeDetail';
 
 function App() {
   const [tabElements, setTabElements] = useState([
@@ -132,6 +133,7 @@ function App() {
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
               <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
               <Route path="/noticeAdd" element={<NoticeAdd />} />
+              <Route path="/noticeDetail" element={<NoticeDetail /> } />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
               <Route path="/episodeDetail" element={<EpisodeDetail />} />
