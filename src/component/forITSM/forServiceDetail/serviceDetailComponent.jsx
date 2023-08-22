@@ -9,25 +9,21 @@ import FileDownloader from '../../fileDownloader';
 const FakeNoticeData = [
     {
         id: 1,
-        tag: '서비스',
-        dept: '인사부',
-        author: '작성자',
+        startDate: '2023.08.22',
+        deliveryDate: '2023.08.22',
+        requester: '요청자1',
+        assigners: '담당자1, 담당자2, 담당자3, 담당자4',
+        requestType: '구매',
         title: '제목',
-        date: '2023.08.22',
         content: `안녕하세요, 네이버웍스입니다.
         ​
-        네이버웍스 비정기 업데이트가 2023년 7월 27일(목)에 진행됩니다.
-        자세한 업데이트 사항은 아래 내용을 확인해 주시기 바랍니다.
-        ​
-        ■ 업데이트 일정 : 2023년 7월 27일(목) 오후 2시경
-        ※ 앱 노출 시간은 앱스토어 사정에 따라 상이할 수 있습니다.
-        ※ Mobile앱은 선택 업데이트 방식으로 [Mobile앱 > 더보기 > 애플리케이션 정보]를 통해서도 최신 버전으로 업데이트 할 수 있습니다.`,
+        3월 전직원 대상 강연을 기획하고 있습니다. 관련 강연을 요청 드리고자 합니다.`,
         file: 'fileName'
     },
 ];
 
 
-const NoticeDetailComponent = () => {
+const ServiceDetailComponent = () => {
 
   const [selectedId, setSelectedId] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
@@ -56,12 +52,12 @@ const NoticeDetailComponent = () => {
     }
 
     const handleNoticeClick = () => {
-      navigate('/notice');
+      navigate('/itRequestListView');
     }
 
   return (
     <>
-    <Title>공지사항</Title>
+    <Title>ITSM</Title>
     <BreadContainer>
       <Breadcrumb
           items={[
@@ -74,7 +70,7 @@ const NoticeDetailComponent = () => {
               title: (
                 <>
                   <UserOutlined />
-                  <span>공지사항 조회</span>
+                  <span>ITSM 서비스 조회</span>
                 </>
               ),
             },
@@ -90,42 +86,50 @@ const NoticeDetailComponent = () => {
           <ContainerBox>
             <ContainerBox>
               <Container>
-                <SmallTitle>태그</SmallTitle>
+                <SmallTitle>요청일</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].tag}</SmallContent>
+                <SmallContent>{FakeNoticeData[0].startDate}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
 
             <ContainerBox>
               <Container>
-                <SmallTitle>부서</SmallTitle>
+                <SmallTitle>납기일</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].dept}</SmallContent>
+                <SmallContent>{FakeNoticeData[0].deliveryDate}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
           </ContainerBox>
-
+          
           <ContainerBox>
             <ContainerBox>
               <Container>
-                <SmallTitle>등록일</SmallTitle>
+                <SmallTitle>요청자</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].date}</SmallContent>
+                <SmallContent>{FakeNoticeData[0].requester}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
 
             <ContainerBox>
               <Container>
-                <SmallTitle>작성자</SmallTitle>
+                <SmallTitle>담당자</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].author}</SmallContent>
+                <SmallContent>{FakeNoticeData[0].assigners}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
           </ContainerBox>
+          <ContainerBox>
+              <Container>
+                <SmallTitle>타입</SmallTitle>
+              </Container>
+              <SmallContentContainer>
+                <SmallContent>{FakeNoticeData[0].requestType}</SmallContent>
+              </SmallContentContainer>
+            </ContainerBox>
         <HorizonLine />
         <ContentContainer>{FakeNoticeData[0].content}</ContentContainer>
 
@@ -139,7 +143,7 @@ const NoticeDetailComponent = () => {
     );
 };
   
-export default NoticeDetailComponent; 
+export default ServiceDetailComponent; 
 
 const NoticeContainer = styled.div`
   margin: 30px;
@@ -152,7 +156,7 @@ const NoticeContainer = styled.div`
 `;
 
 const BreadContainer = styled.div`
-  margin-left: 80%
+  margin-left: 75%
 `;
 
 const Container = styled.div`
@@ -200,7 +204,7 @@ const SmallContent= styled.div`
 
 const SmallContentContainer = styled.div`
   border: 1px dashed #ccc;
-  width: 450px;
+  width: 440px;
   height: 25px;
   padding: 20px;
 `;
