@@ -115,6 +115,15 @@ const ServiceDetailComponent = () => {
 
             <ContainerBox>
               <Container>
+                <SmallTitle>담당자3</SmallTitle>
+              </Container>
+              <SmallContentContainer>
+                <SmallContent>{FakeNoticeData[0].assigners}</SmallContent>
+              </SmallContentContainer>
+            </ContainerBox>
+          </ContainerBox>
+          <ContainerBox>
+              <Container>
                 <SmallTitle>타입</SmallTitle>
               </Container>
               <SmallContentContainer>
