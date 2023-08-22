@@ -12,6 +12,7 @@ import HrProfileView from './pages/hr/hrProfileView';
 import HrView from './pages/hr/hrView';
 import HrSalary from './pages/hr/hrSalary';
 import HrAllSalaryView from './pages/hr/hrAllSalaryView';
+import HrOrgChart from './pages/hr/hrOrgChart';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
 import ItRequestView from './pages/itsm/itRequestView';
@@ -118,6 +119,7 @@ function App() {
               <Route path="/hrView" element={<HrView />} />
               <Route path="/hrSalary" element={<HrSalary />} />
               <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
+              <Route path="/hrOrgChart" element={<HrOrgChart />} />
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
               <Route path="/itRequestView" element={<ItRequestView />} />
