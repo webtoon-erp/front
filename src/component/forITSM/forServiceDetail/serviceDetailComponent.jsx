@@ -115,7 +115,7 @@ const ServiceDetailComponent = () => {
 
             <ContainerBox>
               <Container>
-                <SmallTitle>담당자3</SmallTitle>
+                <SmallTitle>담당자</SmallTitle>
               </Container>
               <SmallContentContainer>
                 <SmallContent>{FakeNoticeData[0].assigners}</SmallContent>
@@ -130,7 +130,6 @@ const ServiceDetailComponent = () => {
                 <SmallContent>{FakeNoticeData[0].requestType}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
-          </ContainerBox>
         <HorizonLine />
         <ContentContainer>{FakeNoticeData[0].content}</ContentContainer>
 
