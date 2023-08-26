@@ -110,45 +110,45 @@ function App() {
         />
 
           <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/passwordReset" element={<PasswordReset />}/>
-              <Route path="/notice" element={<Notice />} />
-              <Route path="/webtoon" element={<Webtoon />} />
-              <Route path="/myPage" element={<MyPage />} />
-              <Route path="/hrAdd" element={<HrAdd />} />
-              <Route path="/hrAttendance" element={<HrAttendance/>} />
-              <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>
-              <Route path="/hrProfileListView" element={<HrProfileListView />} />
-              <Route path="/hrProfileView" element={<HrProfileView />} />
-              <Route path="/hrView" element={<HrView />} />
-              <Route path="/hrSalary" element={<HrSalary />} />
-              <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
-              <Route path="/hrOrgChart" element={<HrOrgChart />} />
-              <Route path="/itRequestAdd" element={<ItRequestAdd />} />
-              <Route path="/itRequestListView" element={<ItRequestListView />} />
-              <Route path="/itRequestView" element={<ItRequestView />} />
-              <Route path="/toonAdd" element={<ToonAdd/>} />
-              <Route path="/episodeAdd" element={<EpisodeAdd />} />
-              <Route path="/toonView" element={<ToonView />} />
-              <Route path="/toonDetail" element={<ToonDetail />} />
-              <Route path="/allToonView" element={<AllToonView />} />
-              <Route path="/epRequestAdd" element={<EpRequestAdd />} />
-              <Route path="/epMyDocsView" element={<EpMyDocsView />} />
-              <Route path="/epDepDocsView" element={<EpDepDocsView />} />
-              <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
-              <Route path="/epRefDocsView" element={<EpRefDocsView />} />
-              <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
-              <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
-              <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
-              <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
-              <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
-              <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
-              <Route path="/noticeAdd" element={<NoticeAdd />} />
-              <Route path="/noticeDetail" element={<NoticeDetail /> } />
-              <Route path="/scheduleAdd" element={<ScheduleAdd />} />
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/episodeDetail" element={<EpisodeDetail />} />
+              <Route path="/" element={<Home />} />  {/* 메인홈 */}
+              <Route path="/login" element={<Login />} />  {/* 로그인 */}
+              <Route path="/passwordReset" element={<PasswordReset />}/>  {/* 비밀번호 초기화 */}
+              <Route path="/notice" element={<Notice />} />  {/* 공지사항 조회 */}
+              <Route path="/webtoon" element={<Webtoon />} />  {/* 작품 관리 */}
+              <Route path="/myPage" element={<MyPage />} />  {/* 마이페이지 */}
+              <Route path="/hrAdd" element={<HrAdd />} />  {/* 사원 등록 */}
+              <Route path="/hrAttendance" element={<HrAttendance/>} />  {/* 전체 근태 관리 */}
+              <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>  {/* 내 근태 관리 */}
+              <Route path="/hrProfileListView" element={<HrProfileListView />} />  {/*  */}
+              <Route path="/hrProfileView" element={<HrProfileView />} />  {/* 직원 상세 */}
+              <Route path="/hrView" element={<HrView />} />  {/* 전체 직원 관리 */}
+              <Route path="/hrSalary" element={<HrSalary />} />  {/* 내 급여 관리 */}
+              <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />  {/* 전체 급여 관리 */}
+              <Route path="/hrOrgChart" element={<HrOrgChart />} />  {/* 조직도 */}
+              <Route path="/itRequestAdd" element={<ItRequestAdd />} />  {/* 서비스 요청 */}
+              <Route path="/itRequestListView" element={<ItRequestListView />} />  {/* 서비스 조회 */}
+              <Route path="/itRequestView" element={<ItRequestView />} />  {/* 서비스 요청 상세 */}
+              <Route path="/toonAdd" element={<ToonAdd/>} />  {/* 작품 등록 */}
+              <Route path="/episodeAdd" element={<EpisodeAdd />} />  {/* 회차 등록 */}
+              <Route path="/episodeDetail" element={<EpisodeDetail />} />  {/* 회차 상세 */}
+              <Route path="/toonView" element={<ToonView />} />  {/* 웹툰 상세 (사용X)*/}
+              <Route path="/toonDetail" element={<ToonDetail />} />  {/* 웹툰 상세 (사용O) */}
+              <Route path="/allToonView" element={<AllToonView />} />  {/* 전체 웹툰 조회 */}
+              <Route path="/epRequestAdd" element={<EpRequestAdd />} />  {/* 결재 요청 */}
+              <Route path="/epMyDocsView" element={<EpMyDocsView />} />  {/* 내 문서 조회 */}
+              <Route path="/epDepDocsView" element={<EpDepDocsView />} />  {/* 부서 문서 조회 */}
+              <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />  {/* 결재 대기 문서 조회 */}
+              <Route path="/epRefDocsView" element={<EpRefDocsView />} />  {/* 참조 문서 조회 */}
+              <Route path="/epRequestDetail" element={<EpRequestDetail /> } />  {/*  */}
+              <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />  {/* 연차 신청서  */}
+              <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />  {/* 법인카드 사용내역서 */}
+              <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />  {/* 구매 품의서 */}
+              <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />  {/* 비용집행 요청서 */}
+              <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />  {/*연장/휴일근무 신청서  */}
+              <Route path="/noticeAdd" element={<NoticeAdd />} />  {/* 공지사항 등록 */}
+              <Route path="/noticeDetail" element={<NoticeDetail /> } />  {/* 공지사항 상세 */}
+              <Route path="/scheduleAdd" element={<ScheduleAdd />} />  {/* 일정 등록 */}
+              <Route path="/schedule" element={<Schedule />} />  {/* 일정 조회 */}
 
               {tabElements.map((tab, index) => (
                 <Route
