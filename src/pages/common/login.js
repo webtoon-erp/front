@@ -8,13 +8,14 @@ const BoldText = styled.span`
   font-size: 24px;
   font-family: 'Montserrat', sans-serif;
   padding: 10px;
+  padding-left: 120px;
 `;
 
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin-left: 35%;
+  margin-top: 8%;
   height: 100vh;
   padding: 24px;
 `;
@@ -36,11 +37,6 @@ const LoginButton = styled(Button)`
   margin-top: 16px;
 `;
 
-const CenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const PasswordResetButton = styled(Button)`
   margin-top: 8px;
@@ -53,7 +49,6 @@ const Login = () => {
   };
 
   return (
-    <CenteredContainer>
       <LoginContainer>
         <BoldText>웹툰 erp</BoldText>
         <LoginForm onSubmit={handleLogin}>
@@ -73,7 +68,6 @@ const Login = () => {
           </Link>
         </LoginForm>
       </LoginContainer>
-    </CenteredContainer>
   );
 };
 

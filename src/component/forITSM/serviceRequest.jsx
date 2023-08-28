@@ -116,7 +116,7 @@ const ServiceRequest = () => {
     }
   };
 
-  
+
   //AgGridReact
   const gridRef = useRef(null);
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
@@ -207,9 +207,13 @@ const ServiceRequest = () => {
     });
   }, []);
 
-  const onAssignerSelected = useCallback(() => {
-    const selectedData = gridRef.current.api.getSelectedRows();
-    SelectAssignerhandler(selectedData);
+  // Ag-Grid에서 row 선택 시 호출되는 이벤트 핸들러
+  const onRowSelected = useCallback((event) => {
+    const selectedRows = gridRef.current.api.getSelectedRows();
+    if (selectedRows.length === 1) {
+      setSelectedAssigner(selectedRows[0].name); // 선택한 담당자 이름으로 업데이트
+      setModalOpen(false);
+    } 
   }, []);
 
   const [fileList, setFileList] = useState([]);
@@ -291,8 +295,8 @@ const ServiceRequest = () => {
             <Container>
                 <InputTitle>담당자</InputTitle><Div/>
                 <Button type="primary" onClick={() => setModalOpen(true)}>
-                    담당자
-                  </Button>
+                  {selectedAssigner ? selectedAssigner : '담당자'}
+                </Button>
                   <Modal
                     title="담당자 선택"
                     centered
@@ -302,9 +306,7 @@ const ServiceRequest = () => {
                   >
                     <GridContainer> 
                           <div style={{ height: '150px', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ marginBottom: '4px' }}>
-                              <button onClick={onAssignerSelected}>Selected</button>
-                            </div>
+                            
                             <div>
                               {[assigners]}
                             </div>
@@ -315,9 +317,9 @@ const ServiceRequest = () => {
                                   rowData={rowData2}
                                   columnDefs={columnDefs2}
                                   defaultColDef={defaultColDef}
-                                  rowSelection={'multiple'}
+                                  rowSelection={'single'}
                                   animateRows={true}
-                                  onRowValueChanged={onRowValueChanged}
+                                  onRowSelected={onRowSelected} // 이벤트 핸들러 등록
                                 />
                             </div>
                           </div>
