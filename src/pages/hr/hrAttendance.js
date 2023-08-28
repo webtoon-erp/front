@@ -22,7 +22,7 @@ const TodayContainer = styled.div`
 
 const Title = styled.div`
   font-size: 30px;
-  padding-top: 120px;
+  padding-top: 50px;
   padding-left: 3%;
   font-weight: bold;
 `;

@@ -2,15 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-const CenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
 
 const ContentContainer = styled.div`
   text-align: center;
+  margin-top: 15%;
 `;
 
 const Title = styled.h1`
@@ -40,7 +35,7 @@ const PasswordReset = () => {
   };
 
   return (
-    <CenteredContainer>
+    
       <ContentContainer>
         <Title>비밀번호 초기화</Title>
         <Description>
@@ -52,7 +47,7 @@ const PasswordReset = () => {
           비밀번호 초기화 요청
         </ResetButton>
       </ContentContainer>
-    </CenteredContainer>
+    
   );
 };
 
