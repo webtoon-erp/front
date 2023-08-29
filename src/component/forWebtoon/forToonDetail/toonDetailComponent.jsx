@@ -28,12 +28,13 @@ const ToonDetailComponent = (Id) => {
     const [editable, setEditable] = useState('false');
     const [enrollable, setEnrollable] = useState('false');
 
-    const [selectedTitle, setSelectedTitle] = useState('');
-    const [selectedAuthor, setSelectedAuthor] = useState('');
-    const [selectedDrawer, setSelectedDrawer] = useState('');
-    const [selectedDay, setSelectedDay] = useState('');
-    const [selectedKeyword, setSelectedKeyword] = useState('');
-    const [selectedContent, setSelectedContent] = useState('');
+    //editing
+    const [isEditing, setIsEditing] = useState(false); 
+    const [editedAuthor, setEditedAuthor] = useState(FakeProfileData[0].author);
+    const [editedDrawer, setEditedDrawer] = useState(FakeProfileData[0].drawer);
+    const [editedDay, setEditedDay] = useState(FakeProfileData[0].day);
+    const [editedKeyword, setEditedKeyword] = useState(FakeProfileData[0].keyword);
+    const [editedContent, setEditedContent] = useState(FakeProfileData[0].content);
     const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
     //data.title
@@ -51,56 +52,54 @@ const ToonDetailComponent = (Id) => {
     const handleClick = () => {
         navigate("/episodeAdd");
     }
+
+    const handleToggleEdit = () => {
+      setIsEditing((prevState) => !prevState);
+  };
     
 
-    const SelectTitlehandler = (e) => {
-        setSelectedTitle(e.target.value);
-      };
+    const handleAuthorChange = (e) => {
+      setEditedAuthor(e.target.value);
+  };
+
+  const handleDrawerChange = (e) => {
+      setEditedDrawer(e.target.value);
+  };
+
+  const handleDayChange = (e) => {
+      setEditedDay(e.target.value);
+  };
+
+  const handleKeywordChange = (e) => {
+      setEditedKeyword(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+      setEditedContent(e.target.value);
+  };
     
-      const SelectAuthorhandler = (e) => {
-        setSelectedAuthor(e.target.value);
-      };
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setThumbnailPreview(event.target.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
     
-      const SelectDrawerhandler = (e) => {
-        setSelectedDrawer(e.target.value);
-      };
-    
-      const SelectDayhandler = (e) => {
-        setSelectedDay(e.target.value);
-      };
-    
-      const SelectKeywordhandler = (e) => {
-        setSelectedKeyword(e.target.value);
-      };
-    
-      const SelectContenthandler = (e) => {
-        setSelectedContent(e.target.value);
-      };
-    
-      const handleThumbnailChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onload = (event) => {
-          setThumbnailPreview(event.target.result);
-        };
-    
-        if (file) {
-          reader.readAsDataURL(file);
-        }
-      };
-    
-      const handleSubmitClick = () => {
+      const handleSaveChanges = () => {
          //console.log(finalId, "finalId 결과값"); 
     
         axios.post('http://localhost:5050/register',
-          {
-            selectedTitle: selectedTitle,           
-            selectedAuthor: selectedAuthor,  
-            selectedDrawer: selectedDrawer,  
-            selectedDay: selectedDay,           
-            selectedKeyword: selectedKeyword,
-            selectedContent: selectedContent,
+          { 
+            editedDrawer: editedDrawer,  
+            editedDay: editedDay,
+            editedKeyword: editedKeyword,
+            editedContent: editedContent,
             thumbnailPreview: thumbnailPreview,
           },
           {
@@ -123,18 +122,22 @@ const ToonDetailComponent = (Id) => {
     return (
         <>
             <RegistBtnContainer>
-                        <RegistBtn onClick={handleSubmitClick}>수정</RegistBtn>
-                        <RegistBtn onClick={handleSubmitClick}>등록</RegistBtn>
+                      <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
+                                  {isEditing ? '등 록' : '수 정'}
+                      </Btn>
                         <RegistBtn onClick={handleClick}>회차 등록</RegistBtn>
             </RegistBtnContainer>
             
+            
             <WebtoonContainer>
+            
                         <WebtoonImgContainer>
                             <Img src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
                         </WebtoonImgContainer>
                         <ToonInsideInfoBox>
                             <ToonTitle>{FakeProfileData[0].title}</ToonTitle>
-                            
+                        {!isEditing ? (
+                            <>
                             <ToonInfoContainer>
                                 <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
                                 <ToonInfoBox>그림 <ToonInfoData>{FakeProfileData[0].drawer}</ToonInfoData></ToonInfoBox>
@@ -144,13 +147,72 @@ const ToonDetailComponent = (Id) => {
                             <ToonInsideInfoTextBox>
                                 <ToonInfoBox>작품 설명 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
                             </ToonInsideInfoTextBox>
-                        </ToonInsideInfoBox>
+                        
+                        </>
+                         ) : (
+                          <>
+                              <ToonInfoContainer>
+                                <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
+                                <ToonInfoBox>그림 <InputContainer><InputField type="text" value={editedDrawer} onChange={handleDrawerChange} /></InputContainer></ToonInfoBox>
+                                <ToonInfoBox>업로드 요일 <InputContainer><InputField type="text" value={editedDay} onChange={handleDayChange} /></InputContainer></ToonInfoBox>
+                                <ToonInfoBox>키워드 <InputContainer><InputField type="text" value={editedKeyword} onChange={handleKeywordChange} /></InputContainer></ToonInfoBox>
+                            </ToonInfoContainer>
+                            <ToonInsideInfoTextBox>
+                              <ToonInfoBox>작품 설명 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
+                            </ToonInsideInfoTextBox> {/**작품 설명 textfiled로 수정하기 */}
+                          </>
+                         )}
+                      </ToonInsideInfoBox>
             </WebtoonContainer>
         </>
     )
 };
 
 export default ToonDetailComponent;
+
+const Btn = styled.button`
+    width: 100px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`
+
+const InputContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const InputField = styled.input`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    width: 60px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const InputTextField = styled.textarea`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+    width: 650px;
+    height: 80px;
+`;
 
 const RegistBtnContainer = styled.div`
     display: flex;
