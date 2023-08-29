@@ -23,12 +23,12 @@ const ForEpisodeDetail = (Id) => {
     const [editable, setEditable] = useState('false');
     const [enrollable, setEnrollable] = useState('false');
 
-    const [selectedTitle, setSelectedTitle] = useState('');
-    const [selectedAuthor, setSelectedAuthor] = useState('');
-    const [selectedDrawer, setSelectedDrawer] = useState('');
-    const [selectedDay, setSelectedDay] = useState('');
-    const [selectedKeyword, setSelectedKeyword] = useState('');
-    const [selectedContent, setSelectedContent] = useState('');
+    //editing
+    const [isEditing, setIsEditing] = useState(false); 
+    const [editedAuthor, setEditedAuthor] = useState(FakeProfileData[0].author);
+    const [editedManager, setEditedManager] = useState(FakeProfileData[0].manager);
+    const [editedTitle, setEditedTitle] = useState(FakeProfileData[0].title);
+    const [editedContent, setEditedContent] = useState(FakeProfileData[0].content);
     const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
     //data.title
@@ -46,56 +46,50 @@ const ForEpisodeDetail = (Id) => {
     const handleClick = () => {
         navigate("/episodeAdd");
     }
+
+    const handleToggleEdit = () => {
+      setIsEditing((prevState) => !prevState);
+  };
     
 
-    const SelectTitlehandler = (e) => {
-        setSelectedTitle(e.target.value);
-      };
+    const handleAuthorChange = (e) => {
+      setEditedAuthor(e.target.value);
+  };
+
+  const handleManagerChange = (e) => {
+      setEditedManager(e.target.value);
+  };
+
+  const handleTitleChange = (e) => {
+      setEditedTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+      setEditedContent(e.target.value);
+  };
     
-      const SelectAuthorhandler = (e) => {
-        setSelectedAuthor(e.target.value);
-      };
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setThumbnailPreview(event.target.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
     
-      const SelectDrawerhandler = (e) => {
-        setSelectedDrawer(e.target.value);
-      };
-    
-      const SelectDayhandler = (e) => {
-        setSelectedDay(e.target.value);
-      };
-    
-      const SelectKeywordhandler = (e) => {
-        setSelectedKeyword(e.target.value);
-      };
-    
-      const SelectContenthandler = (e) => {
-        setSelectedContent(e.target.value);
-      };
-    
-      const handleThumbnailChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onload = (event) => {
-          setThumbnailPreview(event.target.result);
-        };
-    
-        if (file) {
-          reader.readAsDataURL(file);
-        }
-      };
-    
-      const handleSubmitClick = () => {
+      const handleSaveChanges = () => {
          //console.log(finalId, "finalId 결과값"); 
     
         axios.post('http://localhost:5050/register',
-          {
-            selectedTitle: selectedTitle,           
-            selectedAuthor: selectedAuthor,  
-            selectedDrawer: selectedDrawer,  
-            selectedDay: selectedDay,           
-            selectedKeyword: selectedKeyword,
-            selectedContent: selectedContent,
+          { 
+            editedTitle: editedTitle,
+            editedAuthor: editedAuthor,
+            editedManager: editedManager, 
+            editedContent: editedContent,
             thumbnailPreview: thumbnailPreview,
           },
           {
@@ -106,7 +100,7 @@ const ForEpisodeDetail = (Id) => {
           .then((result) => {
             console.log(result);
             console.log("enroll!");
-            window.alert('회차 상세정보가 정상적으로 수정되었습니다.');
+            window.alert('화차 상세정보가 정상적으로 수정되었습니다.');
             //window.location.replace("/login"); 
           })
           .catch((error) => {
@@ -118,28 +112,50 @@ const ForEpisodeDetail = (Id) => {
     return (
         <>
             <RegistBtnContainer>
-                        <RegistBtn onClick={handleSubmitClick}>수정</RegistBtn>
-                        <RegistBtn onClick={handleSubmitClick}>등록</RegistBtn>
+                      <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
+                                  {isEditing ? '등 록' : '수 정'}
+                      </Btn>
             </RegistBtnContainer>
             
             <WebtoonContainer>
                         <WebtoonImgContainer>
                             <Img src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
                         </WebtoonImgContainer>
+                        
+                        {!isEditing ? ( 
+                        <>
                         <ToonInsideInfoBox>
-                            <ToonTitle>{FakeProfileData[0].title}</ToonTitle>
-                            
-                            <ToonInfoContainer>
-                                <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>담당자 <ToonInfoData>{FakeProfileData[0].manager}</ToonInfoData></ToonInfoBox>
-                            </ToonInfoContainer>
-                            <ToonInsideInfoTextBox>
-                                <ToonInfoBox>작가의 말 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
-                            </ToonInsideInfoTextBox>
-                        </ToonInsideInfoBox>
-            </WebtoonContainer>
+                          <ToonTitle>{FakeProfileData[0].title}</ToonTitle>
+                          
+                          <ToonInfoContainer>
+                              <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
+                              <ToonInfoBox>담당자 <ToonInfoData>{FakeProfileData[0].manager}</ToonInfoData></ToonInfoBox>
+                          </ToonInfoContainer>
+                          <ToonInsideInfoTextBox>
+                              <ToonInfoBox>작가의 말 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
+                          </ToonInsideInfoTextBox>
+                          </ToonInsideInfoBox>
+                        </>
+                        ):(
+                          <>
+                          <ToonInsideInfoBox>
+                              <ToonTitle><InputContainer><InputTitleField type="text" value={editedTitle} onChange={handleTitleChange} /></InputContainer></ToonTitle>
+                              
+                              <ToonInfoContainer>
+                                <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
+                                <ToonInfoBox>담당자 <InputContainer><InputField type="text" value={editedManager} onChange={handleManagerChange} /></InputContainer></ToonInfoBox>
+                              </ToonInfoContainer>
+                               <ToonInsideInfoTextBox>
+                                 <ToonInfoBox>작가의 말 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
+                               </ToonInsideInfoTextBox>
+                              </ToonInsideInfoBox>
+                              
+                          </>
+                        ) }     
+                        
+                    </WebtoonContainer>
             <WebtoonWorksContainer>
-                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
+                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={` ${FakeProfileData[0].title}의 썸네일 사진`} />
             </WebtoonWorksContainer>
             
             <CommentContainer>
@@ -152,13 +168,46 @@ const ForEpisodeDetail = (Id) => {
 
 export default ForEpisodeDetail;
 
-const RegistBtnContainer = styled.div`
-    display: flex;
-    padding-left: 75%;
-    margin-bottom: 20px;
+const InputTextField = styled.textarea`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+    width: 650px;
+    height: 80px;
 `;
 
-const RegistBtn = styled.button`
+const InputContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const InputField = styled.input`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    width: 60px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const InputTitleField = styled.input`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    width: 400px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const Btn = styled.button`
     width: 100px;
     height: 40px;
     background-color: ${theme.colors.btn};
@@ -173,6 +222,12 @@ const RegistBtn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 15px;
 `
+
+const RegistBtnContainer = styled.div`
+    display: flex;
+    padding-left: 75%;
+    margin-bottom: 20px;
+`;
 
 const WebtoonContainer = styled.div`
     display: flex;
