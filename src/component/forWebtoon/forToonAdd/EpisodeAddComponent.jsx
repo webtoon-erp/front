@@ -16,15 +16,15 @@ const EpisodeAddComponent = () => {
 
    axios.post('http://localhost:5050/register',
      {
-       selectedTitle: selectedTitle,           
-       selectedEpisode: selectedEpisode,  
-       selectedContent: selectedContent,  
+       webtoonId: selectedTitle,           
+       subTitle: selectedEpisode,  
+       content: selectedContent,  
        selectedthumbnail: selectedthumbnail,
-       selectedWorks: selectedWorks,
+       uploadFile: selectedWorks,
      },
      {
        headers: {
-         'Content-Type': 'application/json',
+         'Content-Type': 'application/json;charset=UTF-8',
        },
      })
      .then((result) => {
