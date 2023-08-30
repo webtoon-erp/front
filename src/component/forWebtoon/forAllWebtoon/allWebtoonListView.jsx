@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -89,16 +90,23 @@ const fakeData = [
   ];
 
 const AllWebtoonListView = () => {
+    const [data, setData] = useState({});
     const [selectedDay, setSelectedDay] = useState('전체');
     const [filterText, setFilterText] = useState(''); // New state for filter text
   
+    useEffect(() => {
+      axios.get('http://localhost:5050/webtoon').then((response)=> {
+        setData(response.data);
+      })
+    }, []);
+
     // 태그 선택 핸들러
     const selectDayHandler = (e) => {
         setSelectedDay(e.target.value);
     };
   
     // 선택된 부서에 해당하는 프로필 필터링
-    const filteredDays = selectedDay === '전체' ? fakeData : fakeData.filter((emp) => emp.day === selectedDay);
+    const filteredDays = selectedDay === '전체' ? data : data.filter((emp) => emp.day === selectedDay);
   
     // ag-grid
     const columnDefs = [
