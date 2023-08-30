@@ -2,8 +2,28 @@ import { useState, useRef, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import FileInput from '../../fileUpload';
+import { Radio, Select, Space } from 'antd';
+
+const options = [];
+
+for (let i = 10; i < 20; i++) {
+    options.push({
+        value: 'employee' + i,
+        label: 'employee' + i,
+    });
+}
+
+const handleChange = (value) => {
+    console.log(`Selected: ${value}`);
+};
 
 const WorkRequestView = () => {
+    const [size, setSize] = useState('middle');
+    const handleSizeChange = (e) => {
+        setSize(e.target.value);
+    };
+
     const editorRef = useRef(null);
     const log = () => {
         if (editorRef.current) {
@@ -18,12 +38,12 @@ const WorkRequestView = () => {
                 <Btn>요 청</Btn>
             </FlexBox>
 
+            <InputTitle placeholder='제목을 입력해주세요.'/>
+
             <Editor
                 onInit={(evt, editor) => editorRef.current = editor}
                 initialValue={`
                     <div>
-                        <h2>제목: 연장/휴일근무 신청</h2>
-                        <p>&nbsp;</p>
                         <h3>문서 종류: 연장/휴일근무 신청서</h3>
                         <p>&nbsp;</p>
                         <table style="border-collapse: collapse; width: 100%; height: 141.297px; border-style: solid; margin-left: auto; margin-right: auto;" border="2" width="650">
@@ -103,7 +123,46 @@ const WorkRequestView = () => {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-            <button onClick={log}>Log editor content</button>
+            <FlexBox2>
+                <SubH>결재자:</SubH>
+                <Space
+                    direction="vertical"
+                    style={{
+                    width: '250px',
+                    marginRight: '30px',
+                    }}
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Please select"
+                        onChange={handleChange}
+                        style={{
+                            width: '100%',
+                        }}
+                        options={options}
+                    />
+                </Space>
+                <SubH>참조자:</SubH>
+                <Space
+                    direction="vertical"
+                    style={{
+                    width: '250px',
+                    }}
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Please select"
+                        onChange={handleChange}
+                        style={{
+                            width: '100%',
+                        }}
+                        options={options}
+                    />
+                </Space>
+            </FlexBox2>
+            
+            <FileInput />
+            {/* <button onClick={log}>Log editor content</button> */}
         </WorkRequestContainer>
     )
 };
@@ -128,6 +187,12 @@ const FlexBox = styled.div`
     display: flex;
 `
 
+const FlexBox2 = styled.div`
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 20px;
+`
+
 const Btn = styled.button`
     width: 90px;
     height: 40px;
@@ -143,4 +208,22 @@ const Btn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 710px;
     float: right;
+`
+
+const InputTitle = styled.input`
+    width: 1080px; 
+    height: 40px;
+    margin-bottom: 10px;
+    border: 2px solid #EEEEEE;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: 14px;
+    &::placeholder {
+        color: #C3C3C3;
+        font-size: 14px;
+    }
+`
+
+const SubH = styled.h4`
+    margin: 5px 20px 0px 0px;
 `
