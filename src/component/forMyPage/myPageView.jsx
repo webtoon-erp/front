@@ -1,9 +1,13 @@
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '../../style/theme';
 import HorizonLine from '../horizonLine';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { Button, Upload, message, Modal } from 'antd';
+import AnnualLeaveRequestView from '../forElectropaymentRuqeust/forEpForm/annualLeaveRequestView';
+
 
 const FakeProfileData = [
     {
@@ -35,11 +39,35 @@ const MyPageView = () => {
         {field: '만료일자', sortable: true, filter: true},
     ];
 
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const [todayDate, setTodayDate] = useState('');
+
+    useEffect(() => {
+        const date = new Date();
+        const TodayDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+        setTodayDate(TodayDate);
+    }, []);
+
     return (
         <>
             <FlexBox>
                 <Title>마이페이지</Title>
-                <Btn>유급휴가 신청</Btn>
+                <Btn onClick={() => setModalOpen(true)}>유급휴가 신청</Btn>
+                <Modal
+                    title="유급휴가 신청"
+                    centered
+                    open={modalOpen}
+                    onOk={() => setModalOpen(false)}
+                    onCancel={() => setModalOpen(false)}
+                >
+                    <InputTitle placeholder='제목을 입력해주세요.'/>
+                    <H3>문서 종류: 연차 신청서</H3>
+                    <H3>날짜: {todayDate}</H3>
+                    <H3 style={{ marginBottom: '5px' }}>사유: </H3>
+                    <TextArea />
+                    <p>위와 같이 상신하오니 검토 후 재가 바랍니다.</p>
+                </Modal>
             </FlexBox>            
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
@@ -105,6 +133,39 @@ const Title2 = styled.div`
     font-size: 22px;
     font-weight: bold;
 `;
+
+const InputTitle = styled.input`
+    width: 450px; 
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    border: 2px solid #EEEEEE;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: 14px;
+    &::placeholder {
+        color: #C3C3C3;
+        font-size: 14px;
+    }
+`
+
+const H3 = styled.h3`
+
+`
+
+const TextArea = styled.textarea`
+    width: 450px; 
+    height: 100px;
+    margin-bottom: 10px;
+    border: 2px solid #EEEEEE;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: 14px;
+    &::placeholder {
+        color: #C3C3C3;
+        font-size: 14px;
+    }
+`
 
 const Btn = styled.button`
     width: 100px;
