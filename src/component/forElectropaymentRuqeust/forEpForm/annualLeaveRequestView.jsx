@@ -38,7 +38,7 @@ const AnnualLeaveRequestView = () => {
                         <p>&nbsp;</p>
                         <h3>사유:</h3>
                         <p>&nbsp;</p>
-                        <p>위와 같이 상신하오니  검토 후 재가 바랍니다.</p>
+                        <p>위와 같이 상신하오니 검토 후 재가 바랍니다.</p>
                     </div>
                 `}
                 apiKey='gkyfnz48wo3yqa2iodxgl1skx1rebhsdsdl0g5a6rt3pk1k2'
