@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
@@ -61,13 +62,20 @@ const FakeData = [
 const BeforeUploadToon = () => {
     const isLoading = false; 
 
+    const [data, setData] = useState({});
     const [selectedWeek, setSelectedWeek] = useState('요일');
+
+    useEffect(() => {
+        axios.get('http://localhost:5050/webtoon').then((response)=> {
+            setData(response.data);
+        })
+    }, []);
 
     const SelectWeekhandler = (e) => {
         setSelectedWeek(e.target.value);
     };
 
-    const filteredToon = selectedWeek === '요일' ? FakeData : FakeData.filter((toon) => toon.week === selectedWeek);
+    const filteredToon = selectedWeek === '요일' ? data : data.filter((toon) => toon.week === selectedWeek);
 
     return(
         <BeforeUploadToonContainer>

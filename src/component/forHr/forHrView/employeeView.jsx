@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
@@ -99,7 +100,14 @@ const FakeData = [
 const EmployeeView = () => {
     const isLoading = false;
 
+    const [data, setData] = useState({});
     const [selectedDep, setSelectedDep] = useState('전체');
+
+    useEffect(() => {
+        axios.get('http://localhost:5050/users').then((response)=> {
+            setData(response.data);
+        })
+    }, []);
 
     // 부서 선택 핸들러
     const SelectDephandler = (e) => {
@@ -107,7 +115,7 @@ const EmployeeView = () => {
     };
 
     // 선택된 부서에 해당하는 프로필 필터링
-    const filteredProfiles = selectedDep === '전체' ? FakeData : FakeData.filter((emp) => emp.dep === selectedDep);
+    const filteredProfiles = selectedDep === '전체' ? data : data.filter((emp) => emp.dep === selectedDep);
 
     return(
         <EmpProfileContainer>
