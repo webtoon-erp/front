@@ -142,7 +142,7 @@ function App() {
               <Route path="/noticeDetail" element={<NoticeDetail /> } />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
-              <Route path="/episodeDetail" element={<EpisodeDetail />} /
+              <Route path="/episodeDetail" element={<EpisodeDetail />} />
 
               {tabElements.map((tab, index) => (
                 <Route
@@ -158,7 +158,6 @@ function App() {
                   }
                 />
               ))}
-
           </Routes>
         </main>
       </div>
