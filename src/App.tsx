@@ -12,6 +12,7 @@ import HrProfileView from './pages/hr/hrProfileView';
 import HrView from './pages/hr/hrView';
 import HrSalary from './pages/hr/hrSalary';
 import HrAllSalaryView from './pages/hr/hrAllSalaryView';
+import HrOrgChart from './pages/hr/hrOrgChart';
 import ItRequestAdd from './pages/itsm/itRequestAdd';
 import ItRequestListView from './pages/itsm/itRequestListView';
 import ItRequestView from './pages/itsm/itRequestView';
@@ -30,6 +31,11 @@ import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import EpRequestDetail from './pages/electropayment/epRequestDetail';
+import EpFormAnnualLeaveRequest from './pages/electropayment/epFormAnnualLeaveRequest';
+import EpFormCorporateCardUsage from './pages/electropayment/epFormCorporateCardUsage';
+import EpFormPurchaseOrder from './pages/electropayment/epFormPurchaseOrder';
+import EpFormReimbursementRequest from './pages/electropayment/epFormReimbursementRequest';
+import EpFormWorkRequest from './pages/electropayment/epFormWorkRequest';
 import NoticeAdd from './pages/system/noticeAdd';
 import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
@@ -136,7 +142,7 @@ function App() {
               <Route path="/noticeDetail" element={<NoticeDetail /> } />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
-              <Route path="/episodeDetail" element={<EpisodeDetail />} />
+              <Route path="/episodeDetail" element={<EpisodeDetail />} /
 
               {tabElements.map((tab, index) => (
                 <Route
@@ -162,4 +168,3 @@ function App() {
 }
 
 export default App;
-           

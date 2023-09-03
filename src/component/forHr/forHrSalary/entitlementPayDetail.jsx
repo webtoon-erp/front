@@ -22,21 +22,6 @@ import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
-let newCount = 1;
-
-function createNewRowData() {
-    const newData = {
-        make: 'Toyota ' + newCount,
-        model: 'Celica ' + newCount,
-        price: 35000 + newCount * 17,
-        zombies: 'Headless',
-        style: 'Little',
-        clothes: 'Airbag',
-    };
-    newCount++;
-    return newData;
-}
-
 const EntitlementPayDetail = () => {
     const gridRef = useRef(null);
 
@@ -83,37 +68,9 @@ const EntitlementPayDetail = () => {
         };
     }, []);
     
-    const clearData = useCallback(() => {
-        const rowData = [];
-        gridRef.current.api.forEachNode(function (node) {
-            rowData.push(node.data);
-        });
-        const res = gridRef.current.api.applyTransaction({
-            remove: rowData,
-        });
-    }, []);
-    
-    const addItems = useCallback((addIndex) => {
-        count++;
-        const newItems = [
-            createNewRowData(),
-        ];
-        const res = gridRef.current.api.applyTransaction({
-            add: newItems,
-            addIndex: addIndex,
-        });
-    }, []);
-    
     //  ag-grid 현재 편집 모드 종료하는 역할
     const onBtStopEditing = useCallback(() => {
         gridRef.current.api.stopEditing();
-    }, []);
-    
-    const onRemoveSelected = useCallback(() => {
-        const selectedData = gridRef.current.api.getSelectedRows();
-        const res = gridRef.current.api.applyTransaction({
-            remove: selectedData,
-        });
     }, []);
     
     let count = 1;
@@ -123,12 +80,7 @@ const EntitlementPayDetail = () => {
             <Title>자격수당 상세</Title>
             <HorizonLine />
             <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                <div style={{ marginBottom: "4px" }}>
-                    <Btn onClick={() => addItems(count)}>추가</Btn>
-                    <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                    <Btn onClick={clearData}>모두 삭제</Btn>
-                    <Btn onClick={onBtStopEditing}>완료</Btn>
-                </div>
+                <Btn onClick={onBtStopEditing}>완료</Btn>
                 <div style={{ flexGrow: '1' }}>
                 <EntitlementPayGrid className="ag-theme-alpine">
                     <AgGridReact 
@@ -179,5 +131,5 @@ const Btn = styled.button`
         background-color: #00B757;
     }
     cursor: pointer;
-    margin: -20px 15px 10px 15px;
+    margin: 0px 15px 20px 330px;
 `

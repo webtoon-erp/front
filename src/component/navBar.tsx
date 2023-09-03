@@ -32,7 +32,7 @@ const items: MenuProps['items'] = [
     ]), 
 
     getItem('인사', 'menu3', <UserOutlined />, [
-        getItem('직원 관리', 'hrView'),
+        getItem('직원 관리', '1', null, [getItem('전체 직원 관리', 'hrView'), getItem('조직도', 'hrOrgChart')]),
         getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
         getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', 'hrAllSalaryView')]),
     ]),
@@ -43,7 +43,7 @@ const items: MenuProps['items'] = [
     ]),
 
     getItem('전자결재', 'menu5', <FileTextOutlined />, [
-        getItem('결재 요청', 'epRequestView'),
+        getItem('결재 요청', 'epRequestAdd'),
         getItem('결재 내역 조회', '9', null, [getItem('내 문서 조회', 'epMyDocsView'), getItem('부서 문서 조회', 'epDepDocsView'), getItem('결재 대기 문서 조회', 'epHoldenDocsView'), getItem('참조 문서 조회', 'epRefDocsView')]),
     ]),
 

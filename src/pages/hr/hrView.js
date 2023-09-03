@@ -17,7 +17,7 @@ const Title = styled.div`
 export default function HrView (){
     return(
         <EmpProfileContainer>
-            <Title>직원 관리</Title>
+            <Title>전체 직원 관리</Title>
             <EmployeeView />
         </EmpProfileContainer>
     )
