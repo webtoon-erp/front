@@ -1,10 +1,6 @@
 import styled from 'styled-components';
-import DepartmentVacation from '../../component/forHr/forHrAttendance/DepartmentExtension';
-import TodayAttendance from '../../component/forHr/forHrAttendance/TodayAttendance';
-import VacationRemain from '../../component/forHr/forHrAttendance/VacationRemain';
 import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
 import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
-import WholeVacation from '../../component/forHr/forHrAttendance/WholeVacation';
 import DepartmentExtension from '../../component/forHr/forHrAttendance/DepartmentExtension';
 import DepartmentAvgExtension from '../../component/forHr/forHrAttendance/DepartmentAvgExtension';
 

@@ -1,21 +1,48 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios'; 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const EmployeeAttendanceView = () => {
-    const [selectedCell, setSelectedCell] = useState(null);
+  const [selectedCell, setSelectedCell] = useState(null);
+  const [rowData, setRowData] = useState([]);
+  const [leftPanelData, setLeftPanelData] = useState([]);
 
-    const leftPanelData = [
-        {'전체 직원': 69},
-        {'출근': 66},
-        {'퇴근': 50},
-        {'미출근': 0},
-        {'지각': 6},
-        {'휴가': 6},
-        {'연장근무': 6},
-      ];
+  const handleCellClick = (params) => {
+      setSelectedCell(params.column.getColDef().field);
+  };
+
+  useEffect(() => {
+      if (selectedCell !== null) {
+        
+          axios.get(`http://localhost:5050/attendance/${selectedCell}`)
+              .then(response => {
+                  const data = response.data.totalAttendanceSummaryDto[selectedCell + 'UserList'];
+                  setRowData(data);
+              })
+              .catch(error => {
+                  console.error('Error fetching data:', error);
+              });
+          
+      }
+      axios.get('http://localhost:5050/attendance/total')
+            .then(response => {
+                const totalSummary = response.data.totalAttendanceSummaryDto;
+                setLeftPanelData([
+                    {'전체 직원': totalSummary.totalUserCnt},
+                    {'출근': totalSummary.onTimeStartUserCnt},
+                    {'퇴근': totalSummary.onTimeEndUserCnt},
+                    {'미출근': totalSummary.notStartUserCnt},
+                    {'지각': totalSummary.lateStartUserCnt},
+                    {'휴가': totalSummary.dayOffUserCnt},
+                    {'연장근무': totalSummary.notEndUserCnt},
+                ]);
+            }).catch(error => {
+              console.error('Error fetching left panel data:', error);
+          });
+  }, [selectedCell]);
 
   const leftPanelColumnDefs = [
     {field: '전체 직원'},
@@ -42,10 +69,7 @@ const EmployeeAttendanceView = () => {
     // ... (rowData for right panel)
   ];
 
-  const handleCellClick = (params) => {
-    setSelectedCell(params.column.getColDef().field);
-    console.log(selectedCell);
-  };
+  
 
   return (
     <Container>
@@ -60,12 +84,12 @@ const EmployeeAttendanceView = () => {
       </LeftPanel>
       <RightPanel>
         <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
-          <AgGridReact
-            columnDefs={rightPanelColumnDefs}
-            rowData={rowColumnData.filter(data => data[selectedCell] !== undefined)}
-          />
+            <AgGridReact
+                columnDefs={rightPanelColumnDefs}
+                rowData={rowData}
+            />
         </div>
-      </RightPanel>
+    </RightPanel>
     </Container>
   );
 };

@@ -104,8 +104,8 @@ function App() {
         />
 
           <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/passwordReset" element={<PasswordReset />}/>
               <Route path="/notice" element={<Notice />} />
               <Route path="/webtoon" element={<Webtoon />} />
