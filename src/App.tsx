@@ -124,6 +124,7 @@ function App() {
               <Route path="/hrView" element={<HrView />} />
               <Route path="/hrSalary" element={<HrSalary />} />
               <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
+              <Route path="/hrOrgChart" element={<HrOrgChart />} />
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
               <Route path="/itRequestView" element={<ItRequestView />} />
@@ -138,6 +139,11 @@ function App() {
               <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
               <Route path="/epRefDocsView" element={<EpRefDocsView />} />
               <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
+              <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
+              <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
+              <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
+              <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
+              <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
               <Route path="/noticeAdd" element={<NoticeAdd />} />
               <Route path="/noticeDetail" element={<NoticeDetail /> } />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
