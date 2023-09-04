@@ -62,7 +62,7 @@ const HeaderStyle = styled.header`
 
 const ContentStyle = styled.div`
     display: flex;
-    width: 100%
+    width: 100%;
     max-width: 1000px;
     height: 100%;
     margin: 0 auto;

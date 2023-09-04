@@ -66,7 +66,7 @@ const FakeData = [
         id: 8,
         imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
         rank: '팀장',
-        dep: '영업부',
+        dep: '웹툰관리부',
         name: 'employee 8',
         url: '/employee8',
     },
@@ -82,7 +82,7 @@ const FakeData = [
         id: 10,
         imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
         rank: '사원',
-        dep: '영업부',
+        dep: '웹툰관리부',
         name: 'employee 10',
         url: '/employee10',
     },
@@ -125,7 +125,7 @@ const EmployeeView = () => {
                         <OptionDep value="전체">전체</OptionDep>
                         <OptionDep value="인사부">인사부</OptionDep>
                         <OptionDep value="회계부">회계부</OptionDep>
-                        <OptionDep value="영업부">영업부</OptionDep>
+                        <OptionDep value="웹툰관리부">웹툰관리부</OptionDep>
                         <OptionDep value="기술부">기술부</OptionDep>
                         <OptionDep value="">기타</OptionDep>
                     </SelectDep>
