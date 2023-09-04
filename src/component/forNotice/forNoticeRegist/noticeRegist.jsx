@@ -34,7 +34,7 @@ const NoticeRegist = () => {
                         <option value="인사부">인사부</option>
                         <option value="회계부">회계부</option>
                         <option value="웹툰관리부">웹툰관리부</option>
-                        <option value="기술부">기술부</option>
+                        <option value="개발부">개발부</option>
                         <option value="기타">기타</option>
                     </select>
                 </SelectTagContainer>

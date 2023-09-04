@@ -89,7 +89,7 @@ const FakeData = [
         id: 11,
         imageUrl: profileImg,
         rank: '사원',
-        dep: '기술부',
+        dep: '개발부',
         name: 'employee 11',
         url: '/employee11',
     },
