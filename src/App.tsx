@@ -41,6 +41,7 @@ import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
 import ScheduleAdd from './pages/system/scheduleAdd';
 import Schedule from './pages/common/schedule';
+import ScheduleDetail from './pages/system/scheduleDetail';
 import EpisodeDetail from './pages/webtoon/episodeDetail';
 import Modal from './component/modal'; // Assuming you have a Modal component
 import NoticeDetail from './pages/system/noticeDetail';
@@ -142,7 +143,12 @@ function App() {
               <Route path="/noticeDetail" element={<NoticeDetail /> } />
               <Route path="/scheduleAdd" element={<ScheduleAdd />} />
               <Route path="/schedule" element={<Schedule />} />
+<<<<<<< Updated upstream
               <Route path="/episodeDetail" element={<EpisodeDetail />} /
+=======
+              <Route path="/scheduleDetail" element={<ScheduleDetail />} />
+              <Route path="/episodeDetail" element={<EpisodeDetail />} />
+>>>>>>> Stashed changes
 
               {tabElements.map((tab, index) => (
                 <Route
