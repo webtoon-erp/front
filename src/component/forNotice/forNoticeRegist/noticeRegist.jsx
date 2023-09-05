@@ -31,11 +31,11 @@ const NoticeRegist = () => {
                 <SelectTagContainer>
                     <select>
                         <option value="기본">부서 선택</option>
-                        <option value="서비스">인사부</option>
-                        <option value="시스템">회계부</option>
-                        <option value="행사">영업부</option>
-                        <option value="행사">기술부</option>
-                        <option value="행사">기타</option>
+                        <option value="인사부">인사부</option>
+                        <option value="회계부">회계부</option>
+                        <option value="웹툰관리부">웹툰관리부</option>
+                        <option value="개발부">개발부</option>
+                        <option value="기타">기타</option>
                     </select>
                 </SelectTagContainer>
                 

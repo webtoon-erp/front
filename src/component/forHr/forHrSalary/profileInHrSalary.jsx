@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
@@ -17,6 +19,14 @@ const FakeProfileData = [
 ];
 
 const ProfileInHrSalary = () => {
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        axios.get('http://localhost:5050/pays/{employeeId}').then((response)=> {
+            setData(response.data);
+        })
+    }, []);
+
     return (
         <>
             <FlexBox>
@@ -24,16 +34,16 @@ const ProfileInHrSalary = () => {
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>
-                            <Img src={FakeProfileData[0].imageUrl} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
+                            <Img src={data.imageUrl} alt={`${data.rank} ${data.name}의 프로필 사진`} />
                         </ProfileImgContainer>
                         <ProfileInfoContainer>
-                            <ProfileInfoBox>사원명 <ProfileInfoData>{FakeProfileData[0].name}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>부서 <ProfileInfoData>{FakeProfileData[0].dep}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>직급 <ProfileInfoData>{FakeProfileData[0].rank}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>사원번호 <ProfileInfoData>{FakeProfileData[0].empId}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>입사일 <ProfileInfoData>{FakeProfileData[0].joinDate}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>휴대전화 <ProfileInfoData>{FakeProfileData[0].phone}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>이메일 <ProfileInfoData>{FakeProfileData[0].email}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>부서 <ProfileInfoData>{data.dep}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>직급 <ProfileInfoData>{data.rank}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>사원번호 <ProfileInfoData>{data.empId}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>입사일 <ProfileInfoData>{data.joinDate}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>휴대전화 <ProfileInfoData>{data.phone}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>이메일 <ProfileInfoData>{data.email}</ProfileInfoData></ProfileInfoBox>
                         </ProfileInfoContainer>
             </ProfileInHrSalaryContainer>
         </>
@@ -53,22 +63,6 @@ const Title = styled.div`
     font-size: 30px;
     font-weight: bold;
 `;
-
-const Btn = styled.button`
-    width: 100px;
-    height: 40px;
-    background-color: ${theme.colors.btn};
-    border: none;
-    color: ${theme.colors.white};
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
-    &:hover {
-        background-color: #00B757;
-    }
-    cursor: pointer;
-    margin: 0px 15px 0px 800px;
-`
 
 const FlexBox = styled.div`
     display: flex;

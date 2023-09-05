@@ -101,8 +101,8 @@ const HrAddComponent = () => {
               <Select value={selectedDept} onChange={SelectDepthandler}>
                           <Option value="인사부">인사부</Option>
                           <Option value="회계부">회계부</Option>
-                          <Option value="영업부">영업부</Option>
-                          <Option value="it부">it부</Option>
+                          <Option value="웹툰 관리부">웹툰 관리부</Option>
+                          <Option value="개발부">개발부</Option>
                 </Select>
           </Container>
           <Container>
