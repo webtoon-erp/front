@@ -1,4 +1,4 @@
-import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { Link, Route, Routes, BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/common/home';
 import Login from './pages/common/login';
@@ -94,23 +94,36 @@ function App() {
     setActiveModal(null);
   };
 
+  
+  const isLoginPage = window.location.pathname === '/';
+
   return (
     <Router>
-      <header>
-        <Header />
-      </header>
-      <div style={{ display: 'flex' }}>
-        <aside>
-          <NavBar onAddTab={handleAddTab} />
-        </aside>
-        <main style={{ flex: 1, marginTop: '80px' }}>
-        <Tab
-          tabElements={tabElements}
-          onClose={handleCloseTab}
-          onOpenModal={handleOpenModal}
-        />
-
-          <Routes>
+      {
+        isLoginPage && (
+          <>
+            <Routes>
+              <Route path="/" element={<Login />} />
+            </Routes>
+          </>
+        )
+      }
+      {!isLoginPage && (
+        <>
+          <header>
+            <Header />
+          </header>
+          <div style={{ display: 'flex' }}>
+            <aside>
+              <NavBar onAddTab={handleAddTab} />
+            </aside>
+            <main style={{ flex: 1, marginTop: '80px' }}>
+              <Tab
+                tabElements={tabElements}
+                onClose={handleCloseTab}
+                onOpenModal={handleOpenModal}
+              />
+              <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/home" element={<Home />} />
               <Route path="/passwordReset" element={<PasswordReset />}/>
@@ -167,9 +180,12 @@ function App() {
                 />
               ))}
           </Routes>
-        </main>
-      </div>
-      <footer></footer>
+              <footer></footer>
+            </main>
+          </div>
+        </>
+      )}
+      
     </Router>
   );
 }

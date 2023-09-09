@@ -8,8 +8,10 @@ import { TimePicker, DatePicker, Space, message } from 'antd';
 const HrAddComponent = () => {
   const [selectedName, setSelectedName] = useState('');
   const [selectedID, setSelectedID] = useState('');
+  const [selectedTeamID, setSelectedTeamID] = useState('');
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedDept, setSelectedDept] = useState('');
+  const [selectedDeptCode, setSelectedDeptCode] = useState('');
   const [selectedPosition, setSelectedPosition] = useState('');
   const [selectedPhoneNumber, setSelectedPhoneNumber] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
@@ -25,8 +27,16 @@ const HrAddComponent = () => {
     setSelectedDept(e.target.value);
   };
 
+  const SelectDeptCodehandler = (e) => {
+    setSelectedDeptCode(e.target.value);
+  };
+
   const SelectPositionhandler = (e) => {
     setSelectedPosition(e.target.value);
+  };
+
+  const SelectTeamIDhandler = (e) => {
+    setSelectedTeamID(e.target.value);
   };
 
   const SelectIDhandler = (e) => {
@@ -63,7 +73,9 @@ const HrAddComponent = () => {
       {
         selectedName: selectedName,           
         selectedDept: selectedDept,           
+        selectedDeptCode: selectedDeptCode,           
         selectedPosition: selectedPosition,
+        selectedTeamID: selectedTeamID,
         selectedID: selectedID,
         selectedStartDate: selectedStartDate,
         selectedPhoneNumber: selectedPhoneNumber,
@@ -106,6 +118,15 @@ const HrAddComponent = () => {
                 </Select>
           </Container>
           <Container>
+              <InputTitle>부서코드</InputTitle><Div3/>
+              <Select value={selectedDeptCode} onChange={SelectDeptCodehandler}>
+                          <Option value="HR">HR</Option>
+                          <Option value="AM">AM</Option>
+                          <Option value="IT">IT</Option>
+                          <Option value="WT">WT</Option>
+                </Select>
+          </Container>
+          <Container>
               <InputTitle>직급</InputTitle><Div2/>
               <Select value={selectedPosition} onChange={SelectPositionhandler}>
                           <Option value="부장">부장</Option>
@@ -115,10 +136,15 @@ const HrAddComponent = () => {
                           <Option value="인턴">인턴</Option>
                 </Select>
           </Container>
-          
+          <Container>
+              <InputTitle>팀번호</InputTitle><Div/><Input type="text" placeholder="팀번호" onChange={SelectTeamIDhandler}/>
+          </Container>
           <Container>
               <InputTitle>사원번호</InputTitle><Div3/><Input type="text" placeholder="사원번호" onChange={SelectIDhandler}/>
           </Container>
+          
+        </RangeContainer>
+        <RangeContainer>
           <Container>
               <InputTitle>입사일</InputTitle><Div/>
               <DatePicker
@@ -128,8 +154,6 @@ const HrAddComponent = () => {
                   placeholderText="입사일"
                   />
           </Container>
-        </RangeContainer>
-        <RangeContainer>
           <Container>
                 <InputTitle>전화번호</InputTitle><Div/><Input type="text" placeholder="전화번호" onChange={SelectPhoneNumberhandler}/>
             </Container>
@@ -166,7 +190,7 @@ const MainContainer = styled.div`
   display: flex;
   border: 1px solid #ccc;
   margin: 30px 50px;
-  height: 350px;
+  height: 380px;
   padding-top: 10px;
 `;
 
