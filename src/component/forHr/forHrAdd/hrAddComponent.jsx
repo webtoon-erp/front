@@ -137,7 +137,7 @@ const HrAddComponent = () => {
                 </Select>
           </Container>
           <Container>
-              <InputTitle>팀번호</InputTitle><Div/><Input type="text" placeholder="팀번호" onChange={SelectTeamIDhandler}/>
+              <InputTitle>팀번호</InputTitle><Div7/><Input type="text" placeholder="팀번호" onChange={SelectTeamIDhandler}/>
           </Container>
           <Container>
               <InputTitle>사원번호</InputTitle><Div3/><Input type="text" placeholder="사원번호" onChange={SelectIDhandler}/>
@@ -146,7 +146,7 @@ const HrAddComponent = () => {
         </RangeContainer>
         <RangeContainer>
           <Container>
-              <InputTitle>입사일</InputTitle><Div/>
+              <InputTitle>입사일</InputTitle><Div6/>
               <DatePicker
                   selected={selectedStartDate}
                   onChange={(date) => setSelectedStartDate(date)}
@@ -232,6 +232,14 @@ const Div4 = styled.div`
 
 const Div5 = styled.div`
   padding: 12px;
+`;
+
+const Div6 = styled.div`
+  padding: 27px;
+`;
+
+const Div7 = styled.div`
+  padding: 23px;
 `;
 
 const Title = styled.div`

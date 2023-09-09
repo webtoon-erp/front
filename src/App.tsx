@@ -45,6 +45,7 @@ import ScheduleDetail from './pages/system/scheduleDetail';
 import EpisodeDetail from './pages/webtoon/episodeDetail';
 import Modal from './component/modal'; // Assuming you have a Modal component
 import NoticeDetail from './pages/system/noticeDetail';
+import ItRequestDetail from './pages/itsm/itRequestDetail';
 
 function App() {
   const [tabElements, setTabElements] = useState([
@@ -142,6 +143,7 @@ function App() {
               <Route path="/itRequestAdd" element={<ItRequestAdd />} />
               <Route path="/itRequestListView" element={<ItRequestListView />} />
               <Route path="/itRequestView" element={<ItRequestView />} />
+              <Route path="/itRequestDetail" element={<ItRequestDetail />} />
               <Route path="/toonAdd" element={<ToonAdd/>} />
               <Route path="/episodeAdd" element={<EpisodeAdd />} />
               <Route path="/toonView" element={<ToonView />} />
