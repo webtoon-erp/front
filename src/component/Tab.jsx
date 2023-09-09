@@ -36,7 +36,7 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
           style={{ border: '1px solid #ccc', padding: '5px' }}
         >
 
-          <Link to={ tab.title === 'Home'? `/` : `/${tab.title}`} className="tab-link" style={{ textDecoration: "none" }}>
+          <Link to={ tab.title === 'Home'? `/home` : `/${tab.title}`} className="tab-link" style={{ textDecoration: "none" }}>
 
             {tab.title}
           </Link>
