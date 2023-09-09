@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import HorizonLine from '../../horizonLine';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb } from 'antd';
+import axios from 'axios';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import FileDownloader from '../../fileDownloader';
 
 const FakeNoticeData = [
@@ -36,14 +40,29 @@ const ServiceDetailComponent = () => {
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
   
-    //const [data, setData] = useState({});
+  const [data, setData] = useState({});
+  const [selectedDay, setSelectedDay] = useState('전체');
+  const [filterText, setFilterText] = useState(''); // New state for filter text
 
-    //seEffect(() => {
-    //    axios.get('http://localhost:5050/quals/'+Id).then((response)=> {
-    //      setData(response.data);
-    //      //console.log("ddddddd");
-    //    })
-    //  }, []);
+  /*useEffect(() => {
+    axios.get('http://localhost:5050/webtoon').then((response)=> {
+      setData(response.data);
+    })
+  }, []);*/
+
+  
+  // ag-grid
+  const columnDefs = [
+    { headerName: '요청 품목', field: 'item', width: 440 },
+    { headerName: '요청 수량', field: 'quantity', width: 300 },
+    { headerName: '예상 비용(단위:만원)', field: 'price', width: 300 },
+  ];
+
+  const rowData = [
+    {'item': '블루투스 키보드', 'quantity': '3', 'price': '45'},
+    {'item': '블루투스 이어폰', 'quantity': '3', 'price': '60'},
+    {'item': '노트북', 'quantity': '2', 'price': '300'},
+  ];
 
     const navigate = useNavigate();
 
@@ -55,9 +74,17 @@ const ServiceDetailComponent = () => {
       navigate('/itRequestListView');
     }
 
+    const gridOptions = {
+      columnDefs: columnDefs,
+      rowData: rowData,
+      animateRows: true,
+      pagination: true,
+      paginationPageSize: 5,
+    };
+
   return (
     <>
-    <Title>ITSM</Title>
+    <Title>ITSM 서비스 조회</Title>
     <BreadContainer>
       <Breadcrumb
           items={[
@@ -131,11 +158,24 @@ const ServiceDetailComponent = () => {
               </SmallContentContainer>
             </ContainerBox>
         <HorizonLine />
-        <ContentContainer>{FakeNoticeData[0].content}</ContentContainer>
-
-        <FileContainer>
+        <ContentContainer>
+          {FakeNoticeData[0].content}
+        </ContentContainer>
+        <ContentContainer2>
+        <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
+                <AgGridReact
+                  columnDefs={columnDefs}
+                  rowData={rowData}
+                  gridOptions={gridOptions}
+                  domLayout='autoHeight'
+                  suppressAutoSize={false}
+                />
+                </div>
+                <FileContainer>
           <FileDownloader files={[{ name: FakeNoticeData[0].title, filename: FakeNoticeData[0].file }]}/>
         </FileContainer>
+        </ContentContainer2>
+        
         </NoticeContainer>
         
       </>
@@ -150,7 +190,7 @@ const NoticeContainer = styled.div`
   margin-top: 50px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  height: 550px;
+  height: 800px;
   width: 100%
   align-items: center;
 `;
@@ -213,4 +253,10 @@ const ContentContainer = styled.div`
   width: 90%
   height: 200px;
   padding: 50px;;
+`;
+
+const ContentContainer2 = styled.div`
+  width: 90%
+  height: 100px;
+  padding: 50px;
 `;
