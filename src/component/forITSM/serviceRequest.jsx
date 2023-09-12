@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '../../style/theme';
 import DatePicker from 'react-datepicker';
@@ -27,6 +27,7 @@ import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadProps } from 'antd';
 import { Button, Upload, message, Modal } from 'antd';
+import { savedData } from '../../data.js'; 
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -58,6 +59,18 @@ const ServiceRequest = () => {
   const [SelectedTitle, setSelectedTitle] = useState('');
   const [selectedRequest, setSelectedRequest] = useState('');
   const [selectedthumbnail, setSelectedThumbnail] = useState(null);
+
+  useEffect(() => {
+    const data = savedData.itRequestAdd
+    if (data.startDate !== null) setStartDate(data.startDate);
+    if (data.selectedDeliveryDate !== null) setSelectedDeliveryDate(data.selectedDeliveryDate);
+    if (data.selectedRequestType !== null) setSelectedRequestType(data.selectedRequestType);
+    if (data.selectedRequester !== null) setSelectedRequester(data.selectedRequester);
+    if (data.selectedAssigner !== null) setSelectedAssigner(data.selectedAssigner);
+    if (data.selectedTitle !== null) setSelectedTitle(data.selectedTitle);
+    if (data.selectedRequest !== null) setSelectedRequest(data.selectedRequest);
+    if (data.selectedthumbnail !== null) setSelectedThumbnail(data.selectedthumbnail);
+  }, []); 
 
   const handleSubmitClick = () => {
     //console.log(finalId, "finalId 결과값"); 
@@ -337,10 +350,10 @@ const ServiceRequest = () => {
             </Container>
          
             <Container>
-                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" onChange={SelectTitlehandler}/>
+                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" value={SelectedTitle} onChange={SelectTitlehandler}/>
             </Container>
             <Container>
-            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" onChange={SelectRequesthandler}/>
+            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" value={selectedRequest} onChange={SelectRequesthandler}/>
           </Container>
 
           </RangeContainer1>
