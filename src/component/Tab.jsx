@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Modal from './modal';
 import styled from 'styled-components';
 import theme from '../style/theme';
+import { savedData } from '../data.js'; 
 
 const Tab = ({ tabElements, onClose, onOpenModal }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(null);
@@ -19,6 +20,11 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
     if (tabElements[index].fixed) {
       return;
     }
+
+    const targetTitle = tabElements[index].title;
+    Object.keys(savedData[targetTitle]).forEach(newKey => {
+      savedData[targetTitle][newKey] = null;
+    });
 
     if (activeTabIndex === index) {
       handleCloseModal();
