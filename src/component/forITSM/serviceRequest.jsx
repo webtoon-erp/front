@@ -101,7 +101,10 @@ const ServiceRequest = () => {
  };
 
  const assigners = []
-
+  const SelectDeliveryDatehandler = (date) => {
+    setSelectedDeliveryDate(date)
+    savedData.itRequestAdd.selectedDeliveryDate = date
+  };
   const SelectAssignerhandler = (value) => {
     setSelectedAssigner(value);
     console.log(value);
@@ -109,12 +112,15 @@ const ServiceRequest = () => {
   };
   const SelectTitlehandler = (e) => {
     setSelectedTitle(e.target.value);
+    savedData.itRequestAdd.selectedTitle = e.target.value
   };
   const SelectRequesthandler = (e) => {
     setSelectedRequest(e.target.value);
+    savedData.itRequestAdd.selectedRequest = e.target.value
   };
   const SelectRequestTypehandler = (e) => {
     setSelectedRequestType(e.target.value);
+    savedData.itRequestAdd.selectedRequestType = e.target.value
   };
   const SelectThumbnailhandler = (e) => {
     const file = e.target.files[0];
@@ -226,6 +232,7 @@ const ServiceRequest = () => {
     if (selectedRows.length === 1) {
       setSelectedAssigner(selectedRows[0].name); // 선택한 담당자 이름으로 업데이트
       setModalOpen(false);
+      savedData.itRequestAdd.selectedAssigner = selectedRows[0].name
     } 
   }, []);
 
@@ -299,7 +306,7 @@ const ServiceRequest = () => {
               <Div />
               <DatePicker
                   selected={selectedDeliveryDate}
-                  onChange={(date) => setSelectedDeliveryDate(date)}
+                  onChange={SelectDeliveryDatehandler}
                   dateFormat="yyyy-MM-dd"
                   minDate={new Date()}
                   placeholderText="납기일"
