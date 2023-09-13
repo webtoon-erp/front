@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '../../style/theme';
 import DatePicker from 'react-datepicker';
@@ -27,6 +27,7 @@ import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadProps } from 'antd';
 import { Button, Upload, message, Modal } from 'antd';
+import { savedData } from '../../data.js'; 
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -59,6 +60,18 @@ const ServiceRequest = () => {
   const [selectedRequest, setSelectedRequest] = useState('');
   const [selectedthumbnail, setSelectedThumbnail] = useState(null);
 
+  useEffect(() => {
+    const data = savedData.itRequestAdd
+    if (data.startDate !== null) setStartDate(data.startDate);
+    if (data.selectedDeliveryDate !== null) setSelectedDeliveryDate(data.selectedDeliveryDate);
+    if (data.selectedRequestType !== null) setSelectedRequestType(data.selectedRequestType);
+    if (data.selectedRequester !== null) setSelectedRequester(data.selectedRequester);
+    if (data.selectedAssigner !== null) setSelectedAssigner(data.selectedAssigner);
+    if (data.selectedTitle !== null) setSelectedTitle(data.selectedTitle);
+    if (data.selectedRequest !== null) setSelectedRequest(data.selectedRequest);
+    if (data.selectedthumbnail !== null) setSelectedThumbnail(data.selectedthumbnail);
+  }, []); 
+
   const handleSubmitClick = () => {
     //console.log(finalId, "finalId 결과값"); 
 
@@ -88,7 +101,10 @@ const ServiceRequest = () => {
  };
 
  const assigners = []
-
+  const SelectDeliveryDatehandler = (date) => {
+    setSelectedDeliveryDate(date)
+    savedData.itRequestAdd.selectedDeliveryDate = date
+  };
   const SelectAssignerhandler = (value) => {
     setSelectedAssigner(value);
     console.log(value);
@@ -96,12 +112,15 @@ const ServiceRequest = () => {
   };
   const SelectTitlehandler = (e) => {
     setSelectedTitle(e.target.value);
+    savedData.itRequestAdd.selectedTitle = e.target.value
   };
   const SelectRequesthandler = (e) => {
     setSelectedRequest(e.target.value);
+    savedData.itRequestAdd.selectedRequest = e.target.value
   };
   const SelectRequestTypehandler = (e) => {
     setSelectedRequestType(e.target.value);
+    savedData.itRequestAdd.selectedRequestType = e.target.value
   };
   const SelectThumbnailhandler = (e) => {
     const file = e.target.files[0];
@@ -213,6 +232,7 @@ const ServiceRequest = () => {
     if (selectedRows.length === 1) {
       setSelectedAssigner(selectedRows[0].name); // 선택한 담당자 이름으로 업데이트
       setModalOpen(false);
+      savedData.itRequestAdd.selectedAssigner = selectedRows[0].name
     } 
   }, []);
 
@@ -286,7 +306,7 @@ const ServiceRequest = () => {
               <Div />
               <DatePicker
                   selected={selectedDeliveryDate}
-                  onChange={(date) => setSelectedDeliveryDate(date)}
+                  onChange={SelectDeliveryDatehandler}
                   dateFormat="yyyy-MM-dd"
                   minDate={new Date()}
                   placeholderText="납기일"
@@ -337,10 +357,10 @@ const ServiceRequest = () => {
             </Container>
          
             <Container>
-                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" onChange={SelectTitlehandler}/>
+                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" value={SelectedTitle} onChange={SelectTitlehandler}/>
             </Container>
             <Container>
-            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" onChange={SelectRequesthandler}/>
+            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" value={selectedRequest} onChange={SelectRequesthandler}/>
           </Container>
 
           </RangeContainer1>
