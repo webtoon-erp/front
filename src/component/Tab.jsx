@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Modal from './modal';
 import styled from 'styled-components';
 import theme from '../style/theme';
+import { savedData } from '../data.js'; 
 
 const Tab = ({ tabElements, onClose, onOpenModal }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenModal = (index) => {
     setActiveTabIndex(index);
@@ -19,6 +22,13 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
     if (tabElements[index].fixed) {
       return;
     }
+
+    const targetTitle = tabElements[index].title;
+    Object.keys(savedData[targetTitle]).forEach(newKey => {
+      savedData[targetTitle][newKey] = null;
+    });
+
+    navigate(tabElements[index - 1].title)
 
     if (activeTabIndex === index) {
       handleCloseModal();
