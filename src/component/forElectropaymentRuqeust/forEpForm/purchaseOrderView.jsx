@@ -56,7 +56,11 @@ const PurchaseOrderView = () => {
     const gridRef = useRef(null);
 
     const rowData = [
-        {'부서 코드': '', '사용 부서' : '', '구매 장비 내역': '', 수량: '', 금액: ''},
+        {'시작일시': '', '종료일시': '', '부서코드': '', '사용부서' : '', '거래처명': '', '비용타입': '', 수량: '', 단가: '', '공급가액': '', '부가세액': '', '총 금액': '', '비고': ''},
+    ];
+
+    const rowData2 = [
+        {'결재자': '', '참조자': ''},
     ];
 
     const onCellValueChanged = useCallback((event) => {
@@ -79,11 +83,22 @@ const PurchaseOrderView = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '부서 코드', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
-        {field: '사용 부서', sortable: true, filter: true},
-        {field: '구매 장비 내역', sortable: true, filter: true},
+        {field: '시작일시', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {field: '종료일시', sortable: true, filter: true},
+        {field: '부서코드', sortable: true, filter: true},
+        {field: '사용부서', sortable: true, filter: true},
+        {field: '거래처명', sortable: true, filter: true},
+        {field: '비용타입', sortable: true, filter: true},
         {field: '수량', sortable: true, filter: true},
-        {field: '금액', sortable: true, filter: true},
+        {field: '단가', sortable: true, filter: true},
+        {field: '공급가액', sortable: true, filter: true},
+        {field: '총 금액', sortable: true, filter: true},
+        {field: '비고', sortable: true, filter: true},
+    ]);
+
+    const [columnDefs2, setColumnDefs2] = useState([
+        {field: '결재자', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {field: '참조자', sortable: true, filter: true},
     ]);
 
     // useEffect(() => {
@@ -199,14 +214,15 @@ const PurchaseOrderView = () => {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-            <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+            <div id='detailGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
                     <BtnBox>
                         <Btn onClick={() => addItems(count)}>추 가</Btn>
                         <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
                         <Btn onClick={onBtStopEditing}>등 록</Btn>
+                        <Btn>표 삽입</Btn>
                     </BtnBox>
                     <div style={{ flexGrow: '1' }}>
-                        <EntitlementGrid className="ag-theme-alpine">
+                        <DetailGrid className="ag-theme-alpine">
                             <AgGridReact 
                                 ref={gridRef}
                                 rowData={rowData}
@@ -218,11 +234,35 @@ const PurchaseOrderView = () => {
                                 onCellValueChanged={onCellValueChanged}
                                 onRowValueChanged={onRowValueChanged}
                             />
-                        </EntitlementGrid>
+                        </DetailGrid>
                     </div>
                 </div>
 
-                <FlexBox2>
+                <div id='apprReferGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                    <BtnBox>
+                        <Btn onClick={() => addItems(count)}>추 가</Btn>
+                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
+                        <Btn onClick={onBtStopEditing}>등 록</Btn>
+                        <Btn>표 삽입</Btn>
+                    </BtnBox>
+                    <div style={{ flexGrow: '1' }}>
+                        <ApprReferGrid className="ag-theme-alpine">
+                            <AgGridReact 
+                                ref={gridRef}
+                                rowData={rowData2}
+                                columnDefs={columnDefs2}
+                                defaultColDef={defaultColDef}
+                                rowSelection="multiple"
+                                animateRows={true}
+                                editType="fullRow"
+                                onCellValueChanged={onCellValueChanged}
+                                onRowValueChanged={onRowValueChanged}
+                            />
+                        </ApprReferGrid>
+                    </div>
+                </div>
+
+                {/* <FlexBox2>
                     <SubH>결재자:</SubH>
                     <Space
                         direction="vertical"
@@ -258,7 +298,7 @@ const PurchaseOrderView = () => {
                             options={options}
                         />
                     </Space>
-                </FlexBox2>
+                </FlexBox2> */}
 
                 <FileInput />
             {/* <button onClick={log}>Log editor content</button> */}
@@ -341,13 +381,18 @@ const InputTitle = styled.input`
 `
 
 const BtnBox = styled.div`
-    margin: 20px 0px 20px 50px;
+    margin: 20px 0px 20px 10px;
     display: flex;
     justify-content: flex-end;
 `
 
-const EntitlementGrid = styled.div`
-    width: 900px;
+const DetailGrid = styled.div`
+    width: 1200px;
+    height: 260px;
+`
+
+const ApprReferGrid = styled.div`
+    width: 500px;
     height: 260px;
 `
 
