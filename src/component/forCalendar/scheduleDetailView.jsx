@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import theme from '../../style/theme';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom'
 import { HomeOutlined, CarryOutOutlined } from '@ant-design/icons';
@@ -28,6 +29,10 @@ const ScheduleDetailView = () => {
 
     return (
         <>
+            <BtnContainer>
+                <Btn>수 정</Btn>
+                <Btn>삭 제</Btn>
+            </BtnContainer>
             <FlexBox>
                 <Title>일정 상세</Title>
                 <BreadContainer>
@@ -113,7 +118,7 @@ export default ScheduleDetailView;
 
 const NoticeContainer = styled.div`
     margin: 30px;
-    margin-top: 50px;
+    margin-top: 30px;
     margin-left: 4%;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -126,7 +131,7 @@ const NoticeContainer = styled.div`
 const FlexBox = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 30px;
 `
 
 const BreadContainer = styled.div`
@@ -166,3 +171,27 @@ const SmallContentContainer = styled.div`
     height: 25px;
     padding: 20px;
 `;
+
+
+const BtnContainer = styled.div`
+    display: flex;
+    margin-left: 930px;
+    align-items: center;
+    margin-top: 20px;
+`;
+
+const Btn = styled.button`
+    width: 90px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`

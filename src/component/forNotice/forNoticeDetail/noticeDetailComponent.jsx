@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
+import theme from './../../../style/theme';
 import { useNavigate } from 'react-router-dom'
 import HorizonLine from '../../horizonLine';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
@@ -60,30 +61,37 @@ const NoticeDetailComponent = () => {
     }
 
   return (
-    <>
-    <Title>공지사항</Title>
-    <BreadContainer>
-      <Breadcrumb
-          items={[
-            {
-              onClick: handleHomeClick,
-              title: <HomeOutlined />,
-            },
-            {
-              onClick: handleNoticeClick,
-              title: (
-                <>
-                  <UserOutlined />
-                  <span>공지사항 조회</span>
-                </>
-              ),
-            },
-            {
-              title: `${FakeNoticeData[0].title}`,
-            },
-          ]}
-        />
-    </BreadContainer>
+    <NoticeDetailContainer>
+      <BtnContainer>
+        <Btn>수 정</Btn>
+        <Btn>삭 제</Btn>
+      </BtnContainer>
+    <FlexBox>
+      <Title>공지사항</Title>
+      <BreadContainer>
+        <Breadcrumb
+            items={[
+              {
+                onClick: handleHomeClick,
+                title: <HomeOutlined />,
+              },
+              {
+                onClick: handleNoticeClick,
+                title: (
+                  <>
+                    <UserOutlined />
+                    <span>공지사항 조회</span>
+                  </>
+                ),
+              },
+              {
+                title: `${FakeNoticeData[0].title}`,
+              },
+            ]}
+          />
+      </BreadContainer>
+    </FlexBox>
+    
         <NoticeContainer>
           <ContentTitle>{FakeNoticeData[0].title}</ContentTitle>
 
@@ -134,25 +142,29 @@ const NoticeDetailComponent = () => {
         </FileContainer>
         </NoticeContainer>
         
-      </>
+      </NoticeDetailContainer>
 
     );
 };
   
 export default NoticeDetailComponent; 
 
+const NoticeDetailContainer = styled.div`
+  padding-top: 20px;
+  padding-left: 4%;
+`;
+
 const NoticeContainer = styled.div`
-  margin: 30px;
-  margin-top: 50px;
+  margin-top: 30px;
   border: 1px solid #ccc;
   border-radius: 8px;
   height: 550px;
-  width: 100%
+  width: 100%;
   align-items: center;
 `;
 
 const BreadContainer = styled.div`
-  margin-left: 80%
+  margin-left: 70%;
 `;
 
 const Container = styled.div`
@@ -164,7 +176,7 @@ const Container = styled.div`
 
 const FileContainer = styled.div`
   border: 1px dashed #ccc;
-  width: 100%
+  width: 100%;
   height: 10px;
   margin: 30px;
   margin-top: 0px;
@@ -178,8 +190,6 @@ const ContainerBox = styled.div`
 
   const Title = styled.div`
   font-size: 30px;
-  padding-top: 40px;
-  padding-left: 4%;
   font-weight: bold;
 `;
 
@@ -206,7 +216,35 @@ const SmallContentContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  width: 90%
+  width: 90%;
   height: 200px;
   padding: 50px;;
 `;
+
+const BtnContainer = styled.div`
+    display: flex;
+    margin-left: 930px;
+    align-items: center;
+`;
+
+const Btn = styled.button`
+    width: 90px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`
+
+const FlexBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+`
