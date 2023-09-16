@@ -104,7 +104,7 @@ const EmployeeView = () => {
     const [selectedDep, setSelectedDep] = useState('전체');
 
     useEffect(() => {
-        axios.get('http://localhost:5050/users').then((response)=> {
+        axios.get('http://146.56.98.153:8080/users').then((response)=> {
             setData(response.data);
         })
     }, []);

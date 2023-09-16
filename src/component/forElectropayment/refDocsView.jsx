@@ -11,7 +11,7 @@ const RefDocsView = () => {
 
     useEffect(() => {
         if (selectedCell !== null) {
-            axios.get(`http://localhost:5050/plas/documents/myCC/${selectedCell}`)
+            axios.get(`http://146.56.98.153:8080/plas/documents/myCC/${selectedCell}`)
                 .then(response => {
                     const data = response.data[selectedCell + 'UserList'];
                     setRowData(data);

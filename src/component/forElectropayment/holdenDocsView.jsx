@@ -11,7 +11,7 @@ const HoldenDocsView = () => {
 
     useEffect(() => {
         if (selectedCell !== null) {
-            axios.get(`http://localhost:5050/plas/documents/myAppv/${selectedCell}`)
+            axios.get(`http://146.56.98.153:8080/plas/documents/myAppv/${selectedCell}`)
                 .then(response => {
                     const data = response.data[selectedCell + 'UserList'];
                     setRowData(data);

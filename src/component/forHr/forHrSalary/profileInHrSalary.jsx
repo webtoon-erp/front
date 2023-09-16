@@ -22,7 +22,7 @@ const ProfileInHrSalary = () => {
     const [data, setData] = useState({});
 
     useEffect(() => {
-        axios.get('http://localhost:5050/pays/{employeeId}').then((response)=> {
+        axios.get('http://146.56.98.153:8080/pays/{employeeId}').then((response)=> {
             setData(response.data);
         })
     }, []);
