@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CalendarArea from '../../component/forHome/CalendarArea';
 import NoticeArea from '../../component/forHome/NoticeArea';
+import { useLocation } from 'react-router-dom';
 
 const MainContainer = styled.div`
   display: flex;

@@ -53,11 +53,7 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
           {!tab.fixed && (
             <DeleteBtn onClick={() => handleCloseTab(index)} className="close-button" />
           )}
-          {!tab.fixed && (
-            <button onClick={() => handleOpenModal(index)} className="open-modal-button">
-              Open Modal
-            </button>
-          )}
+          
           {activeTabIndex === index && (
             <Modal onClose={handleCloseModal} tabInfo={tab} />
           )}

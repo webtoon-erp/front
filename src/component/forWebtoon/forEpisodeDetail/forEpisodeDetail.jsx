@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import { message } from 'antd';
 import CommentComponent from '../../comments/commentComponent';
 
 const FakeProfileData = [
@@ -31,15 +32,40 @@ const ForEpisodeDetail = (Id) => {
     const [editedContent, setEditedContent] = useState(FakeProfileData[0].content);
     const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
-    //data.title
-    //const [data, setData] = useState({});
+    
+    const [data, setData] = useState({});
 
-    //seEffect(() => {
-    //    axios.get('http://localhost:5050/quals/'+Id).then((response)=> {
-    //      setData(response.data);
-    //      //console.log("ddddddd");
-    //    })
-    //  }, []);
+    useEffect(() => {
+        axios.get('http://146.56.98.153:8080/webtoon'+Id).then((response)=> {
+          setData(response.Result.webtoon);
+          console.log(response);
+        })
+      }, []);
+
+    const handleSaveChanges = () => {
+         (axios.post('http://146.56.98.153:8080/webtoon'+Id),
+        {
+            title: editedTitle,           
+            artist: editedAuthor,  
+            illustrator: editedManager,
+            intro: editedContent,
+            uploadFile: thumbnailPreview,
+        },
+        {
+            headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Location : "/webtoon/{webtoonId}"
+            },
+        })
+        .then((result) => {
+            if (result.id) {
+            message.success('작품이 정상적으로 수정되었습니다.');
+        } 
+        })
+        .catch((error) => {
+        message.error('작품이 정상적으로 수정되지 않았습니다.');
+        })
+    }
     
     const navigate = useNavigate();
 
@@ -80,35 +106,8 @@ const ForEpisodeDetail = (Id) => {
       reader.readAsDataURL(file);
     }
   };
-    
-      const handleSaveChanges = () => {
-         //console.log(finalId, "finalId 결과값"); 
-    
-        axios.post('http://localhost:5050/register',
-          { 
-            editedTitle: editedTitle,
-            editedAuthor: editedAuthor,
-            editedManager: editedManager, 
-            editedContent: editedContent,
-            thumbnailPreview: thumbnailPreview,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then((result) => {
-            console.log(result);
-            console.log("enroll!");
-            window.alert('화차 상세정보가 정상적으로 수정되었습니다.');
-            //window.location.replace("/login"); 
-          })
-          .catch((error) => {
-            window.alert('회차 상세정보가 정상적으로 수정되지 않았습니다.');
-            console.log(error);
-          })
-      };
 
+      // 데이터로 수정
     return (
         <>
             <RegistBtnContainer>
@@ -119,20 +118,20 @@ const ForEpisodeDetail = (Id) => {
             
             <WebtoonContainer>
                         <WebtoonImgContainer>
-                            <Img src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
+                            <Img src={data.thumbnailFileName} alt={` ${data.title}의 썸네일 사진`} />
                         </WebtoonImgContainer>
                         
                         {!isEditing ? ( 
                         <>
                         <ToonInsideInfoBox>
-                          <ToonTitle>{FakeProfileData[0].title}</ToonTitle>
+                          <ToonTitle>{data.episode.subTitle}</ToonTitle>
                           
                           <ToonInfoContainer>
-                              <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
-                              <ToonInfoBox>담당자 <ToonInfoData>{FakeProfileData[0].manager}</ToonInfoData></ToonInfoBox>
+                              <ToonInfoBox>작가 <ToonInfoData>{data.artist}</ToonInfoData></ToonInfoBox>
+                              <ToonInfoBox>담당자 <ToonInfoData>{data.episode.manager}</ToonInfoData></ToonInfoBox>
                           </ToonInfoContainer>
                           <ToonInsideInfoTextBox>
-                              <ToonInfoBox>작가의 말 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
+                              <ToonInfoBox>작가의 말 <ToonInfoTextData>{data.content}</ToonInfoTextData></ToonInfoBox>
                           </ToonInsideInfoTextBox>
                           </ToonInsideInfoBox>
                         </>
@@ -155,7 +154,7 @@ const ForEpisodeDetail = (Id) => {
                         
                     </WebtoonContainer>
             <WebtoonWorksContainer>
-                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={` ${FakeProfileData[0].title}의 썸네일 사진`} />
+                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={` ${data.title}의 작품 사진`} />
             </WebtoonWorksContainer>
             
             <CommentContainer>

@@ -8,5 +8,5 @@ export const savedData = {
         "selectedTitle" : null,
         "selectedRequest" :null,
         "selectedthumbnail" :null
-      }
+      },
 }

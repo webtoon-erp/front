@@ -159,7 +159,7 @@ const ToonDetailComponent = (Id) => {
                             </ToonInfoContainer>
                             <ToonInsideInfoTextBox>
                               <ToonInfoBox>작품 설명 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
-                            </ToonInsideInfoTextBox> {/**작품 설명 textfiled로 수정하기 */}
+                            </ToonInsideInfoTextBox> 
                           </>
                          )}
                       </ToonInsideInfoBox>
