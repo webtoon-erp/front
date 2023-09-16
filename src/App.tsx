@@ -46,8 +46,28 @@ import EpisodeDetail from './pages/webtoon/episodeDetail';
 import Modal from './component/modal'; // Assuming you have a Modal component
 import NoticeDetail from './pages/system/noticeDetail';
 import ItRequestDetail from './pages/itsm/itRequestDetail';
+import { savedData } from './data.js';
 
 function App() {
+  const [token, setToken] = useState<string | null>(null)
+  const [position, setPosition] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    setUserId(sessionStorage.getItem("employeeId"));
+    console.log("token app: ", userId);
+  }, [userId])
+
+  useEffect(() => {
+    setPosition(sessionStorage.getItem("position"));
+    console.log("token app: ", position);
+  }, [position])
+
+  useEffect(() => {
+    setToken(sessionStorage.getItem("accessToken"));
+    console.log("token app: ", token);
+  }, [token])
+
   const [tabElements, setTabElements] = useState([
     { title: 'Home', fixed: true }
   ]);
@@ -101,7 +121,7 @@ function App() {
   return (
     <Router>
       {
-        isLoginPage && (
+        isLoginPage &&  (
           <>
             <Routes>
               <Route path="/" element={<Login />} />
@@ -125,62 +145,61 @@ function App() {
                 onOpenModal={handleOpenModal}
               />
               <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/passwordReset" element={<PasswordReset />}/>
-              <Route path="/notice" element={<Notice />} />
-              <Route path="/webtoon" element={<Webtoon />} />
-              <Route path="/myPage" element={<MyPage />} />
-              <Route path="/hrAdd" element={<HrAdd />} />
-              <Route path="/hrAttendance" element={<HrAttendance/>} />
-              <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>
-              <Route path="/hrProfileListView" element={<HrProfileListView />} />
-              <Route path="/hrProfileView" element={<HrProfileView />} />
-              <Route path="/hrView" element={<HrView />} />
-              <Route path="/hrSalary" element={<HrSalary />} />
-              <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
-              <Route path="/hrOrgChart" element={<HrOrgChart />} />
-              <Route path="/itRequestAdd" element={<ItRequestAdd />} />
-              <Route path="/itRequestListView" element={<ItRequestListView />} />
-              <Route path="/itRequestView" element={<ItRequestView />} />
-              <Route path="/itRequestDetail" element={<ItRequestDetail />} />
-              <Route path="/toonAdd" element={<ToonAdd/>} />
-              <Route path="/episodeAdd" element={<EpisodeAdd />} />
-              <Route path="/toonView" element={<ToonView />} />
-              <Route path="/toonDetail" element={<ToonDetail />} />
-              <Route path="/allToonView" element={<AllToonView />} />
-              <Route path="/epRequestAdd" element={<EpRequestAdd />} />
-              <Route path="/epMyDocsView" element={<EpMyDocsView />} />
-              <Route path="/epDepDocsView" element={<EpDepDocsView />} />
-              <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
-              <Route path="/epRefDocsView" element={<EpRefDocsView />} />
-              <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
-              <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
-              <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
-              <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
-              <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
-              <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
-              <Route path="/noticeAdd" element={<NoticeAdd />} />
-              <Route path="/noticeDetail" element={<NoticeDetail /> } />
-              <Route path="/scheduleAdd" element={<ScheduleAdd />} />
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/scheduleDetail" element={<ScheduleDetail />} />
-              <Route path="/episodeDetail" element={<EpisodeDetail />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/passwordReset" element={<PasswordReset />}/>
+                <Route path="/notice" element={<Notice />} />
+                <Route path="/webtoon" element={<Webtoon />} />
+                <Route path="/myPage" element={<MyPage />} />
+                <Route path="/hrAdd" element={<HrAdd />} />
+                <Route path="/hrAttendance" element={<HrAttendance/>} />
+                <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>
+                <Route path="/hrProfileListView" element={<HrProfileListView />} />
+                <Route path="/hrProfileView" element={<HrProfileView />} />
+                <Route path="/hrView" element={<HrView />} />
+                <Route path="/hrSalary" element={<HrSalary />} />
+                <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />
+                <Route path="/hrOrgChart" element={<HrOrgChart />} />
+                <Route path="/itRequestAdd" element={<ItRequestAdd />} />
+                <Route path="/itRequestListView" element={<ItRequestListView />} />
+                <Route path="/itRequestView" element={<ItRequestView />} />
+                <Route path="/itRequestDetail" element={<ItRequestDetail />} />
+                <Route path="/toonAdd" element={<ToonAdd/>} />
+                <Route path="/episodeAdd" element={<EpisodeAdd />} />
+                <Route path="/toonView" element={<ToonView />} />
+                <Route path="/toonDetail" element={<ToonDetail />} />
+                <Route path="/allToonView" element={<AllToonView />} />
+                <Route path="/epRequestAdd" element={<EpRequestAdd />} />
+                <Route path="/epMyDocsView" element={<EpMyDocsView />} />
+                <Route path="/epDepDocsView" element={<EpDepDocsView />} />
+                <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
+                <Route path="/epRefDocsView" element={<EpRefDocsView />} />
+                <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
+                <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
+                <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
+                <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
+                <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
+                <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
+                <Route path="/noticeAdd" element={<NoticeAdd />} />
+                <Route path="/noticeDetail" element={<NoticeDetail /> } />
+                <Route path="/scheduleAdd" element={<ScheduleAdd />} />
+                <Route path="/schedule" element={<Schedule />} />
+                <Route path="/scheduleDetail" element={<ScheduleDetail />} />
+                <Route path="/episodeDetail" element={<EpisodeDetail />} />
 
-              {tabElements.map((tab, index) => (
-                <Route
-                  key={index}
-                  path={`/${tab.title}`}
-                  element={
-                    <TabComponent
-                      title={tab.title}
-                      modalContent={activeModal}
-                      onOpenModal={() => handleOpenModal(index)}
-                      onCloseModal={handleCloseModal}
-                    />
-                  }
-                />
-              ))}
+                {tabElements.map((tab, index) => (
+                  <Route
+                    key={index}
+                    path={`/${tab.title}`}
+                    element={
+                      <TabComponent
+                        title={tab.title}
+                        modalContent={activeModal}
+                        onOpenModal={() => handleOpenModal(index)}
+                        onCloseModal={handleCloseModal}
+                      />
+                    }
+                  />
+                ))}
           </Routes>
               <footer></footer>
             </main>

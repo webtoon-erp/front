@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,105 +5,36 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import SearchComponent from '../../search';
+import { message } from 'antd';
 import theme from '../../../style/theme';
-
-const fakeData = [
-    {
-      id: 1,
-      day: '월',
-      title: '월요일웹툰1',
-      author: 'author 1',
-      drawer: 'drawer 1',
-      keyword: '코미디',
-      url: '/data1',
-    },
-    {
-        id: 2,
-        day: '월',
-        title: '월요일웹툰2',
-        author: 'author 2',
-        drawer: 'drawer 2',
-        keyword: '코미디',
-        url: '/data2',
-      },
-      {
-        id: 3,
-        day: '월',
-        title: '월요일웹툰3',
-        author: 'author 3',
-        drawer: 'drawer 3',
-        keyword: '코미디',
-        url: '/data3',
-      },
-      {
-        day: '화',
-        title: '화요일웹툰1',
-        author: 'author 1',
-        drawer: 'drawer 1',
-        keyword: '코미디',
-        url: '/data1',
-      },
-      {
-          day: '화',
-          title: '화요일웹툰2',
-          author: 'author 2',
-          drawer: 'drawer 2',
-          keyword: '코미디',
-          url: '/data2',
-        },
-        {
-          day: '화',
-          title: '월요일웹툰3',
-          author: 'author 3',
-          drawer: 'drawer 3',
-          keyword: '코미디',
-          url: '/data3',
-        },
-        {
-            day: '수',
-            title: '수요일웹툰1',
-            author: 'author 1',
-            drawer: 'drawer 1',
-            keyword: '코미디',
-            url: '/data1',
-          },
-          {
-              day: '수',
-              title: '수요일웹툰2',
-              author: 'author 2',
-              drawer: 'drawer 2',
-              keyword: '코미디',
-              url: '/data2',
-            },
-            {
-              day: '수',
-              title: '수요일웹툰3',
-              author: 'author 3',
-              drawer: 'drawer 3',
-              keyword: '코미디',
-              url: '/data3',
-            },
-            
-  ];
 
 const AllWebtoonListView = () => {
     const [data, setData] = useState({});
     const [selectedDay, setSelectedDay] = useState('전체');
-    const [filterText, setFilterText] = useState(''); // New state for filter text
-  
+    const [filterText, setFilterText] = useState(''); 
+
+    const [selectedCell, setSelectedCell] = useState(null);
+    const [rowData, setRowData] = useState([]);
+
     useEffect(() => {
-      axios.get('http://localhost:5050/webtoon').then((response)=> {
-        setData(response.data);
-      })
-    }, []);
+        if (selectedCell !== null) {
+            axios.get(`http://146.56.98.153:8080/webtoon/${selectedCell}`)
+                .then(response => {
+                    const data = response.data[selectedCell + 'UserList'];
+                    setRowData(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+            
+        }
+    }, [selectedCell]);
 
     // 태그 선택 핸들러
     const selectDayHandler = (e) => {
         setSelectedDay(e.target.value);
     };
   
-    // 선택된 부서에 해당하는 프로필 필터링
     const filteredDays = selectedDay === '전체' ? data : data.filter((emp) => emp.day === selectedDay);
   
     // ag-grid
@@ -117,49 +46,31 @@ const AllWebtoonListView = () => {
       { headerName: '키워드', field: 'keyword', width: 280 },
     ];
   
-
+    function handleCellClick(params) {
+      setSelectedCell(params.column.getColDef().field);
+  }
     // 검색 기능
-    const handleCellClick = (event) => {
-      const column = event.colDef.field;
-      const rowData = event.data;
-      const url = rowData.url;
-      if (column && url) {
-        window.location.href = url;
-      }
-    };
-
     const gridOptions = {
-      columnDefs: columnDefs,
-      rowData: filteredDays,
       rowSelection: 'single',
       animateRows: true,
       pagination: true,
       paginationPageSize: 10,
-      onCellClicked: handleCellClick,
     };
-
+    
     const gridRef = useRef(null);
-
-      useEffect(() => {
-        gridRef.current = gridOptions.api;
-      }, []);
-
-      const onFilterTextBoxChanged = useCallback(() => {
-        gridRef.current.setQuickFilter(
-          document.getElementById('filter-text-box').value
-        );
-      }, []);
+    
+    useEffect(() => {
+      if (gridRef.current) {
+        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+      }
+    }, []);
+    
+    const onFilterTextBoxChanged = useCallback(() => {
+      if (gridRef.current) {
+        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+      }
+    }, []);
       
-
-      const onPrintQuickFilterTexts = useCallback(() => {
-        gridRef.current.forEachNode((rowNode, index) => {
-          console.log(
-            'Row ' + index + ' quick filter text is ' + rowNode.quickFilterAggregateText
-          );
-        });
-      }, []);
-
-      //
       const navigate = useNavigate();
 
       const handleClick = () => {
@@ -198,10 +109,13 @@ const AllWebtoonListView = () => {
                 
                 <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
                 <AgGridReact
-                  columnDefs={columnDefs}
-                  rowData={filteredDays}
-                  gridOptions={gridOptions}
-                  ref={gridRef}
+                   rowData={rowData}
+                   columnDefs={columnDefs}
+                   animateRows={true}
+                   rowSelection='single'
+                   pagination= {true}
+                   paginationPageSize= {20}
+                  onCellClicked= {handleCellClick}
                 />
 
                 </div>

@@ -67,20 +67,19 @@ const HrAddComponent = () => {
   };
 
   const handleSubmitClick = () => {
-     //console.log(finalId, "finalId 결과값"); 
 
-    axios.post('http://localhost:5050/register',
+    axios.post('http://146.56.98.153:8080/users',
       {
-        selectedName: selectedName,           
-        selectedDept: selectedDept,           
-        selectedDeptCode: selectedDeptCode,           
-        selectedPosition: selectedPosition,
-        selectedTeamID: selectedTeamID,
-        selectedID: selectedID,
-        selectedStartDate: selectedStartDate,
-        selectedPhoneNumber: selectedPhoneNumber,
-        selectedEmail: selectedEmail,
-        profilePreview: profilePreview,
+        name: selectedName,           
+        deptName: selectedDept,           
+        deptCode: selectedDeptCode,           
+        position: selectedPosition,
+        teamNum: selectedTeamID,
+        employeeId: selectedID,
+        joinDate: selectedStartDate,
+        tel: selectedPhoneNumber,
+        email: selectedEmail,
+        birthDate: selectedBirthdayDate
       },
       {
         headers: {
@@ -88,7 +87,7 @@ const HrAddComponent = () => {
         },
       })
       .then((result) => {
-        if (result.status === 'done') {
+        if (result.status == 201) {
          message.success(`사원등록이 정상적으로 완료되었습니다.`);
        }  
       })
@@ -106,7 +105,7 @@ const HrAddComponent = () => {
       <MainContainer>
         <RangeContainer>
         <Container>
-              <InputTitle>사원명</InputTitle><Div/><Input type="text" placeholder="제목" onChange={SelectNamehandler}/>
+              <InputTitle>사원명</InputTitle><Div/><Input type="text" placeholder="사원명" onChange={SelectNamehandler}/>
           </Container>
           <Container>
               <InputTitle>부서</InputTitle><Div2/>
@@ -163,11 +162,11 @@ const HrAddComponent = () => {
             <Container>
                 <InputTitle>생년월일</InputTitle><Div/>
                 <DatePicker
-                    selected={selectedBirthdayDate}
-                    onChange={(date) => setSelectedBirthdayDate(date)}
-                    dateFormat="yyyy-MM-dd"
-                    placeholderText="입사일"
-                    />
+                  selected={selectedBirthdayDate}
+                  onChange={(date) => setSelectedBirthdayDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="생년월일"
+                  />
             </Container>
           <ProfileContainer>
             <InputTitle>프로필 사진</InputTitle><Div5/>

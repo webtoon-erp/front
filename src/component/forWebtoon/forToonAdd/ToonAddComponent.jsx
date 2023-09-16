@@ -54,25 +54,44 @@ const ToonAddComponent = () => {
 
   const handleSubmitClick = () => {
      //console.log(finalId, "finalId 결과값"); 
-
-    axios.post('http://localhost:5050/register',
+     axios.post('http://146.56.98.153:8080/webtoon',
       {
-        selectedTitle: selectedTitle,           
-        selectedAuthor: selectedAuthor,  
-        selectedDrawer: selectedDrawer,  
+        file: thumbnailPreview,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          Location : "/webtoon"
+        },
+      })
+      .then((result) => {
+        if (result.id) {
+         message.success('썸네일이 정상적으로 등록되었습니다.');
+       } 
+      })
+      .catch((error) => {
+       message.error('썸네일이 정상적으로 등록되지 않았습니다.');
+      })
+
+    axios.post('http://146.56.98.153:8080/webtoon',
+      {
+        title: selectedTitle,           
+        artist: selectedAuthor,  
+        illustrator: selectedDrawer,  
         selectedDay: selectedDay,           
-        selectedKeyword: selectedKeyword,
-        selectedContent: selectedContent,
+        keyword: selectedKeyword,
+        intro: selectedContent,
         thumbnailPreview: thumbnailPreview,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          Location : "/webtoon"
         },
       })
       .then((result) => {
-        if (result.status === 'done') {
-         message.success(`작품이 정상적으로 등록되었습니다.`);
+        if (result.id) {
+         message.success('작품이 정상적으로 등록되었습니다.');
        } 
       })
       .catch((error) => {
