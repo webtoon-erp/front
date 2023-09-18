@@ -26,15 +26,15 @@ let newCount = 1;
 
 function createNewRowData() {
     const newData = {
-        make: 'Toyota ' + newCount,
-        model: 'Celica ' + newCount,
-        price: 35000 + newCount * 17,
-        zombies: 'Headless',
-        style: 'Little',
-        clothes: 'Airbag',
+        // make: 'Toyota ' + newCount,
+        // model: 'Celica ' + newCount,
+        // price: 35000 + newCount * 17,
+        // zombies: 'Headless',
+        // style: 'Little',
+        // clothes: 'Airbag',
     };
     newCount++;
-    return newData;
+    // return newData;
 }
 
 
