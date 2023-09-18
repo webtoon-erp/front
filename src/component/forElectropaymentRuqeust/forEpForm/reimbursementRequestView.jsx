@@ -21,6 +21,7 @@ import { MenuModule } from '@ag-grid-enterprise/menu';
 import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 import { Radio, Select, Space } from 'antd';
 import FileInput from '../../fileUpload';
+import ApprRefGrid from './apprRefGrid';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -36,7 +37,7 @@ function createNewRowData() {
         // clothes: 'Airbag',
     };
     newCount++;
-    // return newData;
+    return newData;
 }
 
 const options = [];
@@ -233,29 +234,7 @@ const ReimbursementRequestView = () => {
                     </div>
                 </div>
 
-                <div id='apprReferGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                    <BtnBox>
-                        <Btn onClick={() => addItems(count)}>추 가</Btn>
-                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                        <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn>표 삽입</Btn>
-                    </BtnBox>
-                    <div style={{ flexGrow: '1' }}>
-                        <ApprReferGrid className="ag-theme-alpine">
-                            <AgGridReact 
-                                ref={gridRef}
-                                rowData={rowData2}
-                                columnDefs={columnDefs2}
-                                defaultColDef={defaultColDef}
-                                rowSelection="multiple"
-                                animateRows={true}
-                                editType="fullRow"
-                                onCellValueChanged={onCellValueChanged}
-                                onRowValueChanged={onRowValueChanged}
-                            />
-                        </ApprReferGrid>
-                    </div>
-                </div>
+                <ApprRefGrid />
 
                 <FileInput />
             {/* <button onClick={log}>Log editor content</button> */}
