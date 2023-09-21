@@ -221,6 +221,76 @@ const CorporateCardUsageView = () => {
         }
     }
 
+    function autoCreateSumTable(location) {
+        const gridApi = gridRef.current.api;
+        const allData = gridApi.getModel().rowsToDisplay.map(row => row.data);
+
+        const groupedData = {};
+
+        for (let i = 0; i < allData.length; i++) {
+            const item = allData[i];
+            const type = item["비용타입"];
+            const amount = item["총 금액"];
+
+            if (!groupedData[type]) {
+                groupedData[type] = { 총금액: 0, 건수: 0 };
+            }
+
+            groupedData[type].총금액 += Number(amount);
+            groupedData[type].건수++;
+        }
+
+        // 테이블 엘리먼트 생성
+        const table = document.createElement('table');
+        table.style.borderCollapse = 'collapse'; 
+        table.style.width = '100%'; 
+        table.setAttribute('border', '1'); 
+
+        // colgroup 생성
+        const colgroup = document.createElement('colgroup');
+        for (const _ in groupedData[0]) {
+            const col = document.createElement('col');
+            colgroup.appendChild(col);
+        }
+        table.appendChild(colgroup);
+
+        // 테이블 헤더 생성
+        const headerRow = document.createElement('tr');
+        const headers = ['바용항목', '전표건수', '금액소계'];
+        headers.forEach(headerText => {
+            const headerCell = document.createElement('th');
+            headerCell.style.backgroundColor = 'lightyellow'; 
+            headerCell.textContent = headerText;
+            headerRow.appendChild(headerCell);
+        });
+        table.appendChild(headerRow);
+
+        // 데이터 행 생성
+        for (const key in groupedData) {
+            if (groupedData.hasOwnProperty(key)) {
+                const item = groupedData[key];
+                const row = document.createElement('tr');
+                const cellValues = [key, item['건수'], item['총금액']];
+                cellValues.forEach(cellText => {
+                    const cell = document.createElement('td');
+                    cell.textContent = cellText;
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+                table.appendChild(row);
+            }
+        }
+
+        const tableHtmlString = table.outerHTML;
+        
+        const editor = editorRef.current;
+        if (editor) {
+            const currentContent = editor.getContent(); 
+            const updatedContent = currentContent.replace('<div id="'+location+'"></div>', tableHtmlString); 
+            editor.setContent(updatedContent); 
+        }
+    }
+
     const [todayDate, setTodayDate] = useState('');
 
     useEffect(() => {
@@ -254,6 +324,7 @@ const CorporateCardUsageView = () => {
                         
                         <p>&nbsp;</p>
                         <h3>2. 비용항목별 소계</h3>
+                        <div id="insert-sum-table-here"></div>
                         
                         <p>&nbsp;</p>
                         <h3>3. 사용 상세 현황</h3>
@@ -301,7 +372,10 @@ const CorporateCardUsageView = () => {
                         <Btn onClick={() => addItems(count)}>추 가</Btn>
                         <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
                         <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn onClick={() => autoCreateTable(["시작일시", "비용타입", "거래처명", "총 금액", "비고"], ["사용일자", "비용항목/상세", "거래처", "금액", "비고"], "insert-table-here")}>표 삽입</Btn>
+                        <Btn onClick={() => {
+                                autoCreateTable(["시작일시", "비용타입", "거래처명", "총 금액", "비고"], ["사용일자", "비용항목/상세", "거래처", "금액", "비고"], "insert-table-here");
+                                autoCreateSumTable('insert-sum-table-here');
+                            }}>표 삽입</Btn>
                     </BtnBox>
                     <div style={{ flexGrow: '1' }}>
                         <TableGrid className="ag-theme-alpine">
