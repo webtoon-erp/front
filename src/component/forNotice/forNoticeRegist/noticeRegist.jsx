@@ -1,26 +1,101 @@
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import FileInput from '../../fileUpload';
+import { savedData } from '../../data.js';
+import { message } from 'antd';
 
 const NoticeRegist = () => {
-    const editorRef = useRef();
+    const [selectedTag, setSelectedTag] = useState('');
+    const [selectedDep, setSelectedDep] = useState('');
+    const [writer, setWriter] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [content, setContent] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    function onClickHandler() {
-        console.log(editorRef.current.getContent());
-    }
+    useEffect(() => {
+        const data = savedData.noticeAdd
+        if (data.selectedTag !== null) setSelectedTag(data.selectedTag);
+        if (data.selectedDep !== null) setSelectedDep(data.selectedDep);
+        if (data.writer !== null) setWriter(data.writer);
+        if (data.title !== null) setTitle(data.title);
+        if (data.content !== null) setContent(data.content);
+        if (data.selectedFile !== null) setSelectedFile(data.selectedFile);
+    }, []);
+
+    const handleSubmitClick = () => {
+        //console.log(finalId, "finalId 결과값"); 
+    
+        axios.post('http://146.56.98.153:8080/notice',
+            {
+                selectedTag: selectedTag,           
+                selectedDep: selectedDep,  
+                writer: writer,  
+                title: title,
+                content: content,
+                selectedFile: selectedFile,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((result) => {
+                if (result.status === 'done') {
+                    message.success(`공지사항이 정상적으로 등록되었습니다.`);
+                } 
+            })
+            .catch((error) => {
+                message.error('공지사항이 정상적으로 등록되지 않았습니다.');
+            })
+        };
+
+        const assigners = [];
+        const SelectedTagHandler = (e) => {
+            setSelectedTag(e.target.value);
+            savedData.noticeAdd.selectedTag = e.target.value;
+        };
+        const SelectedDepHandler = (e) => {
+            setSelectedDep(e.target.value);
+            savedData.noticeAdd.selectedDep = e.target.value;
+        };
+        const WriterHandler = (e) => {
+            setWriter(e.target.value);
+            savedData.noticeAdd.writer = e.target.value;
+        };
+        const TitleHandler = (e) => {
+            setTitle(e.target.value);
+            savedData.noticeAdd.title = e.target.value;
+        };
+        const ContentHandler = (e) => {
+            setContent(e.target.value);
+            savedData.noticeAdd.content = e.target.value;
+        };
+        const SelectedFileHandler = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setSelectedFile(event.target.result);
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        };    
+
+    const editorRef = useRef();
 
     return (
         <NoticeRegistContainer>
             <FlexBox>
                 <Title>공지사항 등록</Title>
-                <Btn onClick={onClickHandler}>등 록</Btn>
+                <Btn onClick={handleSubmitClick}>등 록</Btn>
             </FlexBox>
 
             <FlexBox2>
                 <SelectTagContainer>
-                    <select>
+                    <select value={selectedTag} onChange={SelectedTagHandler}>
                         <option value="기본">태그 선택</option>
                         <option value="서비스">서비스</option>
                         <option value="시스템">시스템</option>
@@ -29,7 +104,7 @@ const NoticeRegist = () => {
                 </SelectTagContainer>
 
                 <SelectTagContainer>
-                    <select>
+                    <select value={selectedDep} onChange={SelectedDepHandler}>
                         <option value="기본">부서 선택</option>
                         <option value="인사부">인사부</option>
                         <option value="회계부">회계부</option>
@@ -39,12 +114,14 @@ const NoticeRegist = () => {
                     </select>
                 </SelectTagContainer>
                 
-                <InputWriter placeholder='작성자'/>
+                <InputWriter type="text" placeholder='작성자' value={writer} onChange={WriterHandler} />
             </FlexBox2>
 
-            <InputTitle placeholder='제목을 입력해주세요.'/>
+            <InputTitle type="text" placeholder='제목을 입력해주세요.' value={title} onChange={TitleHandler} />
 
             <Editor
+                value={content} 
+                onChange={ContentHandler}
                 onInit={ (evt, editor) => editorRef.current = editor }
                 initialValue='내용을 입력하세요.'
                 apiKey='f1xezzgkhg13spovg2f1h3yuong1qyb7aeaipvy78kq2srty'
