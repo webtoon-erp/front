@@ -37,9 +37,6 @@ const CalendarComponent = () => {
     { headerName: '종료일자', field: 'endDate', width: 200 },
   ];
 
-  // 선택된 부서에 해당하는 프로필 필터링
-  const filteredDays = selectedTag;
-
   const gridOptions = {
     columnDefs: columnDefs,
     rowSelection: 'single',
@@ -63,16 +60,6 @@ const CalendarComponent = () => {
     <>
       <Title>일정 조회</Title>
       <NoticeContainer>
-        <SelectDepContainer>
-          <select value={selectedTag}>
-            <option value="전체">전체</option>
-            <option value="서비스">서비스</option>
-            <option value="시스템">시스템</option>
-            <option value="행사">행사</option>
-          </select>
-          <Container />
-          <SearchComponent />
-        </SelectDepContainer>
         
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
           <AgGridReact
