@@ -3,40 +3,52 @@ import { Collapse } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import axios from 'axios'; // Import axios for making the API request
 
 const ScheduleComponent = () => {
-
     const gridRef = useRef(); // Optional - for accessing Grid's API
-    //const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
     const [columnDefs, setColumnDefs] = useState([
-        {field: '일자'},
-        {field: '업무시작'},
-        {field: '업무종료'},
-        {field: '총 근무시간'},
-        {field: '근무시간 상세'},
+      { field: '일자' },
+      { field: '업무시작' },
+      { field: '업무종료' },
+      { field: '총 근무시간' },
+      { field: '근무시간 상세' },
     ]);
-
     const [rowData, setRowData] = useState([]);
-
+    const [userId, setUserId] = useState(''); // Initialize userId state
+  
     useEffect(() => {
-        generateRowData();
+      // Get the userId from sessionStorage
+      const storedUserId = sessionStorage.getItem('employeeId');
+      setUserId(storedUserId); // Set userId state
+  
+      // Fetch attendance data for the specific employee
+      if (storedUserId) {
+        axios
+          .get(`http://146.56.98.153:8080/attendance/${storedUserId}`, {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              const attendanceList = response.data.attendanceList;
+              // Map the attendance data to rowData
+              const generatedData = attendanceList.map((item) => ({
+                '일자': item.week, // Map to '일자' field
+                '업무시작': item.startTime,
+                '업무종료': item.endTime,
+                '총 근무시간': item.totalTime,
+                '근무시간 상세': '', // You can populate this as needed
+              }));
+              setRowData(generatedData);
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching attendance data:', error);
+          });
+      }
     }, []);
-
-    //임시데이터
-    const randomRowData = ['04 월', '08:00:00','18:00:00','8h 20m 0s', "기본 8h 10m 0s/ 연장 0h 10m 0s/ 야간 0h 0m 0s"]
-
-    const generateRowData = () => {
-        
-    const generatedData = items.map((item) => ({
-        '일자': item,
-        '업무시작': '',
-        '업무종료': '',
-        '총 근무시간': '',
-        '근무시간 상세': '',
-    }));
-    setRowData(generatedData);
-    };
 
 
 const defaultColDef = useMemo( ()=> ({

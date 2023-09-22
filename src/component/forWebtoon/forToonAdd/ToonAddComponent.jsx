@@ -53,51 +53,53 @@ const ToonAddComponent = () => {
   };
 
   const handleSubmitClick = () => {
-     //console.log(finalId, "finalId 결과값"); 
-     axios.post('http://146.56.98.153:8080/webtoon',
-      {
-        file: thumbnailPreview,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          Location : "/webtoon"
-        },
-      })
-      .then((result) => {
-        if (result.id) {
-         message.success('썸네일이 정상적으로 등록되었습니다.');
-       } 
-      })
-      .catch((error) => {
-       message.error('썸네일이 정상적으로 등록되지 않았습니다.');
-      })
-
-    axios.post('http://146.56.98.153:8080/webtoon',
-      {
-        title: selectedTitle,           
-        artist: selectedAuthor,  
-        illustrator: selectedDrawer,  
-        selectedDay: selectedDay,           
+    // Check if required fields are empty
+    if (
+      !selectedTitle ||
+      !selectedAuthor ||
+      !selectedDrawer ||
+      !selectedDay ||
+      !selectedKeyword ||
+      !selectedContent ||
+      !thumbnailPreview
+    ) {
+      message.error('모든 필수 항목을 입력해주세요.'); // Display an error message
+      return; // Don't proceed with the request if required fields are empty
+    }
+  
+    const formData = new FormData();
+  
+    // Append the JSON data as a part with the key "dto"
+    formData.append(
+      'dto',
+      new Blob([JSON.stringify({
+        title: selectedTitle,
+        artist: selectedAuthor,
+        illustrator: selectedDrawer,
+        category: selectedDay,
         keyword: selectedKeyword,
-        intro: selectedContent,
-        thumbnailPreview: thumbnailPreview,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          Location : "/webtoon"
-        },
-      })
+        intro: selectedContent
+      })], { type: 'application/json' })
+    );
+  
+    // Append the file as a part with the key "file"
+    formData.append('file', thumbnailPreview);
+  
+    axios
+      .post('http://146.56.98.153:8080/webtoon', formData)
       .then((result) => {
-        if (result.id) {
-         message.success('작품이 정상적으로 등록되었습니다.');
-       } 
+        console.log('result', result);
+        if (result.status === 200) {
+          message.success('작품과 썸네일이 정상적으로 등록되었습니다.');
+        } else {
+          message.error('작품이 정상적으로 등록되지 않았습니다.');
+        }
       })
       .catch((error) => {
-       message.error('작품이 정상적으로 등록되지 않았습니다.');
-      })
+        message.error('작품이 정상적으로 등록되지 않았습니다.');
+      });
   };
+  
   
   return (
     <>

@@ -7,69 +7,70 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const EmployeeAttendanceView = () => {
   const [selectedCell, setSelectedCell] = useState(null);
-  const [rowData, setRowData] = useState([]);
   const [leftPanelData, setLeftPanelData] = useState([]);
-
-  const handleCellClick = (params) => {
-      setSelectedCell(params.column.getColDef().field);
-  };
+  const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
-      if (selectedCell !== null) {
-        
-          axios.get(`http://localhost:5050/attendance/${selectedCell}`)
-              .then(response => {
-                  const data = response.data.totalAttendanceSummaryDto[selectedCell + 'UserList'];
-                  setRowData(data);
-              })
-              .catch(error => {
-                  console.error('Error fetching data:', error);
-              });
-          
-      }
-      axios.get('http://localhost:5050/attendance/total')
-            .then(response => {
-                const totalSummary = response.data.totalAttendanceSummaryDto;
-                setLeftPanelData([
-                    {'전체 직원': totalSummary.totalUserCnt},
-                    {'출근': totalSummary.onTimeStartUserCnt},
-                    {'퇴근': totalSummary.onTimeEndUserCnt},
-                    {'미출근': totalSummary.notStartUserCnt},
-                    {'지각': totalSummary.lateStartUserCnt},
-                    {'휴가': totalSummary.dayOffUserCnt},
-                    {'연장근무': totalSummary.notEndUserCnt},
-                ]);
-            }).catch(error => {
-              console.error('Error fetching left panel data:', error);
-          });
-  }, [selectedCell]);
+    axios.get('http://146.56.98.153:8080/attendance/total')
+  .then((response) => {
+    if (response.status === 200) {
+      const { totalAttendanceSummaryDto, rightPanelData } = response.data;
+
+      // Map data for the left panel
+      const leftPanelMappedData = {
+        totalUserCnt: totalAttendanceSummaryDto.totalUserCnt,
+        onTimeStartUserCnt: totalAttendanceSummaryDto.onTimeStartUserCnt,
+        onTimeEndUserCnt: totalAttendanceSummaryDto.onTimeEndUserCnt,
+        notStartUserCnt: totalAttendanceSummaryDto.notStartUserCnt,
+        lateStartUserCnt: totalAttendanceSummaryDto.lateStartUserCnt,
+        dayOffUserCnt: totalAttendanceSummaryDto.dayOffUserCnt,
+        notEndUserCnt: totalAttendanceSummaryDto.notEndUserCnt,
+      };
+
+      // Map data for the right panel, only if rightPanelData is defined
+      const rightPanelMappedData = Array.isArray(rightPanelData)
+        ? rightPanelData.map((item) => ({
+            deptName: item.deptName,
+            teamNum: item.teamNum,
+            position: item.position,
+            employeeId: item.employeeId,
+            name: item.name,
+            tel: item.tel,
+            email: item.email,
+          }))
+        : [];
+
+      // Set the mapped data to state
+      setLeftPanelData([leftPanelMappedData]);
+      setRowData(rightPanelMappedData);
+    }
+  })
+  .catch((error) => {
+    console.error('WholeAttendance Error fetching data:', error);
+  });
+
+
+  }, []);
 
   const leftPanelColumnDefs = [
-    {field: '전체 직원'},
-    {field: '출근'},
-    {field: '퇴근'},
-    {field: '미출근'},
-    {field: '지각'},
-    {field: '휴가'},
-    {field: '연장근무'},
+    { headerName: '전체 직원', field: 'totalUserCnt', width: 140 },
+    { headerName: '출근', field: 'onTimeStartUserCnt', width: 140 },
+    { headerName: '퇴근', field: 'onTimeEndUserCnt', width: 140 },
+    { headerName: '미출근', field: 'notStartUserCnt', width: 140 },
+    { headerName: '지각', field: 'lateStartUserCnt', width: 140 },
+    { headerName: '휴가', field: 'dayOffUserCnt', width: 140 },
+    { headerName: '연장근무', field: 'notEndUserCnt', width: 140 },
   ];
 
   const rightPanelColumnDefs = [
-    { headerName: '부서명', field: 'dept', width: 100 },
-    { headerName: '팀번호', field: 'dept', width: 100 },
+    { headerName: '부서명', field: 'deptName', width: 100 },
+    { headerName: '팀번호', field: 'teamNum', width: 100 },
     { headerName: '직급', field: 'position', width: 100 },
-    { headerName: '사번', field: 'id', width: 150 },
+    { headerName: '사번', field: 'employeeId', width: 150 },
     { headerName: '이름', field: 'name', width: 100 },
-    { headerName: '전화번호', field: 'phoneNumber', width: 200 },
+    { headerName: '전화번호', field: 'tel', width: 200 },
     { headerName: '이메일', field: 'email', width: 200 },
-    // ... (other columns)
   ];
-
-  const rowColumnData = [
-    // ... (rowData for right panel)
-  ];
-
-  
 
   return (
     <Container>
@@ -78,18 +79,17 @@ const EmployeeAttendanceView = () => {
           <AgGridReact
             columnDefs={leftPanelColumnDefs}
             rowData={leftPanelData}
-            onCellClicked={handleCellClick}
           />
         </div>
       </LeftPanel>
       <RightPanel>
         <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
-            <AgGridReact
-                columnDefs={rightPanelColumnDefs}
-                rowData={rowData}
-            />
+          <AgGridReact
+            columnDefs={rightPanelColumnDefs}
+            rowData={rowData}
+          />
         </div>
-    </RightPanel>
+      </RightPanel>
     </Container>
   );
 };

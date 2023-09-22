@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import axios from 'axios'; // Import axios for making the HTTP request
 import { Button, Modal } from 'antd';
 
 const CalendarArea = () => {
@@ -9,28 +10,26 @@ const CalendarArea = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    // Simulate an API call to fetch events
-    setTimeout(() => {
-      const fetchedEvents = [
-        {
-          title: '일정 1',
-          start: '2023-06-28',
-          end: '2023-06-29',
-          backgroundColor: 'green'
+    axios
+      .get('http://146.56.98.153:8080/plans', {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
         },
-        {
-          title: '일정 2',
-          start: '2023-07-01',
-          end: '2023-07-02',
-          backgroundColor: 'green'
-        },
-        // Additional events...
-      ];
-      setEvents(fetchedEvents);
-      setIsLoading(false);
-    }, ); 
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setEvents(response.data);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          console.error('Failed to fetch events');
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error('Error fetching events:', error);
+      });
   }, []);
-  
 
   return (
     <div className={`calendar-area ${isLoading ? 'loading' : ''}`}>

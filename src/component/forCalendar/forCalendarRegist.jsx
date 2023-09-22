@@ -1,53 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '../../style/theme';
 import dayjs from 'dayjs';
 import { TimePicker, DatePicker, Space, message } from 'antd';
-import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
-
 const ForCalendarRegist = () => {
-  //달력(요청, 납기일)
-
   const [registDate, setRegistDate] = useState(new Date());
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState('');
-  const [selectedRequest, setSelectedRequest] = useState('');
   const [selectedStartTime, setSelectedStartTime] = useState('10:00');
   const [selectedEndTime, setSelectedEndTime] = useState('12:00');
+  const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    setUserId(sessionStorage.getItem("employeeId"));
+    console.log("token app: ", userId);
+  }, [userId]);
 
   const handleSubmitClick = () => {
-    //console.log(finalId, "finalId 결과값"); 
+    const startDateD = selectedStartDate.$d;
+    const endDateD = selectedEndDate.$d;
 
-   axios.post('http://localhost:5050/register',
-     {
-      registDate: registDate,
-      selectedStartDate: selectedStartDate,
-      selectedStartTime: selectedStartTime,
-      selectedEndDate: selectedEndDate, 
-      selectedEndTime: selectedEndTime,  
-      selectedDeliveryDate: selectedDeliveryDate,  
-      selectedTitle: selectedTitle,
-      selectedRequest: selectedRequest,
-     },
-     {
-       headers: {
-         'Content-Type': 'application/json',
-       },
-     })
-     .then((result) => {
-       if (result.status === 'done') {
-        message.success(`[일정] 등록이 정상적으로 등록되었습니다.`);
-      } 
-     })
-     .catch((error) => {
-      message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
-     })
- };
+    if (
+      !userId ||
+      !selectedTitle ||
+      !startDateD ||
+      !endDateD
+    ) {
+      message.error('모든 필수 항목을 입력해주세요.');
+      return;
+    }
 
+    axios
+      .post(
+        'http://146.56.98.153:8080/plans',
+        {
+          employeeId: userId,
+          planType: '', 
+          title: selectedTitle,
+          startDate: startDateD,
+          startTime: selectedStartTime,
+          endDate: endDateD,
+          endTime: selectedEndTime,
+          holidayYN: false, 
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        }
+      )
+      .then((result) => {
+        if (result.status === 200) {
+          message.success('[일정] 등록이 정상적으로 등록되었습니다.');
+        } else {
+          message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
+        }
+      })
+      .catch((error) => {
+        message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
+      });
+  };
 
   const SelectTitlehandler = (e) => {
     setSelectedTitle(e.target.value);
@@ -55,8 +71,7 @@ const ForCalendarRegist = () => {
 
   const format = 'HH:mm';
 
-  const disabledDate = current => {
-    // 오늘 이전의 날짜를 비활성화
+  const disabledDate = (current) => {
     return current && current < dayjs().startOf('day');
   };
 
@@ -70,8 +85,6 @@ const ForCalendarRegist = () => {
       <DatePicker {...props} placeholder={formattedTodayDate} disabled />
     );
   };
-  
-  
 
   return (
     <>
