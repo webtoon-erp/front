@@ -9,81 +9,83 @@ import { message } from 'antd';
 import theme from '../../../style/theme';
 
 const AllWebtoonListView = () => {
-    const [data, setData] = useState({});
-    const [selectedDay, setSelectedDay] = useState('전체');
-    const [filterText, setFilterText] = useState(''); 
-
+    const [selectedCategory, setSelectedCategory] = useState('전체');
+    const [filterText, setFilterText] = useState('');
     const [selectedCell, setSelectedCell] = useState(null);
     const [rowData, setRowData] = useState([]);
-
-    useEffect(() => {
-        if (selectedCell !== null) {
-            axios.get(`http://146.56.98.153:8080/webtoon/${selectedCell}`)
-                .then(response => {
-                    const data = response.data[selectedCell + 'UserList'];
-                    setRowData(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-            
-        }
-    }, [selectedCell]);
-
+    
     // 태그 선택 핸들러
-    const selectDayHandler = (e) => {
-        setSelectedDay(e.target.value);
+    const selectCategoryHandler = (e) => {
+      setSelectedCategory(e.target.value);
     };
-  
-    const filteredDays = selectedDay === '전체' ? data : data.filter((emp) => emp.day === selectedDay);
-  
-    // ag-grid
+
     const columnDefs = [
-      { headerName: '요일', field: 'day', width: 100 },
+      { headerName: '요일', field: 'category', width: 100 },
       { headerName: '제목', field: 'title', width: 400 },
-      { headerName: '작가', field: 'author', width: 120 },
-      { headerName: '그림', field: 'drawer', width: 120 },
+      { headerName: '작가', field: 'artist', width: 120 },
+      { headerName: '그림', field: 'illustrator', width: 120 },
       { headerName: '키워드', field: 'keyword', width: 280 },
     ];
-  
-    function handleCellClick(params) {
-      setSelectedCell(params.column.getColDef().field);
-  }
-    // 검색 기능
-    const gridOptions = {
-      rowSelection: 'single',
-      animateRows: true,
-      pagination: true,
-      paginationPageSize: 10,
-    };
     
     const gridRef = useRef(null);
     
+    const onGridReady = (params) => {
+      params.api.setQuickFilter(document.getElementById('filter-text-box').value);
+    };
+  
     useEffect(() => {
       if (gridRef.current) {
-        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+        gridRef.current.api.setQuickFilter(document.getElementById('filter-text-box').value);
       }
     }, []);
     
     const onFilterTextBoxChanged = useCallback(() => {
       if (gridRef.current) {
-        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+        gridRef.current.api.setQuickFilter(document.getElementById('filter-text-box').value);
       }
     }, []);
       
-      const navigate = useNavigate();
+    const navigate = useNavigate();
 
-      const handleClick = () => {
-        navigate("/toonAdd");
+    const handleClick = () => {
+      navigate("/toonAdd");
     }
-      
+
+    // This function handles the row click event.
+    const handleRowClick = (event) => {
+      if (event.data.id) {
+        // Replace 'toonDetail' with the actual path to your detail page.
+        navigate(`/toonDetail/${event.data.id}`);
+      }
+    };
+    
+    useEffect(() => {
+      axios.get('http://146.56.98.153:8080/webtoon', {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setRowData(response.data);
+          console.log("response.data", response.data);
+        } else {
+          message.error('데이터를 불러오는데 실패했습니다.');
+        }
+      })
+      .catch((error) => {
+        console.error('데이터를 불러오는데 실패했습니다.', error);
+        message.error('데이터를 불러오는데 실패했습니다.');
+      });
+    }, []); 
+    
 
     return (
         <>
           <Title>전체 웹툰</Title>
             <ToonContainer>
                 <SelectTagContainer>
-                <select value={selectedDay} onChange={selectDayHandler}>
+                <select value={selectedCategory} onChange={selectCategoryHandler}>
                     <option value="전체">전체</option>
                     <option value="월">월</option>
                     <option value="화">화</option>
@@ -104,27 +106,27 @@ const AllWebtoonListView = () => {
                         <RegistBtn onClick={handleClick}>작품 등록</RegistBtn>
                   </RegistBtnContainer>
                 </SelectTagContainer>
-
-                
                 
                 <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
-                <AgGridReact
-                   rowData={rowData}
-                   columnDefs={columnDefs}
-                   animateRows={true}
-                   rowSelection='single'
-                   pagination= {true}
-                   paginationPageSize= {20}
-                  onCellClicked= {handleCellClick}
-                />
-
-                </div>
+                  <AgGridReact
+                    rowData={rowData}
+                    columnDefs={columnDefs}
+                    animateRows={true}
+                    rowSelection='single'
+                    pagination={true}
+                    paginationPageSize={20}
+                    onGridReady={onGridReady} // 이 부분 추가
+                    // Assign the handleRowClick function to the onCellClicked event
+                    onCellClicked={handleRowClick}
+                  />
+              </div>
             </ToonContainer>
         </>
     )
 }
 
 export default AllWebtoonListView;
+
 
 const RegistBtnContainer = styled.div`
     display: flex;
@@ -152,7 +154,6 @@ const ToonContainer = styled.div`
 display: flex;
 flex-direction: column;
 align-items: flex-start;
-
 padding: 50px;
 padding-left: 70px;
 `;

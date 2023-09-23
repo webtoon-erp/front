@@ -8,37 +8,36 @@ export default function WorkExtension() {
   const chartRef = useRef(null);
   const [overtimeData, setOvertimeData] = useState([]);
 
-  
-
   useEffect(() => {
     const chartCanvas = chartRef.current;
-    // Get the latest 4 months starting from the current month
-    const currentMonth = new Date().getMonth() + 1; // Adding 1 to make it 1-based
+    const currentMonth = new Date().getMonth() + 1;
     const months = [];
     for (let i = 0; i < 4; i++) {
-        const monthIndex = (currentMonth - i + 12) % 12; // Ensure it wraps around correctly
-        months.push(monthIndex);
+      const monthIndex = (currentMonth - i + 12) % 12;
+      months.push(monthIndex + 1);
     }
-    //months = months.reverse();
-
-    console.log("4months", months);
+  
     axios
-      .get('http://localhost:5050/attendance/total')
+      .get('http://146.56.98.153:8080/attendance/total')
       .then((response) => {
         if (response.status === 200) {
-          const monthlyOvertimeSummaryDto = response.data.totalAttendanceSummaryDto.monthlyOvertimeSummaryDto;
-
+          const monthlyOvertimeSummaryDto = response.data.monthlyOvertimeSummaryDto;
+  
           const overtimeHoursArray = months.map((monthIndex) => ({
             id: monthIndex,
-            value: parseTimeToMinutes(monthlyOvertimeSummaryDto[monthIndex])
+            value: parseTimeToMinutes(monthlyOvertimeSummaryDto[getMonthName(monthIndex)]),
           }));
-
+  
           setOvertimeData(overtimeHoursArray);
-
+  
+          if (chartCanvas.chart) {
+            chartCanvas.chart.destroy();
+          }
+  
           const chart = new Chart(chartCanvas, {
             type: 'line',
             data: {
-              labels: months.map((monthIndex) => getMonthName(monthIndex).substr(0, 3)), // Use short month names as labels
+              labels: months.map((monthIndex) => getMonthName(monthIndex).substr(0, 3)),
               datasets: [
                 {
                   label: '연장근무시간',
@@ -69,9 +68,13 @@ export default function WorkExtension() {
               },
             },
           });
-
+  
+          chartCanvas.chart = chart;
+  
           return () => {
-            chart.destroy();
+            if (chartCanvas.chart) {
+              chartCanvas.chart.destroy();
+            }
           };
         }
       })
@@ -81,10 +84,15 @@ export default function WorkExtension() {
   }, []);
 
   const parseTimeToMinutes = (timeString) => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes + seconds / 60;
-    return totalMinutes;
+    if (typeof timeString === 'string') {
+      const [hours, minutes, seconds] = timeString.split(':').map(Number);
+      const totalMinutes = hours * 60 + minutes + seconds / 60;
+      return totalMinutes;
+    } else {
+      return 0;
+    }
   };
+  
 
   const minutesToHoursAndMinutes = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -92,14 +100,13 @@ export default function WorkExtension() {
     return `${hours}시간 ${remainingMinutes}분`;
   };
 
-  // Helper function to get month name from its index
   const getMonthName = (monthIndex) => {
     const monthNames = [
       'janOvertime', 'febOvertime', 'marOvertime', 'aprOvertime',
       'mayOvertime', 'junOvertime', 'julOvertime', 'augOvertime',
       'sepOvertime', 'octOvertime', 'novOvertime', 'decOvertime'
     ];
-    return monthNames[monthIndex];
+    return monthNames[monthIndex+1];
   };
 
   return (
