@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import FileInput from '../../fileUpload';
-import { savedData } from '../../data.js';
+import { savedData } from '../../../data.js';
 import { message } from 'antd';
 
 const NoticeRegist = () => {
