@@ -7,6 +7,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { Button, Upload, message, Modal } from 'antd';
 import AnnualLeaveRequestView from '../forElectropaymentRuqeust/forEpForm/annualLeaveRequestView';
+import axios from 'axios';
 
 
 const FakeProfileData = [
@@ -26,17 +27,39 @@ const FakeProfileData = [
 ];
 
 const MyPageView = () => {
-    const rowData = [
-        {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
-        {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
-        {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
-        {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
-    ];
+    
+    const [userData, setUserData] = useState(null);
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://146.56.98.153:8080/users/{employeeId}')
+        .then(function (response) {
+            setUserData(response.data);
+            const qualifications = response.data.qualifications || [];
+            setRowData(qualifications);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
+
+    // const rowData = [
+    //     {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
+    //     {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
+    //     {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
+    //     {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
+    // ];
+
+    // const columnDefs = [
+    //     {field: '자격증명', sortable: true, filter: true, width: '390px'},
+    //     {field: '자격증 상세', sortable: true, filter: true, width: '380px'},
+    //     {field: '만료일자', sortable: true, filter: true},
+    // ];
 
     const columnDefs = [
-        {field: '자격증명', sortable: true, filter: true, width: '390px'},
-        {field: '자격증 상세', sortable: true, filter: true, width: '380px'},
-        {field: '만료일자', sortable: true, filter: true},
+        {headerName: '자격증명', field: 'qlfcType', sortable: true, filter: true, width: '390px'},
+        {headerName: '자격증 상세', field: 'content', sortable: true, filter: true, width: '380px'},
+        {headerName: '만료일자', field: 'qlfcDate', sortable: true, filter: true}
     ];
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -74,15 +97,15 @@ const MyPageView = () => {
                     <Img src={FakeProfileData[0].imageUrl} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
                 </ProfileImgContainer>
                 <ProfileInfoContainer>
-                    <ProfileInfoBox>사원명 <ProfileInfoData>{FakeProfileData[0].name}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>부서 <ProfileInfoData>{FakeProfileData[0].dep}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>직급 <ProfileInfoData>{FakeProfileData[0].rank}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>사원번호 <ProfileInfoData>{FakeProfileData[0].empId}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>입사일 <ProfileInfoData>{FakeProfileData[0].joinDate}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>휴대전화 <ProfileInfoData>{FakeProfileData[0].phone}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>이메일 <ProfileInfoData>{FakeProfileData[0].email}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>생년월일 <ProfileInfoData>{FakeProfileData[0].birthDate}</ProfileInfoData></ProfileInfoBox>
-                    <ProfileInfoBox>잔여연차 <ProfileInfoData>{FakeProfileData[0].annualLeave}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>사원명 <ProfileInfoData>{userData?.name}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>부서 <ProfileInfoData>{userData?.deptName}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>직급 <ProfileInfoData>{userData?.position}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>사원번호 <ProfileInfoData>{userData?.employeeId}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>입사일 <ProfileInfoData>{userData?.joinDate}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>휴대전화 <ProfileInfoData>{userData?.tel}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>이메일 <ProfileInfoData>{userData?.email}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>생년월일 <ProfileInfoData>{userData?.birthDate}</ProfileInfoData></ProfileInfoBox>
+                    <ProfileInfoBox>잔여연차 <ProfileInfoData>{userData?.dayOff}</ProfileInfoData></ProfileInfoBox>
                 </ProfileInfoContainer>
             </ProfileInHrSalaryContainer>
             <EntitlementGridContainer>
