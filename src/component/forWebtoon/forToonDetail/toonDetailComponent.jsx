@@ -4,80 +4,69 @@ import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
-const FakeProfileData = [
-    {
-        id: 1,
-        title: '엔딩, 바꿔보려합니다',
-        author: 'author',
-        drawer: 'drawer',
-        day: '월요일',
-        keyword: '코미디',
-        content: '010-1234-1234',
-        rank: 'title 1 썸네일',
-        thumnailPreview: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbxgxO2HlWpJnmMF19T9mPjPypU5Q7R5Dcfg&usqp=CAU',
-        content: `배드엔딩만 쓰는 피폐소설작가 변수아는
-        누군가의 저주로 인해 현재 연재중인 ‘청춘의 끝에’의 악녀 최세화로 빙의된다.
-        인성파탄자, 소시오패스, 이중인격자, 싸이코패스뿐인 소설 속에서
-        과연 수아는 살아서 원래 세계로 돌아갈 수 있을까?`,
-    },
-];
+const ToonDetailComponent = ({ webtoonId }) => {
+  const [webtoonData, setWebtoonData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedAuthor, setEditedAuthor] = useState('');
+  const [editedDrawer, setEditedDrawer] = useState('');
+  const [editedDay, setEditedDay] = useState('');
+  const [editedKeyword, setEditedKeyword] = useState('');
+  const [editedContent, setEditedContent] = useState('');
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
+  const navigate = useNavigate();
 
-const ToonDetailComponent = (Id) => {
-    //수정 가능 여부
-    const [editable, setEditable] = useState('false');
-    const [enrollable, setEnrollable] = useState('false');
+  useEffect(() => {
+    const url = `http://146.56.98.153:8080/webtoon/${webtoonId}`;
+  
+    axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          // Rest of your code
+          // ...
+        } else {
+          window.alert('데이터를 불러오는데 실패했습니다.');
+        }
+      })
+      .catch((error) => {
+        console.error('데이터를 불러오는데 실패했습니다.', error);
+        window.alert('데이터를 불러오는데 실패했습니다.');
+      });
+  }, [webtoonId]);
+  
 
-    //editing
-    const [isEditing, setIsEditing] = useState(false); 
-    const [editedAuthor, setEditedAuthor] = useState(FakeProfileData[0].author);
-    const [editedDrawer, setEditedDrawer] = useState(FakeProfileData[0].drawer);
-    const [editedDay, setEditedDay] = useState(FakeProfileData[0].day);
-    const [editedKeyword, setEditedKeyword] = useState(FakeProfileData[0].keyword);
-    const [editedContent, setEditedContent] = useState(FakeProfileData[0].content);
-    const [thumbnailPreview, setThumbnailPreview] = useState(null);
-
-    //data.title
-    //const [data, setData] = useState({});
-
-    //seEffect(() => {
-    //    axios.get('http://localhost:5050/quals/'+Id).then((response)=> {
-    //      setData(response.data);
-    //      //console.log("ddddddd");
-    //    })
-    //  }, []);
-    
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate("/episodeAdd");
-    }
-
-    const handleToggleEdit = () => {
-      setIsEditing((prevState) => !prevState);
+  const handleClick = () => {
+    navigate("/episodeAdd");
   };
-    
 
-    const handleAuthorChange = (e) => {
-      setEditedAuthor(e.target.value);
+  const handleToggleEdit = () => {
+    setIsEditing((prevState) => !prevState);
+  };
+
+  const handleAuthorChange = (e) => {
+    setEditedAuthor(e.target.value);
   };
 
   const handleDrawerChange = (e) => {
-      setEditedDrawer(e.target.value);
+    setEditedDrawer(e.target.value);
   };
 
   const handleDayChange = (e) => {
-      setEditedDay(e.target.value);
+    setEditedDay(e.target.value);
   };
 
   const handleKeywordChange = (e) => {
-      setEditedKeyword(e.target.value);
+    setEditedKeyword(e.target.value);
   };
 
   const handleContentChange = (e) => {
-      setEditedContent(e.target.value);
+    setEditedContent(e.target.value);
   };
-    
+
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -90,81 +79,69 @@ const ToonDetailComponent = (Id) => {
       reader.readAsDataURL(file);
     }
   };
-    
-      const handleSaveChanges = () => {
-         //console.log(finalId, "finalId 결과값"); 
-    
-        axios.post('http://localhost:5050/register',
-          { 
-            editedDrawer: editedDrawer,  
-            editedDay: editedDay,
-            editedKeyword: editedKeyword,
-            editedContent: editedContent,
-            thumbnailPreview: thumbnailPreview,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then((result) => {
-            console.log(result);
-            console.log("enroll!");
-            window.alert('작품 상세정보가 정상적으로 수정되었습니다.');
-            //window.location.replace("/login"); 
-          })
-          .catch((error) => {
-            window.alert('작품 상세정보가 정상적으로 수정되지 않았습니다.');
-            console.log(error);
-          })
-      };
+
+  const handleSaveChanges = () => {
+    // 수정된 데이터를 서버에 전송
+    axios.post(`http://146.56.98.153:8080/register/${webtoonId}`,
+      {
+        editedAuthor,
+        editedDrawer,
+        editedDay,
+        editedKeyword,
+        editedContent,
+        thumbnailPreview,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      })
+      .then((result) => {
+        console.log(result);
+        console.log("enroll!");
+        window.alert('작품 상세정보가 정상적으로 수정되었습니다.');
+      })
+      .catch((error) => {
+        window.alert('작품 상세정보가 정상적으로 수정되지 않았습니다.');
+        console.log(error);
+      });
+  };
 
     return (
-        <>
-            <RegistBtnContainer>
-                      <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
-                                  {isEditing ? '등 록' : '수 정'}
-                      </Btn>
-                        <RegistBtn onClick={handleClick}>회차 등록</RegistBtn>
-            </RegistBtnContainer>
-            
-            
-            <WebtoonContainer>
-            
-                        <WebtoonImgContainer>
-                            <Img src={FakeProfileData[0].thumnailPreview} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
-                        </WebtoonImgContainer>
-                        <ToonInsideInfoBox>
-                            <ToonTitle>{FakeProfileData[0].title}</ToonTitle>
-                        {!isEditing ? (
-                            <>
-                            <ToonInfoContainer>
-                                <ToonInfoBox>작가 <ToonInfoData>{FakeProfileData[0].author}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>그림 <ToonInfoData>{FakeProfileData[0].drawer}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>업로드 요일 <ToonInfoData>{FakeProfileData[0].day}</ToonInfoData></ToonInfoBox>
-                                <ToonInfoBox>키워드 <ToonInfoData>{FakeProfileData[0].keyword}</ToonInfoData></ToonInfoBox>
-                            </ToonInfoContainer>
-                            <ToonInsideInfoTextBox>
-                                <ToonInfoBox>작품 설명 <ToonInfoTextData>{FakeProfileData[0].content}</ToonInfoTextData></ToonInfoBox>
-                            </ToonInsideInfoTextBox>
-                        
-                        </>
-                         ) : (
-                          <>
-                              <ToonInfoContainer>
-                                <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
-                                <ToonInfoBox>그림 <InputContainer><InputField type="text" value={editedDrawer} onChange={handleDrawerChange} /></InputContainer></ToonInfoBox>
-                                <ToonInfoBox>업로드 요일 <InputContainer><InputField type="text" value={editedDay} onChange={handleDayChange} /></InputContainer></ToonInfoBox>
-                                <ToonInfoBox>키워드 <InputContainer><InputField type="text" value={editedKeyword} onChange={handleKeywordChange} /></InputContainer></ToonInfoBox>
-                            </ToonInfoContainer>
-                            <ToonInsideInfoTextBox>
-                              <ToonInfoBox>작품 설명 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
-                            </ToonInsideInfoTextBox> 
-                          </>
-                         )}
-                      </ToonInsideInfoBox>
-            </WebtoonContainer>
-        </>
+        <WebtoonContainer>
+        <WebtoonImgContainer>
+          <Img src={webtoonData ? webtoonData.thumbnailFileName : ''} alt={webtoonData ? `${webtoonData.thumbnailFileName}의 썸네일 사진` : ''} />
+        </WebtoonImgContainer>
+        <ToonInsideInfoBox>
+          <ToonTitle>{webtoonData ? webtoonData.title : ''}</ToonTitle>
+          {!isEditing ? (
+            <>
+              <ToonInfoContainer>
+                <ToonInfoBox>작가 <ToonInfoData>{webtoonData ? webtoonData.artist : ''}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>그림 <ToonInfoData>{webtoonData ? webtoonData.illustrator : ''}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>업로드 요일 <ToonInfoData>{webtoonData ? webtoonData.category : ''}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>키워드 <ToonInfoData>{webtoonData ? webtoonData.keyword : ''}</ToonInfoData></ToonInfoBox>
+              </ToonInfoContainer>
+              <ToonInsideInfoTextBox>
+                <ToonInfoBox>작품 설명 <ToonInfoTextData>{webtoonData ? webtoonData.intro : ''}</ToonInfoTextData></ToonInfoBox>
+              </ToonInsideInfoTextBox>
+            </>
+          ) : (
+            <>
+              <ToonInfoContainer>
+                <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
+                <ToonInfoBox>그림 <InputContainer><InputField type="text" value={editedDrawer} onChange={handleDrawerChange} /></InputContainer></ToonInfoBox>
+                <ToonInfoBox>업로드 요일 <InputContainer><InputField type="text" value={editedDay} onChange={handleDayChange} /></InputContainer></ToonInfoBox>
+                <ToonInfoBox>키워드 <InputContainer><InputField type="text" value={editedKeyword} onChange={handleKeywordChange} /></InputContainer></ToonInfoBox>
+              </ToonInfoContainer>
+              <ToonInsideInfoTextBox>
+                <ToonInfoBox>작품 설명 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
+              </ToonInsideInfoTextBox>
+            </>
+          )}
+        </ToonInsideInfoBox>
+      </WebtoonContainer>
+      
     )
 };
 

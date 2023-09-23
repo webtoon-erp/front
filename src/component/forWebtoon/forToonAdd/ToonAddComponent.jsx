@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { Button, Upload, message } from 'antd';
 
-
 const ToonAddComponent = () => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
@@ -12,9 +11,9 @@ const ToonAddComponent = () => {
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedKeyword, setSelectedKeyword] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null); // 변경된 변수명
 
-  
+  // 각각의 input 값에 대한 핸들러 함수들
   const SelectTitlehandler = (e) => {
     setSelectedTitle(e.target.value);
   };
@@ -39,67 +38,77 @@ const ToonAddComponent = () => {
     setSelectedContent(e.target.value);
   };
 
+  // 썸네일 이미지 업로드 핸들러
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setThumbnailPreview(event.target.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    setThumbnailFile(file); // 썸네일 파일 저장
   };
 
-  const handleSubmitClick = () => {
-    // Check if required fields are empty
-    if (
-      !selectedTitle ||
-      !selectedAuthor ||
-      !selectedDrawer ||
-      !selectedDay ||
-      !selectedKeyword ||
-      !selectedContent ||
-      !thumbnailPreview
-    ) {
-      message.error('모든 필수 항목을 입력해주세요.'); // Display an error message
-      return; // Don't proceed with the request if required fields are empty
-    }
-  
-    const formData = new FormData();
-  
-    // Append the JSON data as a part with the key "dto"
-    formData.append(
-      'dto',
-      new Blob([JSON.stringify({
-        title: selectedTitle,
-        artist: selectedAuthor,
-        illustrator: selectedDrawer,
-        category: selectedDay,
-        keyword: selectedKeyword,
-        intro: selectedContent
-      })], { type: 'application/json' })
-    );
-  
-    // Append the file as a part with the key "file"
-    formData.append('file', thumbnailPreview);
-  
-    axios
-      .post('http://146.56.98.153:8080/webtoon', formData)
-      .then((result) => {
-        console.log('result', result);
-        if (result.status === 200) {
-          message.success('작품과 썸네일이 정상적으로 등록되었습니다.');
-        } else {
-          message.error('작품이 정상적으로 등록되지 않았습니다.');
-        }
-      })
-      .catch((error) => {
+ // 작품 등록 버튼 클릭 핸들러
+const handleSubmitClick = () => {
+  // 필수 필드가 비어있는지 확인
+  if (
+    !selectedTitle ||
+    !selectedAuthor ||
+    !selectedDrawer ||
+    !selectedDay ||
+    !selectedKeyword ||
+    !selectedContent ||
+    !thumbnailFile
+  ) {
+    message.error('모든 필수 항목을 입력해주세요.');
+    return; // 필수 필드 중 하나라도 비어 있으면 요청을 보내지 않습니다.
+  }
+
+
+  // JSON 데이터 객체 생성
+  const jsonData = {
+    title: selectedTitle,
+    artist: selectedAuthor,
+    illustrator: selectedDrawer,
+    category: selectedDay,
+    keyword: selectedKeyword,
+    intro: selectedContent,
+  };
+
+  // FormData 객체 생성
+  const formData = new FormData();
+
+  // JSON 데이터를 'dto' 키로 추가
+  formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+  // 썸네일 파일을 'file' 키로 추가
+  formData.append('file', thumbnailFile);
+
+
+  // 데이터 출력
+  // FormData 객체 순회
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
+
+  // POST 요청을 보냅니다.
+  axios
+    .post('http://146.56.98.153:8080/webtoon', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // 필요한 경우 Content-Type을 설정합니다.
+      },
+    })
+    .then((result) => {
+      console.log('result', result);
+      if (result.status === 200) {
+        message.success('작품과 썸네일이 정상적으로 등록되었습니다.');
+      } else {
         message.error('작품이 정상적으로 등록되지 않았습니다.');
-      });
-  };
-  
+      }
+    })
+    .catch((error) => {
+      message.error('작품이 정상적으로 등록되지 않았습니다.');
+    });
+};
+
+
   
   return (
     <>
@@ -151,15 +160,16 @@ const ToonAddComponent = () => {
           </Container>
         </RangeContainer>
         <RangeContainer>
-          <Container>
-            <InputTitle>썸네일</InputTitle>
-            <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
-          </Container>
-          {thumbnailPreview && (
-            <Container>
-              <ImagePreview src={thumbnailPreview} alt="Thumbnail Preview" />
-            </Container>
-          )}
+        <Container>
+  <InputTitle>썸네일</InputTitle>
+  <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
+      </Container>
+      {thumbnailFile && (
+        <Container>
+          <ImagePreview src={URL.createObjectURL(thumbnailFile)} alt="Thumbnail Preview" />
+        </Container>
+      )}
+
         </RangeContainer>
       </MainContainer>
     </>

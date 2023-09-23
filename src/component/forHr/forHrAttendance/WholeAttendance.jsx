@@ -9,27 +9,45 @@ const EmployeeAttendanceView = () => {
   const [selectedCell, setSelectedCell] = useState(null);
   const [leftPanelData, setLeftPanelData] = useState([]);
   const [rowData, setRowData] = useState([]);
+  const [totalAttendanceSummaryDto, setTotalAttendanceSummaryDto] = useState({});
 
-  useEffect(() => {
-    axios.get('http://146.56.98.153:8080/attendance/total')
-  .then((response) => {
-    if (response.status === 200) {
-      const { totalAttendanceSummaryDto, rightPanelData } = response.data;
+  const handleCellClicked = useCallback((event) => {
+    let originalColumnName = event.column.colId; // Get the original column name
+    let updatedRowData;
 
-      // Map data for the left panel
-      const leftPanelMappedData = {
-        totalUserCnt: totalAttendanceSummaryDto.totalUserCnt,
-        onTimeStartUserCnt: totalAttendanceSummaryDto.onTimeStartUserCnt,
-        onTimeEndUserCnt: totalAttendanceSummaryDto.onTimeEndUserCnt,
-        notStartUserCnt: totalAttendanceSummaryDto.notStartUserCnt,
-        lateStartUserCnt: totalAttendanceSummaryDto.lateStartUserCnt,
-        dayOffUserCnt: totalAttendanceSummaryDto.dayOffUserCnt,
-        notEndUserCnt: totalAttendanceSummaryDto.notEndUserCnt,
-      };
+    console.log("Original Column Name:", originalColumnName);
 
-      // Map data for the right panel, only if rightPanelData is defined
-      const rightPanelMappedData = Array.isArray(rightPanelData)
-        ? rightPanelData.map((item) => ({
+    switch (originalColumnName) {
+      case 'totalUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.totalUserList;
+        break;
+      case 'onTimeStartUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.onTimeStartUserList;
+        break;
+      case 'lateStartUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.lateStartUserList;
+        break;
+      case 'notStartUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.notStartUserList;
+        break;
+      case 'dayOffUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.dayOffUserList;
+        break;
+      case 'onTimeEndUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.onTimeEndUserList;
+        break;
+      case 'notEndUserCnt':
+        updatedRowData = totalAttendanceSummaryDto.notEndUserList;
+        break;
+      default:
+        break;
+    }
+
+    setRowData(updatedRowData);
+    console.log("rowData", rowData)
+
+    const rightPanelMappedData = Array.isArray(updatedRowData)
+        ? updatedRowData.map((item) => ({
             deptName: item.deptName,
             teamNum: item.teamNum,
             position: item.position,
@@ -38,18 +56,37 @@ const EmployeeAttendanceView = () => {
             tel: item.tel,
             email: item.email,
           }))
-        : [];
+    : [];
+    
+    setRowData(rightPanelMappedData);
 
-      // Set the mapped data to state
-      setLeftPanelData([leftPanelMappedData]);
-      setRowData(rightPanelMappedData);
-    }
-  })
-  .catch((error) => {
-    console.error('WholeAttendance Error fetching data:', error);
-  });
+  }, [rowData]);
+  
 
+  useEffect(() => {
+    axios.get('http://146.56.98.153:8080/attendance/total')
+      .then((response) => {
+        if (response.status === 200) {
+          const totalAttendanceFromResponse = response.data.totalAttendanceSummaryDto;
 
+          setTotalAttendanceSummaryDto(totalAttendanceFromResponse);
+  
+          const leftPanelMappedData = {
+            totalUserCnt: totalAttendanceFromResponse.totalUserCnt,
+            onTimeStartUserCnt: totalAttendanceFromResponse.onTimeStartUserCnt,
+            onTimeEndUserCnt: totalAttendanceFromResponse.onTimeEndUserCnt,
+            notStartUserCnt: totalAttendanceFromResponse.notStartUserCnt,
+            lateStartUserCnt: totalAttendanceFromResponse.lateStartUserCnt,
+            dayOffUserCnt: totalAttendanceFromResponse.dayOffUserCnt,
+            notEndUserCnt: totalAttendanceFromResponse.notEndUserCnt,
+          };
+  
+          setLeftPanelData([leftPanelMappedData]);
+        }
+      })
+      .catch((error) => {
+        console.error('WholeAttendance Error fetching data:', error);
+      });
   }, []);
 
   const leftPanelColumnDefs = [
@@ -79,6 +116,7 @@ const EmployeeAttendanceView = () => {
           <AgGridReact
             columnDefs={leftPanelColumnDefs}
             rowData={leftPanelData}
+            onCellClicked={handleCellClicked} // Add this line
           />
         </div>
       </LeftPanel>

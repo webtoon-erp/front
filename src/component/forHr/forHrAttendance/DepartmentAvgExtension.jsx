@@ -8,27 +8,20 @@ import styled from 'styled-components';
 export default function DepartmentExtension() {
   const chartRef = useRef(null);
 
-  const [departmentOvertimeData, setDepartmentOvertimeData] = useState({
-    hrOvertimeSum: '0:00:00',
-    amOvertimeSum: '0:00:00',
-    wtOvertimeSum: '0:00:00',
-    itOvertimeSum: '0:00:00'
-  });
 
   useEffect(() => {
-    axios.get('http://localhost:5050/attendance/total')
+    axios.get('http://146.56.98.153:8080/attendance/total')
       .then(response => {
-        const departmentOvertimeSumDto = response.data.totalAttendanceSummaryDto.departmentOvertimeSumDto;
-        setDepartmentOvertimeData(departmentOvertimeSumDto);
+        const departmentOvertimeAvgDto = response.data.departmentOvertimeAvgDto;
 
         const ctx = chartRef.current.getContext('2d');
         chartRef.current.chart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: Object.keys(departmentOvertimeData), // Use the keys of departmentOvertimeData
+            labels: Object.keys(departmentOvertimeAvgDto), // Use the keys of departmentOvertimeData
             datasets: [{
               label: '부서별 연장근무시간(월계)',
-              data: Object.values(departmentOvertimeData).map(value => parseTimeToMinutes(value)),
+              data: Object.values(departmentOvertimeAvgDto).map(value => parseTimeToMinutes(value)),
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1
@@ -50,7 +43,7 @@ export default function DepartmentExtension() {
                 beginAtZero: true,
                 ticks: {
                   stepSize: 0.5, // 눈금 간격을 0.5로 설정
-                  callback: (value) => value * 100, // y축 눈금에 표시할 값을 다시 100 곱하여 원래대로 복원
+                  callback: (value) => value , // y축 눈금에 표시할 값을 다시 100 곱하여 원래대로 복원
                 }
               }
             }
@@ -64,7 +57,7 @@ export default function DepartmentExtension() {
 
   const parseTimeToMinutes = (timeString) => {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
-    return hours * 60 + minutes + seconds / 60;
+    return hours + minutes/ 60 + seconds / 3600;
   };
 
   return (

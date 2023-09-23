@@ -166,7 +166,7 @@ function App() {
                 <Route path="/toonAdd" element={<ToonAdd/>} />
                 <Route path="/episodeAdd" element={<EpisodeAdd />} />
                 <Route path="/toonView" element={<ToonView />} />
-                <Route path="/toonDetail" element={<ToonDetail />} />
+                <Route path="/toonDetail/:webtoonId" element={<ToonDetail />} />
                 <Route path="/allToonView" element={<AllToonView />} />
                 <Route path="/epRequestAdd" element={<EpRequestAdd />} />
                 <Route path="/epMyDocsView" element={<EpMyDocsView />} />
