@@ -49,6 +49,7 @@ const NoticeRegist = () => {
             })
             .catch((error) => {
                 message.error('공지사항이 정상적으로 등록되지 않았습니다.');
+                console.log(error);
             })
         };
 
