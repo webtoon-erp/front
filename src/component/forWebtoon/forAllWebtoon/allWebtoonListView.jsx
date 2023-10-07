@@ -9,15 +9,10 @@ import { message } from 'antd';
 import theme from '../../../style/theme';
 
 const AllWebtoonListView = () => {
-    const [selectedCategory, setSelectedCategory] = useState('전체');
-    const [filterText, setFilterText] = useState('');
+   const [filterText, setFilterText] = useState('');
     const [selectedCell, setSelectedCell] = useState(null);
     const [rowData, setRowData] = useState([]);
-    
-    // 태그 선택 핸들러
-    const selectCategoryHandler = (e) => {
-      setSelectedCategory(e.target.value);
-    };
+    const gridRef = useRef(null);
 
     const columnDefs = [
       { headerName: '요일', field: 'category', width: 100 },
@@ -27,21 +22,22 @@ const AllWebtoonListView = () => {
       { headerName: '키워드', field: 'keyword', width: 280 },
     ];
     
-    const gridRef = useRef(null);
-    
     const onGridReady = (params) => {
-      params.api.setQuickFilter(document.getElementById('filter-text-box').value);
+      // gridRef를 설정
+      gridRef.current = params.api;
     };
   
     useEffect(() => {
+      // 컴포넌트가 마운트될 때 초기 필터 설정
       if (gridRef.current) {
-        gridRef.current.api.setQuickFilter(document.getElementById('filter-text-box').value);
+        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
       }
     }, []);
-    
+  
     const onFilterTextBoxChanged = useCallback(() => {
+      // 필터 텍스트가 변경될 때 필터 설정
       if (gridRef.current) {
-        gridRef.current.api.setQuickFilter(document.getElementById('filter-text-box').value);
+        gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
       }
     }, []);
       
@@ -51,10 +47,8 @@ const AllWebtoonListView = () => {
       navigate("/toonAdd");
     }
 
-    // This function handles the row click event.
     const handleRowClick = (event) => {
       if (event.data.id) {
-        // Replace 'toonDetail' with the actual path to your detail page.
         navigate(`/toonDetail/${event.data.id}`);
       }
     };
@@ -85,17 +79,6 @@ const AllWebtoonListView = () => {
           <Title>전체 웹툰</Title>
             <ToonContainer>
                 <SelectTagContainer>
-                <select value={selectedCategory} onChange={selectCategoryHandler}>
-                    <option value="전체">전체</option>
-                    <option value="월">월</option>
-                    <option value="화">화</option>
-                    <option value="수">수</option>
-                    <option value="목">목</option>
-                    <option value="금">금</option>
-                    <option value="토">토</option>
-                    <option value="일">일</option>
-                </select>
-                <Container />
                   <input
                         type="text"
                         id="filter-text-box"
@@ -115,8 +98,7 @@ const AllWebtoonListView = () => {
                     rowSelection='single'
                     pagination={true}
                     paginationPageSize={20}
-                    onGridReady={onGridReady} // 이 부분 추가
-                    // Assign the handleRowClick function to the onCellClicked event
+                    onGridReady={onGridReady} 
                     onCellClicked={handleRowClick}
                   />
               </div>
@@ -160,6 +142,7 @@ padding-left: 70px;
 
 const SelectTagContainer = styled.div`
 margin-bottom: 20px;
+margin-left: 65%;
 
 select {
   width: 150px;

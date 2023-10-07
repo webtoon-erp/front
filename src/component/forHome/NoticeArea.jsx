@@ -1,7 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import axios from 'axios'; // axios 추가
+
+const NoticeArea = () => {
+  const [data, setData] = useState([]); // 데이터 상태 추가
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
+  useEffect(() => {
+    // HTTP GET 요청 보내기
+    axios.get('http://146.56.98.153:8080/home', {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        // 응답이 성공하면 데이터를 설정하고 로딩 상태를 false로 변경
+        setData(response.data);
+        setIsLoading(false);
+      } else {
+        console.error('데이터를 불러오는데 실패했습니다.');
+      }
+    })
+    .catch((error) => {
+      console.error('데이터를 불러오는데 실패했습니다.', error);
+    });
+  }, []); // 한 번만 실행되도록 빈 배열을 전달합니다.
+
+  return (
+    <NoticeAreaContainer>
+      <Title>공지사항</Title>
+      <ButtonContainer>
+        <Link to="/notice">
+          <button>전체 공지사항 보기</button>
+        </Link>
+      </ButtonContainer>
+      <CardGrid>
+        {data.map((card) => (
+          <Link to={card.url} key={card.id}>
+            {/* Replace CardButton with SkeletonCardButton during loading */}
+            {isLoading ? (
+              <SkeletonCardButton>
+                <Skeleton width={80} height={120} />
+              </SkeletonCardButton>
+            ) : (
+              <CardButton>
+                <CardTitle>{card.title}</CardTitle>
+                <CardContent>{card.noticeType}</CardContent>
+                <CardContent>{card.noticeDate}</CardContent>
+              </CardButton>
+            )}
+          </Link>
+        ))}
+      </CardGrid>
+    </NoticeAreaContainer>
+  );
+};
+
+export default NoticeArea;
 
 const NoticeAreaContainer = styled.div`
   display: flex;
@@ -43,6 +101,10 @@ const CardButton = styled.button`
   cursor: pointer;
 `;
 
+const SkeletonCardButton = styled(CardButton)`
+  background-color: #f9f9f9;
+`;
+
 const CardTitle = styled.h3`
   font-weight: bold;
   margin-bottom: 8px;
@@ -59,86 +121,3 @@ const CardContent = styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
-
-const FakeData = [
-  {
-    id: 1,
-    title: 'Card 1',
-    content:
-      'This is the content of Card 1. It can be a bit longer and may overflow to the next line.',
-    url: '/card1',
-  },
-  {
-    id: 2,
-    title: 'Card 2',
-    content:
-      'This is the content of Card 2. It can be a bit longer and may overflow to the next line.',
-    url: '/card2',
-  },
-  {
-    id: 3,
-    title: 'Card 3',
-    content:
-      'This is the content of Card 3. It can be a bit longer and may overflow to the next line.',
-    url: '/card3',
-  },
-  {
-    id: 4,
-    title: 'Card 4',
-    content:
-      'This is the content of Card 4. It can be a bit longer and may overflow to the next line.',
-    url: '/card4',
-  },
-  {
-    id: 5,
-    title: 'Card 5',
-    content:
-      'This is the content of Card 5. It can be a bit longer and may overflow to the next line.',
-    url: '/card5',
-  },
-  {
-    id: 6,
-    title: 'Card 6',
-    content:
-      'This is the content of Card 6. It can be a bit longer and may overflow to the next line.',
-    url: '/card6',
-  },
-];
-
-const SkeletonCardButton = styled(CardButton)`
-  background-color: #f9f9f9;
-`;
-
-const NoticeArea = () => {
-  const isLoading = false; // Set the loading state based on your data loading process
-
-  return (
-    <NoticeAreaContainer>
-      <Title>공지사항</Title>
-      <ButtonContainer>
-        <Link to="/notice">
-          <button>전체 공지사항 보기</button>
-        </Link>
-      </ButtonContainer>
-      <CardGrid>
-        {FakeData.map((card) => (
-          <Link to={card.url} key={card.id}>
-            {/* Replace CardButton with SkeletonCardButton during loading */}
-            {isLoading ? (
-              <SkeletonCardButton>
-                <Skeleton width={80} height={120} />
-              </SkeletonCardButton>
-            ) : (
-              <CardButton>
-                <CardTitle>{card.title}</CardTitle>
-                <CardContent>{card.content}</CardContent>
-              </CardButton>
-            )}
-          </Link>
-        ))}
-      </CardGrid>
-    </NoticeAreaContainer>
-  );
-};
-
-export default NoticeArea;

@@ -88,17 +88,17 @@ const handleSubmitClick = () => {
   }
 
 
-  // POST 요청을 보냅니다.
+  // POST 요청
   axios
     .post('http://146.56.98.153:8080/webtoon', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data', // 필요한 경우 Content-Type을 설정합니다.
+        'Content-Type': 'multipart/form-data', 
       },
     })
     .then((result) => {
       console.log('result', result);
       if (result.status === 200) {
-        message.success('작품과 썸네일이 정상적으로 등록되었습니다.');
+        message.success('작품이 정상적으로 등록되었습니다.');
       } else {
         message.error('작품이 정상적으로 등록되지 않았습니다.');
       }

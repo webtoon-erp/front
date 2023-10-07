@@ -30,8 +30,8 @@ export default function WorkExtension() {
   
           setOvertimeData(overtimeHoursArray);
   
-          if (chartCanvas.chart) {
-            chartCanvas.chart.destroy();
+          if (chartRef.current.chart) {
+            chartRef.current.chart.destroy();
           }
   
           const chart = new Chart(chartCanvas, {

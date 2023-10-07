@@ -6,159 +6,203 @@ import theme from '../../../style/theme';
 import { message } from 'antd';
 import CommentComponent from '../../comments/commentComponent';
 
-const FakeProfileData = [
-    {
-        id: 1,
-        title: '엔딩, 바꿔보려합니다 1화 제목',
-        author: '나는 작가',
-        manager: '담당자1',
-        thumnailPreview: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbxgxO2HlWpJnmMF19T9mPjPypU5Q7R5Dcfg&usqp=CAU',
-        content: `엔딩, 바꿔보려합니다 1화입니다.
-        잘 부탁드립니다.`,
-    },
-];
 
-
-const ForEpisodeDetail = (Id) => {
-    //수정 가능 여부
-    const [editable, setEditable] = useState('false');
-    const [enrollable, setEnrollable] = useState('false');
+const ForEpisodeDetail = ({Id}) => {
+    const [userId, setUserId] = useState('');
+    useEffect(() => {
+      setUserId(sessionStorage.getItem("employeeId"));
+    }, [userId]);
 
     //editing
+    const [webtoonData, setWebtoonData] = useState(null);
     const [isEditing, setIsEditing] = useState(false); 
-    const [editedAuthor, setEditedAuthor] = useState(FakeProfileData[0].author);
-    const [editedManager, setEditedManager] = useState(FakeProfileData[0].manager);
-    const [editedTitle, setEditedTitle] = useState(FakeProfileData[0].title);
-    const [editedContent, setEditedContent] = useState(FakeProfileData[0].content);
+    const [editedAuthor, setEditedAuthor] = useState('작가');
+    const [editedManager, setEditedManager] = useState();
+    const [editedTitle, setEditedTitle] = useState();
+    const [editedContent, setEditedContent] = useState('작가의 말');
     const [thumbnailPreview, setThumbnailPreview] = useState(null);
-
-    
-    const [data, setData] = useState({});
+    const [episodePreview, setEpisodePreview] = useState(null);
 
     useEffect(() => {
-        axios.get('http://146.56.98.153:8080/webtoon'+Id).then((response)=> {
-          setData(response.Result.webtoon);
-          console.log(response);
-        })
-      }, []);
+        const data = {
+            webtoonId: Id,
+        };
+    
+        axios
+            .get('http://146.56.98.153:8080/webtoonDt/'+Id, {
+            data: data,  
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            })
+            .then((response) => {
+            if (response.status === 200) {
+                console.log("epiDetail", response.data)
+                setWebtoonData(response.data.info);
+                setEditedTitle(response.data.info.subTitle)
+                setThumbnailPreview(response.data.resourceThumb)
+                //setEditedAuthor(response.data.info.subTitle)
+                setEditedManager(response.data.info.episodeNum)
+                //setEditedContent(response.data.resourceEpisode)
+                setEpisodePreview(response.data.resourceEpisode)
+            }
+            })
+            .catch((error) => {
+            message.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+    }, []);
 
     const handleSaveChanges = () => {
-         (axios.post('http://146.56.98.153:8080/webtoon'+Id),
-        {
-            title: editedTitle,           
-            artist: editedAuthor,  
-            illustrator: editedManager,
-            intro: editedContent,
-            uploadFile: thumbnailPreview,
-        },
-        {
-            headers: {
+        // JSON 데이터 객체 생성
+        const jsonData = {
+            subTitle: editedTitle,
+            content: editedContent,
+            managerId: userId, 
+        };
+        const formData = new FormData();
+
+        // JSON 데이터를 'dto' 키로 추가
+        formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+    
+        //여기가 다른데 이 부분에서 400에러?
+        formData.append('file', thumbnailPreview);
+
+        // 웹툰 ID (Path Parameter)
+        const webtoonId = Id;
+    
+        axios
+            .put(`http://146.56.98.153:8080/webtoonDt/${webtoonId}`, formData, {
+                params: {
+                    webtoonId: webtoonId,
+                },
+                headers: {
+                    'Content-Type': 'multipart/form-data', // 파일 업로드를 위해 Content-Type 변경
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    message.success('회차 상세정보가 정상적으로 수정되었습니다.');
+                    setIsEditing(false);
+                    // 작품 정보 업데이트
+                    setWebtoonData((prevData) => ({
+                        ...prevData,
+                        subTitle: editedTitle,
+                        content: editedContent,
+                        managerId: userId,
+                    }));
+                }
+            })
+            .catch((error) => {
+                message.error('회차 상세정보가 정상적으로 수정되지 않았습니다.');
+            });
+    };
+    
+
+    const handleDelete = () => {
+        const headers = {
             'Content-Type': 'application/json;charset=UTF-8',
-            Location : "/webtoon/{webtoonId}"
-            },
+        };
+        axios
+        .delete('http://146.56.98.153:8080/webtoonDt/'+Id, {
+            headers: headers,
         })
-        .then((result) => {
-            if (result.id) {
-            message.success('작품이 정상적으로 수정되었습니다.');
-        } 
+        .then((response) => {
+            message.success('삭제 성공:', response);
+            navigate(`/toonDetail/${Id}`);
         })
         .catch((error) => {
-        message.error('작품이 정상적으로 수정되지 않았습니다.');
-        })
+            message.error('삭제 실패:', error);
+        });
     }
     
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate("/episodeAdd");
-    }
-
     const handleToggleEdit = () => {
-      setIsEditing((prevState) => !prevState);
-  };
+        setIsEditing((prevState) => !prevState);
+    };
     
 
     const handleAuthorChange = (e) => {
-      setEditedAuthor(e.target.value);
-  };
-
-  const handleManagerChange = (e) => {
-      setEditedManager(e.target.value);
-  };
-
-  const handleTitleChange = (e) => {
-      setEditedTitle(e.target.value);
-  };
-
-  const handleContentChange = (e) => {
-      setEditedContent(e.target.value);
-  };
-    
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setThumbnailPreview(event.target.result);
+        setEditedAuthor(e.target.value);
     };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
+    const handleManagerChange = (e) => {
+        setEditedManager(e.target.value);
+    };
 
-      // 데이터로 수정
+    const handleTitleChange = (e) => {
+        setEditedTitle(e.target.value);
+    };
+
+    const handleContentChange = (e) => {
+        setEditedContent(e.target.value);
+    };
+        
+    const handleThumbnailChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+        setThumbnailPreview(event.target.result);
+        };
+
+        if (file) {
+        reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
             <RegistBtnContainer>
-                      <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
-                                  {isEditing ? '등 록' : '수 정'}
-                      </Btn>
+                <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
+                {isEditing ? '등 록' : '수 정'}
+                </Btn>
+                <Btn onClick={handleDelete}> 삭제 </Btn>
             </RegistBtnContainer>
-            
+
+    
             <WebtoonContainer>
                         <WebtoonImgContainer>
-                            <Img src={data.thumbnailFileName} alt={` ${data.title}의 썸네일 사진`} />
+                            <Img src={thumbnailPreview} alt={` ${thumbnailPreview}의 썸네일 사진`} />
                         </WebtoonImgContainer>
                         
                         {!isEditing ? ( 
                         <>
-                        <ToonInsideInfoBox>
-                          <ToonTitle>{data.episode.subTitle}</ToonTitle>
-                          
-                          <ToonInfoContainer>
-                              <ToonInfoBox>작가 <ToonInfoData>{data.artist}</ToonInfoData></ToonInfoBox>
-                              <ToonInfoBox>담당자 <ToonInfoData>{data.episode.manager}</ToonInfoData></ToonInfoBox>
-                          </ToonInfoContainer>
-                          <ToonInsideInfoTextBox>
-                              <ToonInfoBox>작가의 말 <ToonInfoTextData>{data.content}</ToonInfoTextData></ToonInfoBox>
-                          </ToonInsideInfoTextBox>
-                          </ToonInsideInfoBox>
+                            <ToonInsideInfoBox>
+                            <ToonTitle>{editedTitle}</ToonTitle>
+                            
+                            <ToonInfoContainer>
+                                <ToonInfoBox>작가 <ToonInfoData>{editedAuthor}</ToonInfoData></ToonInfoBox>
+                                <ToonInfoBox>회차 <ToonInfoData>{editedManager}</ToonInfoData></ToonInfoBox>
+                            </ToonInfoContainer>
+                            <ToonInsideInfoTextBox>
+                                <ToonInfoBox>작가의 말 <ToonInfoTextData>{editedContent}</ToonInfoTextData></ToonInfoBox>
+                            </ToonInsideInfoTextBox>
+                            </ToonInsideInfoBox>
+                            </>
+                            ):(
+                        <>
+                            <ToonInsideInfoBox>
+                            <ToonTitle><InputContainer><InputTitleField type="text" value={editedTitle} onChange={handleTitleChange} /></InputContainer></ToonTitle>
+                            
+                            <ToonInfoContainer>
+                            <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
+                            <ToonInfoBox>회차 <InputContainer><InputField type="text" value={editedManager} onChange={handleManagerChange} /></InputContainer></ToonInfoBox>
+                            </ToonInfoContainer>
+                            <ToonInsideInfoTextBox>
+                                <ToonInfoBox>작가의 말 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
+                            </ToonInsideInfoTextBox>
+                            </ToonInsideInfoBox>
                         </>
-                        ):(
-                          <>
-                          <ToonInsideInfoBox>
-                              <ToonTitle><InputContainer><InputTitleField type="text" value={editedTitle} onChange={handleTitleChange} /></InputContainer></ToonTitle>
-                              
-                              <ToonInfoContainer>
-                                <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
-                                <ToonInfoBox>담당자 <InputContainer><InputField type="text" value={editedManager} onChange={handleManagerChange} /></InputContainer></ToonInfoBox>
-                              </ToonInfoContainer>
-                               <ToonInsideInfoTextBox>
-                                 <ToonInfoBox>작가의 말 <InputContainer><InputTextField type="text" value={editedContent} onChange={handleContentChange} /></InputContainer></ToonInfoBox>
-                               </ToonInsideInfoTextBox>
-                              </ToonInsideInfoBox>
-                              
-                          </>
                         ) }     
                         
                     </WebtoonContainer>
             <WebtoonWorksContainer>
-                <ToonImg src={FakeProfileData[0].thumnailPreview} alt={` ${data.title}의 작품 사진`} />
+                <ToonImg src={episodePreview} alt={` ${episodePreview}의 작품 사진`} />
             </WebtoonWorksContainer>
             
             <CommentContainer>
-              <CommentComponent />
+            <CommentComponent webtoonDtId={Id}/>
             </CommentContainer>
 
         </>

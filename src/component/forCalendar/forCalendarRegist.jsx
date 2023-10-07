@@ -17,7 +17,6 @@ const ForCalendarRegist = () => {
 
   useEffect(() => {
     setUserId(sessionStorage.getItem("employeeId"));
-    console.log("token app: ", userId);
   }, [userId]);
 
   const handleSubmitClick = () => {
