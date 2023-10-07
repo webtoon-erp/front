@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import { Button, Upload, message } from 'antd';
 
-const ToonDetailComponent = ({ webtoonId }) => {
+const ToonDetailComponent = ({Id}) => {
   const [webtoonData, setWebtoonData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedAuthor, setEditedAuthor] = useState('');
@@ -15,32 +16,36 @@ const ToonDetailComponent = ({ webtoonId }) => {
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const url = `http://146.56.98.153:8080/webtoon/${webtoonId}`;
   
-    axios.get(url, {
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    })
+  useEffect(() => {
+    const data = {
+      webtoonId: Id,
+    };
+  
+    axios
+      .get('http://146.56.98.153:8080/webtoon/'+Id, {
+        data: data,  
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
-          // Rest of your code
-          // ...
-        } else {
-          window.alert('데이터를 불러오는데 실패했습니다.');
+          setWebtoonData(response.data.info);
+          setEditedAuthor(response.data.info.artist)
+          setEditedDrawer(response.data.info.illustrator)
+          setEditedDay(response.data.info.category)
+          setEditedKeyword(response.data.info.keyword)
+          setEditedContent(response.data.info.intro)
         }
       })
       .catch((error) => {
         console.error('데이터를 불러오는데 실패했습니다.', error);
-        window.alert('데이터를 불러오는데 실패했습니다.');
       });
-  }, [webtoonId]);
-  
+  }, [Id]);
 
   const handleClick = () => {
-    navigate("/episodeAdd");
+    navigate(`/episodeAdd/${Id}`);
   };
 
   const handleToggleEdit = () => {
@@ -49,6 +54,7 @@ const ToonDetailComponent = ({ webtoonId }) => {
 
   const handleAuthorChange = (e) => {
     setEditedAuthor(e.target.value);
+    return e.target.value;
   };
 
   const handleDrawerChange = (e) => {
@@ -81,33 +87,62 @@ const ToonDetailComponent = ({ webtoonId }) => {
   };
 
   const handleSaveChanges = () => {
-    // 수정된 데이터를 서버에 전송
-    axios.post(`http://146.56.98.153:8080/register/${webtoonId}`,
-      {
-        editedAuthor,
-        editedDrawer,
-        editedDay,
-        editedKeyword,
-        editedContent,
-        thumbnailPreview,
-      },
-      {
+    // JSON 데이터 객체 생성
+    const jsonData = {
+      title: webtoonData.title,
+      intro: editedContent,
+      artist: editedAuthor,
+      illustrator: editedDrawer,
+      category: editedDay,
+      keyword: editedKeyword, 
+    };
+
+    // FormData 객체 생성
+    const formData = new FormData();
+
+    // JSON 데이터를 'dto' 키로 추가
+    formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+    // 웹툰 ID (Path Parameter)
+    const webtoonId = Id;
+
+    // PUT 요청 보내기
+    axios
+      .put(`http://146.56.98.153:8080/webtoon/${webtoonId}`, formData, {
+        params: {
+          webtoonId: webtoonId,
+        },
         headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
+          'Content-Type': 'multipart/form-data', // 파일 업로드를 위해 Content-Type 변경
         },
       })
       .then((result) => {
-        console.log(result);
-        console.log("enroll!");
-        window.alert('작품 상세정보가 정상적으로 수정되었습니다.');
+        message.success('작품 상세정보가 정상적으로 수정되었습니다.');
+        setIsEditing(false);
+        // 작품 정보 업데이트
+        setWebtoonData((prevData) => ({
+          ...prevData,
+          intro: editedContent,
+          artist: editedAuthor,
+          illustrator: editedDrawer,
+          category: editedDay,
+          keyword: editedKeyword,
+        }));
       })
       .catch((error) => {
-        window.alert('작품 상세정보가 정상적으로 수정되지 않았습니다.');
-        console.log(error);
+        message.error('작품 상세정보가 정상적으로 수정되지 않았습니다.');
       });
-  };
+};
+
 
     return (
+      <>
+      <RegistBtnContainer>
+                      <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
+                                  {isEditing ? '등 록' : '수 정'}
+                      </Btn>
+                      <Btn onClick={handleClick}>회차 등록</Btn>
+            </RegistBtnContainer>
         <WebtoonContainer>
         <WebtoonImgContainer>
           <Img src={webtoonData ? webtoonData.thumbnailFileName : ''} alt={webtoonData ? `${webtoonData.thumbnailFileName}의 썸네일 사진` : ''} />
@@ -141,7 +176,7 @@ const ToonDetailComponent = ({ webtoonId }) => {
           )}
         </ToonInsideInfoBox>
       </WebtoonContainer>
-      
+      </>  
     )
 };
 
@@ -193,7 +228,7 @@ const InputTextField = styled.textarea`
 
 const RegistBtnContainer = styled.div`
     display: flex;
-    padding-left: 58%;
+    padding-left: 65%;
     margin-bottom: 20px;
 `;
 

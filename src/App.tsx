@@ -164,9 +164,9 @@ function App() {
                 <Route path="/itRequestView" element={<ItRequestView />} />
                 <Route path="/itRequestDetail" element={<ItRequestDetail />} />
                 <Route path="/toonAdd" element={<ToonAdd/>} />
-                <Route path="/episodeAdd" element={<EpisodeAdd />} />
+                <Route path="/episodeAdd/:Id" element={<EpisodeAdd />} />
                 <Route path="/toonView" element={<ToonView />} />
-                <Route path="/toonDetail/:webtoonId" element={<ToonDetail />} />
+                <Route path="/toonDetail/:Id" element={<ToonDetail />} />
                 <Route path="/allToonView" element={<AllToonView />} />
                 <Route path="/epRequestAdd" element={<EpRequestAdd />} />
                 <Route path="/epMyDocsView" element={<EpMyDocsView />} />
@@ -184,7 +184,7 @@ function App() {
                 <Route path="/scheduleAdd" element={<ScheduleAdd />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/scheduleDetail" element={<ScheduleDetail />} />
-                <Route path="/episodeDetail" element={<EpisodeDetail />} />
+                <Route path="/episodeDetail/:Id" element={<EpisodeDetail />} />
 
                 {tabElements.map((tab, index) => (
                   <Route

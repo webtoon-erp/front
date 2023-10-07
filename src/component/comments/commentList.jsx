@@ -1,18 +1,19 @@
 import styled from 'styled-components';
 
-const CommentList = ({list}) => {
-        return (
-            <UnorderedList>
-                {list.map((comment, index) => (
-                    <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                        <List>{comment.userid}</List>
-                        <List>{comment.content}</List>
-                        <List>{comment.date}</List>
-                    </div>
-                ))}
-            </UnorderedList>
-        );
-};
+const CommentList = ({ list }) => {
+    return (
+      <UnorderedList>
+        {list.map((comment, index) => (
+          <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
+            <List>{comment.userid}</List>
+            <List>{comment.content}</List>
+            <List>{comment.date}</List> {/* date 속성만 렌더링 */}
+          </div>
+        ))}
+      </UnorderedList>
+    );
+  };
+  
 
 export default CommentList;
 

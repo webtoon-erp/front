@@ -2,19 +2,20 @@ import ToonDetailComponent from "../../component/forWebtoon/forToonDetail/toonDe
 import styled from 'styled-components'
 import ToonGrid from "../../component/forWebtoon/forToonDetail/toonGrid";
 import theme from '../../style/theme';
+import { useParams } from 'react-router-dom';
 
 export default function ToonDetail (){
-    
+    const { Id } = useParams();
 
     return(
         <>
          <Title>웹툰 상세보기</Title>
          <Container>
             <ToonDetailContainer>
-                <ToonDetailComponent/>
+                <ToonDetailComponent Id={Id}/>
             </ToonDetailContainer>
             <ToonGridContainer>
-                <ToonGrid />
+                <ToonGrid Id={Id}/>
             </ToonGridContainer>
          </Container>
         </>
