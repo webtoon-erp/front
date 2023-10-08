@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { AgGridReact } from 'ag-grid-react';
@@ -7,6 +8,24 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const AllSalaryView = () => {
     const gridRef = useRef(null);
+    const [rowData, setRowData] = useState([]);
+
+    useEffect(() => {
+        // Make a GET request to fetch data
+        axios.get('http://146.56.98.153:8080/pays/all', {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                setRowData(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+    }, []);
 
     const columnDefs = [      
         {field: '이름', sortable: true, filter: true, width: '155px', headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: false},
@@ -23,11 +42,11 @@ const AllSalaryView = () => {
         }},
     ];
 
-    const rowData = [
-        {이름: '안유진', 사번 : '1234', 부서: '웹툰관리부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content1'},
-        {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content2'},
-        {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급', url: '/content3'},
-    ];
+    // const rowData = [
+    //     {이름: '안유진', 사번 : '1234', 부서: '웹툰관리부', 팀: '1팀', 급여: '3,084,000', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content1'},
+    //     {이름: '장원영', 사번 : '2345', 부서: '인사부', 팀: '1팀', 급여: '3,100,500', '급여 지급일': '2023-08-01', '지급 상태': '지급', url: '/content2'},
+    //     {이름: '김지원', 사번 : '3456', 부서: '회계부', 팀: '2팀', 급여: '3,516,000', '급여 지급일': '2023-08-01', '지급 상태': '미지급', url: '/content3'},
+    // ];
 
     function handleCellClick(event) {
         const column = event.colDef.field;
@@ -66,6 +85,8 @@ const AllSalaryView = () => {
                             rowSelection='multiple'
                             isRowSelectable={isRowSelectable}
                             onCellClicked= {handleCellClick}
+                            pagination={true}
+                            paginationPageSize={10}
                         />
                 </EntitlementGrid>
         </>
@@ -107,5 +128,5 @@ const FlexBox = styled.div`
 
 const EntitlementGrid = styled.div`
     width: 1020px;
-    height: 260px;
+    height: 500px;
 `
