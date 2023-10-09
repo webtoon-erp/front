@@ -27,8 +27,7 @@ const ServiceRequest = () => {
   const [selectedAssignerId, setSelectedAssigner] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedRequest, setSelectedRequest] = useState('');
-  const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [fileList, setFileList] = useState([]); 
+  const [thumbnailFile, setThumbnailFile] = useState(null); 
   const [employeeToken, setEmployeeToken] = useState('');
   const [employeeId, setEmployeeId] = useState('');
 
@@ -37,46 +36,32 @@ const ServiceRequest = () => {
   }, []);
 
   useEffect(() => {
-    setEmployeeToken(sessionStorage.getItem("employeeToken"));
+    setEmployeeToken(sessionStorage.getItem("accessToken"));
+    console.log("employeeToken", employeeToken)
   }, []);
 
   const handleSubmitClick = () => {
-    // 필수 필드가 비어있는지 확인
-    if (
-      !selectedRequestType ||
-      !selectedTitle ||
-      !selectedRequest ||
-      !selectedDate ||
-      !selectedAssignerId ||
-      !employeeId ||
-      !rowData,
-      !thumbnailFile
-    ) {
-      message.error('모든 필수 항목을 입력해주세요.');
-      console.log(
-        selectedRequestType,
-        selectedTitle ,
-        selectedRequest,
-        selectedDate ,
-        selectedAssignerId ,
-        employeeId ,
-        rowData,
-        thumbnailFile
-      )
-      return; // 필수 필드 중 하나라도 비어 있으면 요청을 보내지 않습니다.
-    }
 
     if (selectedRequest === "업무 지원") {
+      if (
+        !selectedRequestType ||
+        !selectedTitle ||
+        !selectedRequest ||
+        !selectedDate ||
+        !selectedAssignerId ||
+        !employeeId 
+      ) {
+        message.error('모든 필수 항목을 입력해주세요.');
+      }
     // 업무지원
     const requestData = {
       reqType: "assist",
       title: selectedTitle,
       content: selectedRequest,
-      step: 0,
+      step: 1,
       dueDate: selectedDate,
       reqUserId: employeeId,
       itUserId: selectedAssignerId,
-      requestDts: rowData,
     };
   
     // FormData 객체 생성
@@ -95,9 +80,9 @@ const ServiceRequest = () => {
       selectedDate ,
       selectedAssignerId ,
       employeeId ,
-      rowData,
       thumbnailFile
     )
+    console.log("employeeToken", employeeToken)
 
     axios
       .post('http://146.56.98.153:8080/request', formData, {
@@ -108,25 +93,49 @@ const ServiceRequest = () => {
       })
       .then((result) => {
         if (result.status === 200) {
-          message.success(`[ITSM] 요청이 정상적으로 등록되었습니다.`);
+          message.success(`[ITSM] 지원 요청이 정상적으로 등록되었습니다.`);
         }
       })
       .catch((error) => {
-        message.error('[ITSM] 요청이 정상적으로 등록되지 않았습니다.');
+        message.error('[ITSM] 지원 요청이 정상적으로 등록되지 않았습니다.');
       });
   }
   else {
     // 구매
+
+    if (
+      !selectedRequestType ||
+      !selectedTitle ||
+      !selectedRequest ||
+      !selectedDate ||
+      !selectedAssignerId ||
+      !employeeId ||
+      !rowData
+    ) {
+      message.error('모든 필수 항목을 입력해주세요.');
+      console.log(
+        selectedRequestType,
+        selectedTitle ,
+        selectedRequest,
+        selectedDate ,
+        selectedAssignerId ,
+        employeeId ,
+        rowData,
+        thumbnailFile
+      )
+      return; // 필수 필드 중 하나라도 비어 있으면 요청을 보내지 않습니다.
+    }
     const requestData = {
       reqType: "purchase",
       title: selectedTitle,
       content: selectedRequest,
-      step: 0,
+      step: 1,
       dueDate: selectedDate,
       reqUserId: employeeId,
       itUserId: selectedAssignerId,
       requestDts: rowData,
     };
+    console.log("employeeToken", employeeToken)
   
     // FormData 객체 생성
     const formData = new FormData();
@@ -157,11 +166,11 @@ const ServiceRequest = () => {
       })
       .then((result) => {
         if (result.status === 200) {
-          message.success(`[ITSM] 요청이 정상적으로 등록되었습니다.`);
+          message.success(`[ITSM] 구매 요청이 정상적으로 등록되었습니다.`);
         }
       })
       .catch((error) => {
-        message.error('[ITSM] 요청이 정상적으로 등록되지 않았습니다.');
+        message.error('[ITSM] 구매 요청이 정상적으로 등록되지 않았습니다.');
       });
   };
 }
@@ -176,7 +185,6 @@ const ServiceRequest = () => {
     })
     .then((response) => {
       if (response.status === 200) {
-        console.log("it responese", response.data)
         setRowData2(response.data);
       }
     })
@@ -257,14 +265,14 @@ const ServiceRequest = () => {
 
   //요청 상품
   const [columnDefs, setColumnDefs] = useState([
-    { headerName: '요청 품목', field: 'item', editable: true,
+    { headerName: '요청 품목', field: 'content', editable: true,
           headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
-    { headerName: '요청 수량', field: 'quantity', editable: true , width: 100 },
-    { headerName: '예상 비용(단위:만원)', field: 'price', editable: true , width: 200 },
+    { headerName: '요청 수량', field: 'count', editable: true , width: 100 },
+    { headerName: '예상 비용(단위:만원)', field: 'cost', editable: true , width: 200 },
   ]);
  
   const createNewRowData = () => {
-    return { item: '', quantity: 0, price: 0 };
+    return { content: '', count: 0, cost: 0 };
   };
   
   let count = 1;
@@ -277,11 +285,11 @@ const ServiceRequest = () => {
     var data = event.data;
     console.log(
       'onRowValueChanged: (' +
-        data.item +
+        data.content +
         ', ' +
-        data.quantity +
+        data.count +
         ', ' +
-        data.price +
+        data.cost +
         ')'
     );
     const updatedRowData = [...rowData];
@@ -295,15 +303,14 @@ const ServiceRequest = () => {
     rowData.push(data);
   }, [rowData]);
 
-  const addItems = useCallback((addIndex) => {
+  const addItems = useCallback(() => {
     count++;
     const newItems = [
         createNewRowData(),
     ];
 
     gridRef.current.api.applyTransaction({
-        add: newItems,
-        addIndex: count,
+        add: newItems
     });
   }, []);
 
@@ -331,12 +338,6 @@ const ServiceRequest = () => {
       savedData.itRequestAdd.selectedAssigner = selectedRows[0].employeeId
     } 
   }, []);
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFileList({ files: files });
-  };
-
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -371,6 +372,53 @@ const ServiceRequest = () => {
                 placeholderText="납기일"
               />
           </Container>
+
+            <Container>
+            <InputTitle>요청 타입</InputTitle><Div/>
+                <Select value={selectedRequestType} onChange={SelectRequestTypehandler}>
+                            <Option value="구매">구매 </Option>
+                            <Option value="업무 지원">업무 지원</Option>
+                </Select>
+            </Container>
+         
+            <Container>
+                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" value={selectedTitle} onChange={SelectTitlehandler}/>
+            </Container>
+            <Container>
+            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" value={selectedRequest} onChange={SelectRequesthandler}/>
+          </Container>
+
+          </RangeContainer1>
+        <RangeContainer4>
+          <Container>
+            <InputTitle>요청 상품</InputTitle><Div2/>
+            <GridContainer> 
+            <div id='detailGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                    <BtnBox>
+                        <Btn onClick={() => addItems()}>추 가</Btn>
+                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
+                        <Btn onClick={onBtStopEditing}>등 록</Btn>
+                    </BtnBox>
+                    <div style={{ flexGrow: '1' }}>
+                        <TableGrid className="ag-theme-alpine">
+                            <AgGridReact 
+                                ref={gridRef}
+                                rowData={rowData}
+                                columnDefs={columnDefs}
+                                defaultColDef={defaultColDef}
+                                rowSelection="multiple"
+                                animateRows={true}
+                                editType="fullRow"
+                                onCellValueChanged={onCellValueChanged}
+                                onRowValueChanged={onRowValueChanged}
+                            />
+                        </TableGrid>
+                    </div>
+                </div>
+              </GridContainer>
+            </Container>
+            <Div3 />
+
             <Container>
                 <InputTitle>담당자</InputTitle><Div/>
                 <Button type="primary" onClick={() => setModalOpen(true)}>
@@ -406,52 +454,6 @@ const ServiceRequest = () => {
                       </GridContainer>
                   </Modal>
             </Container>
-
-            <Container>
-            <InputTitle>요청 타입</InputTitle><Div/>
-                <Select value={selectedRequestType} onChange={SelectRequestTypehandler}>
-                            <Option value="구매">구매 </Option>
-                            <Option value="업무 지원">업무 지원</Option>
-                </Select>
-            </Container>
-         
-            <Container>
-                <InputTitle>제목</InputTitle><Div2/><Input type="text" placeholder="제목" value={selectedTitle} onChange={SelectTitlehandler}/>
-            </Container>
-            <Container>
-            <InputTitle>요청사항</InputTitle><TextArea placeholder="요청 사항" value={selectedRequest} onChange={SelectRequesthandler}/>
-          </Container>
-
-          </RangeContainer1>
-        <RangeContainer4>
-          <Container>
-            <InputTitle>요청 상품</InputTitle><Div2/>
-            <GridContainer> 
-            <div id='detailGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                    <BtnBox>
-                        <Btn onClick={() => addItems(count)}>추 가</Btn>
-                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                        <Btn onClick={onBtStopEditing}>등 록</Btn>
-                    </BtnBox>
-                    <div style={{ flexGrow: '1' }}>
-                        <TableGrid className="ag-theme-alpine">
-                            <AgGridReact 
-                                ref={gridRef}
-                                rowData={rowData}
-                                columnDefs={columnDefs}
-                                defaultColDef={defaultColDef}
-                                rowSelection="multiple"
-                                animateRows={true}
-                                editType="fullRow"
-                                onCellValueChanged={onCellValueChanged}
-                                onRowValueChanged={onRowValueChanged}
-                            />
-                        </TableGrid>
-                    </div>
-                </div>
-              </GridContainer>
-            </Container>
-            <Div3 />
             
             <Container>
               <InputTitle>첨부 파일</InputTitle>
@@ -494,6 +496,7 @@ const Btn = styled.button`
     margin: 0px 15px 0px 20px;
     float: right;
 `
+
 const BtnBox = styled.div`
     margin: 20px 0px 20px 10px;
     display: flex;
