@@ -58,23 +58,26 @@ const ViewList = () => {
     };
 
     useEffect(() => {
-        axios.get('http://146.56.98.153:8080/', {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-        })
-        .then((response) => {
-            if (response.status === 200) {
-                setRowData(response.data);
-                console.log("response.data", response.data);
-            } else {
-                message.error('데이터를 불러오는데 실패했습니다.');
-            }
-        })
-        .catch((error) => {
-            console.error('데이터를 불러오는데 실패했습니다.', error);
-            message.error('데이터를 불러오는데 실패했습니다.');
-        });
+        const userId = sessionStorage.getItem('employeeId');
+
+        if(userId) {
+            axios.get(`http://146.56.98.153:8080/request/all/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setRowData(response.data);
+                    console.log("response.data", response.data);
+                } else {
+                    message.error('데이터를 불러오는데 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+        }
     }, []);
     
     return(
