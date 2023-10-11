@@ -22,9 +22,17 @@ const ProfileInHrSalary = () => {
     const [data, setData] = useState({});
 
     useEffect(() => {
-        axios.get('http://146.56.98.153:8080/pays/{employeeId}').then((response)=> {
-            setData(response.data);
-        })
+        const userId = sessionStorage.getItem('employeeId');
+
+        if (userId) {
+            axios
+                .get(`http://146.56.98.153:8080/pays/${userId}`).then((response)=> {
+                    setData(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching attendance data:', error);
+                });
+        }
     }, []);
 
     return (
@@ -34,15 +42,15 @@ const ProfileInHrSalary = () => {
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>
-                            <Img src={data.imageUrl} alt={`${data.rank} ${data.name}의 프로필 사진`} />
+                            <Img src={data.photo} alt={`${data.position} ${data.name}의 프로필 사진`} />
                         </ProfileImgContainer>
                         <ProfileInfoContainer>
                             <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>부서 <ProfileInfoData>{data.dep}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>직급 <ProfileInfoData>{data.rank}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>사원번호 <ProfileInfoData>{data.empId}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>부서 <ProfileInfoData>{data.deptName}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>직급 <ProfileInfoData>{data.position}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>사원번호 <ProfileInfoData>{data.employeeId}</ProfileInfoData></ProfileInfoBox>
                             <ProfileInfoBox>입사일 <ProfileInfoData>{data.joinDate}</ProfileInfoData></ProfileInfoBox>
-                            <ProfileInfoBox>휴대전화 <ProfileInfoData>{data.phone}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>휴대전화 <ProfileInfoData>{data.tel}</ProfileInfoData></ProfileInfoBox>
                             <ProfileInfoBox>이메일 <ProfileInfoData>{data.email}</ProfileInfoData></ProfileInfoBox>
                         </ProfileInfoContainer>
             </ProfileInHrSalaryContainer>

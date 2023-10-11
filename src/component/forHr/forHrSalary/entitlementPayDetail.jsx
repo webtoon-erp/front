@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
+import axios from 'axios';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { message } from 'antd';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
@@ -24,10 +26,11 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 const EntitlementPayDetail = () => {
     const gridRef = useRef(null);
+    const [rowData, setRowData] = useState([]);
 
-    const rowData = [
-        {'자격증 명': '정보처리기사', 지급액: '150,000'},
-    ];
+    // const rowData = [
+    //     {'자격증 명': '정보처리기사', 지급액: '150,000'},
+    // ];
 
     const onCellValueChanged = useCallback((event) => {
         console.log(
@@ -54,11 +57,28 @@ const EntitlementPayDetail = () => {
         { field: '지급액', editable: true , width: 100 },
     ]);
 
-    // useEffect(() => {
-    //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
-    //     .then(result => result.json())
-    //     .then(rowData => setRowData(rowData))
-    // }, []);
+    useEffect(() => {
+        const userId = sessionStorage.getItem('employeeId');
+
+        if(userId) {
+            axios.get(`http://146.56.98.153:8080/pays/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setRowData(response.data);
+                    console.log("response.data", response.data);
+                } else {
+                    message.error('데이터를 불러오는데 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+        }
+    }, []);
 
     const defaultColDef = useMemo(() => {
         return {

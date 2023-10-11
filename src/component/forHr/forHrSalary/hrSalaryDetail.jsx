@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
@@ -16,7 +17,22 @@ const FakeSalData = [
 
 const HrSalaryDetail = () => {
     const [isEditing, setIsEditing] = useState(false); // 상태 추가
-    const [editedAccount, setEditedAccount] = useState(FakeSalData[0].account);
+    const [editedAccount, setEditedAccount] = useState('');
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem('employeeId');
+
+        if (userId) {
+            axios
+                .get(`http://146.56.98.153:8080/pays/${userId}`).then((response)=> {
+                    setData(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching attendance data:', error);
+                });
+        }
+    }, []);
 
     const handleToggleEdit = () => {
         setIsEditing((prevState) => !prevState);
@@ -48,12 +64,12 @@ const HrSalaryDetail = () => {
                     {!isEditing ? (
                         <SalaryInfoBox>지급계좌 <SalaryInfoData>{editedAccount}</SalaryInfoData></SalaryInfoBox>
                     ) : (
-                        <SalaryInfoBox>지급계좌 <InputContainer><InputField type="text" value={editedAccount} onChange={handleAccountChange} /></InputContainer></SalaryInfoBox>
+                        <SalaryInfoBox>지급계좌 <InputContainer><InputField type="text" value={data.bankAccount} onChange={handleAccountChange} /></InputContainer></SalaryInfoBox>
                     )}
-                        <SalaryInfoBox>연봉 <SalaryInfoData>{FakeSalData[0].anuSal}</SalaryInfoData></SalaryInfoBox>
-                        <SalaryInfoBox>월급 <SalaryInfoData>{FakeSalData[0].monSal}</SalaryInfoData></SalaryInfoBox>
-                        <SalaryInfoBox>추가수당 <SalaryInfoData>{FakeSalData[0].extraPay}</SalaryInfoData></SalaryInfoBox>
-                        <SalaryInfoBox>자격수당 <SalaryInfoData>{FakeSalData[0].entitlementPay}</SalaryInfoData></SalaryInfoBox>
+                        <SalaryInfoBox>연봉 <SalaryInfoData>{data.yearSalary}</SalaryInfoData></SalaryInfoBox>
+                        <SalaryInfoBox>월급 <SalaryInfoData>{data.monthSalary}</SalaryInfoData></SalaryInfoBox>
+                        <SalaryInfoBox>추가수당 <SalaryInfoData>{data.addSalary}</SalaryInfoData></SalaryInfoBox>
+                        <SalaryInfoBox>자격수당 <SalaryInfoData>{data.qualSalary}</SalaryInfoData></SalaryInfoBox>
                 </>
             </DetailContentContainer>
         </HrSalaryDetailContainer>
