@@ -36,7 +36,7 @@ const Header: React.FC = () => {
     return (
             <HeaderStyle>
                     <ContentStyle>
-                    <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="images/Naver_Webtoon_logo.png" />
+                    <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Naver_Line_Webtoon_logo.png" />
                         <FlexBox>
                             <LogoutBtn>Logout</LogoutBtn>
                             <Popover placement="bottom" title={text} content={content} trigger="click">
