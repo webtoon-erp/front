@@ -4,12 +4,16 @@ import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import SearchComponent from '../search';
+import theme from '../../style/theme';
+import { useNavigate } from "react-router-dom";
+import { message } from 'antd';
 import axios from 'axios';
 
 const CalendarComponent = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
   const [rowData, setRowData] = useState([]);
+  const [selectedCellData, setSelectedCellData] = useState(null);
+  
   
   useEffect(() => {
     // Make a GET request to fetch data
@@ -46,19 +50,48 @@ const CalendarComponent = () => {
     onCellClicked: handleCellClick,
   };
 
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    if (selectedCellData) {
+      const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+  
+      axios
+        .delete(`http://146.56.98.153:8080/plans/${selectedCellData}`, 
+        {
+          planId: selectedCellData
+        }
+        ,
+        {
+          headers: headers,
+        })
+        .then((response) => {
+          message.success('삭제 성공:', response);
+          // navigate(`/toonDetail/${planId}`);
+          setSelectedCellData(null);
+        })
+        .catch((error) => {
+          message.error('삭제 실패:', error);
+        });
+    }
+  };
+  
+  
+
   // 셀 클릭 핸들러
   function handleCellClick(event) {
-    const column = event.colDef.field;
-    const rowData = event.data;
-    const url = rowData.url;
-    if (column  && url) {
-      window.location.href = url;
-    }
+    setSelectedCellData(event.data);
   }
 
   return (
     <>
       <Title>일정 조회</Title>
+
+            <RegistBtnContainer>
+              <Btn onClick={() => handleDelete()}>삭제</Btn>
+            </RegistBtnContainer>
       <NoticeContainer>
         
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
@@ -74,6 +107,28 @@ const CalendarComponent = () => {
 };
 
 export default CalendarComponent;
+
+const Btn = styled.button`
+    width: 100px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`
+
+const RegistBtnContainer = styled.div`
+    display: flex;
+    padding-left: 75%;
+    margin-bottom: 20px;
+`;
 
 const NoticeContainer = styled.div`
   display: flex;
