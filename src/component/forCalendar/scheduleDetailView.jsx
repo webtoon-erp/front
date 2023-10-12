@@ -18,6 +18,8 @@ const FakeNoticeData = [
 ];
 
 const ScheduleDetailView = () => {
+
+    
     const navigate = useNavigate();
 
     const handleHomeClick = () => {
