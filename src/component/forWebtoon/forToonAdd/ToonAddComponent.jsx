@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import { Button, Upload, message } from 'antd';
+import { message } from 'antd';
 
 const ToonAddComponent = () => {
   const [selectedTitle, setSelectedTitle] = useState('');

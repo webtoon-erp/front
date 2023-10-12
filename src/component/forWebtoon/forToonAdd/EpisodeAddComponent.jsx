@@ -12,9 +12,11 @@ const EpisodeAddComponent = ({ ToonId }) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [selectedWorks, setSelectedWorks] = useState(null);
   const [employeeId, setEmployeeId] = useState('');
+  const [toonId, setToonId] = useState('');
 
   useEffect(() => {
     setEmployeeId(sessionStorage.getItem("employeeId"));
+    setToonId(localStorage.getItem('Id'));
   }, []);
 
   const handleThumbnailChange = (e) => {
@@ -37,7 +39,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
 
   const handleSubmitClick = () => {
     // 필수 필드 확인
-    if (!ToonId || !selectedTitle || !selectedContent || !employeeId || !selectedThumbnail || !selectedWorks) {
+    if (!toonId || !selectedTitle || !selectedContent || !employeeId || !selectedThumbnail || !selectedWorks) {
       message.error('모든 필수 항목을 입력해주세요.');
       return;
     }
@@ -47,7 +49,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
 
     // JSON 데이터 객체 생성
     const jsonData = {
-      webtoonId: ToonId,
+      webtoonId: toonId,
       subTitle: selectedTitle,
       content: selectedContent,
       employeeId: employeeId,
@@ -60,8 +62,9 @@ const EpisodeAddComponent = ({ ToonId }) => {
     formData.append('thumbnailFile', selectedThumbnail);
 
     // 컨텐츠 파일을 'episodeFile' 키로 추가
-    formData.append('episodeFile', selectedWorks);
+    formData.append('webtoonFile', selectedWorks);
 
+    console.log("formData", formData);
     // POST 요청
     axios
       .post('http://146.56.98.153:8080/webtoonDt', formData, {

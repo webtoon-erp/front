@@ -9,9 +9,11 @@ import CommentComponent from '../../comments/commentComponent';
 
 const ForEpisodeDetail = ({Id}) => {
     const [userId, setUserId] = useState('');
+
     useEffect(() => {
       setUserId(sessionStorage.getItem("employeeId"));
     }, [userId]);
+
 
     //editing
     const [webtoonData, setWebtoonData] = useState(null);
@@ -25,7 +27,7 @@ const ForEpisodeDetail = ({Id}) => {
 
     useEffect(() => {
         const data = {
-            webtoonId: Id,
+            webtoonDtID : Id,
         };
     
         axios
@@ -40,11 +42,11 @@ const ForEpisodeDetail = ({Id}) => {
                 console.log("epiDetail", response.data)
                 setWebtoonData(response.data.info);
                 setEditedTitle(response.data.info.subTitle)
-                setThumbnailPreview(response.data.resourceThumb)
-                //setEditedAuthor(response.data.info.subTitle)
+                setThumbnailPreview(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.thumbnailFileName}`)
+                setEditedAuthor(response.data.info.manager)
                 setEditedManager(response.data.info.episodeNum)
                 //setEditedContent(response.data.resourceEpisode)
-                setEpisodePreview(response.data.resourceEpisode)
+                setEpisodePreview(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.episodeFileName}`)
             }
             })
             .catch((error) => {
@@ -65,15 +67,15 @@ const ForEpisodeDetail = ({Id}) => {
         formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
     
         //여기가 다른데 이 부분에서 400에러?
-        formData.append('file', thumbnailPreview);
+        //formData.append('file', thumbnailPreview);
 
-        // 웹툰 ID (Path Parameter)
+        // 웹툰 회차 ID (Path Parameter)
         const webtoonId = Id;
     
         axios
             .put(`http://146.56.98.153:8080/webtoonDt/${webtoonId}`, formData, {
                 params: {
-                    webtoonId: webtoonId,
+                    webtoonDtId: webtoonId,
                 },
                 headers: {
                     'Content-Type': 'multipart/form-data', // 파일 업로드를 위해 Content-Type 변경
@@ -172,7 +174,7 @@ const ForEpisodeDetail = ({Id}) => {
                             <ToonTitle>{editedTitle}</ToonTitle>
                             
                             <ToonInfoContainer>
-                                <ToonInfoBox>작가 <ToonInfoData>{editedAuthor}</ToonInfoData></ToonInfoBox>
+                                <ToonInfoBox>담당자 <ToonInfoData>{editedAuthor}</ToonInfoData></ToonInfoBox>
                                 <ToonInfoBox>회차 <ToonInfoData>{editedManager}</ToonInfoData></ToonInfoBox>
                             </ToonInfoContainer>
                             <ToonInsideInfoTextBox>
@@ -186,7 +188,7 @@ const ForEpisodeDetail = ({Id}) => {
                             <ToonTitle><InputContainer><InputTitleField type="text" value={editedTitle} onChange={handleTitleChange} /></InputContainer></ToonTitle>
                             
                             <ToonInfoContainer>
-                            <ToonInfoBox>작가 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
+                            <ToonInfoBox>담당자 <InputContainer><InputField type="text" value={editedAuthor} onChange={handleAuthorChange} /></InputContainer></ToonInfoBox>
                             <ToonInfoBox>회차 <InputContainer><InputField type="text" value={editedManager} onChange={handleManagerChange} /></InputContainer></ToonInfoBox>
                             </ToonInfoContainer>
                             <ToonInsideInfoTextBox>

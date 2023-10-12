@@ -37,6 +37,8 @@ const ToonDetailComponent = ({Id}) => {
           setEditedDay(response.data.info.category)
           setEditedKeyword(response.data.info.keyword)
           setEditedContent(response.data.info.intro)
+          setWebtoonData(response.data.info);
+          setThumbnailPreview(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.thumbnailFileName}`);
         }
       })
       .catch((error) => {
@@ -45,6 +47,7 @@ const ToonDetailComponent = ({Id}) => {
   }, [Id]);
 
   const handleClick = () => {
+    localStorage.setItem('Id', Id);
     navigate(`/episodeAdd/${Id}`);
   };
 
@@ -145,20 +148,20 @@ const ToonDetailComponent = ({Id}) => {
             </RegistBtnContainer>
         <WebtoonContainer>
         <WebtoonImgContainer>
-          <Img src={webtoonData ? webtoonData.thumbnailFileName : ''} alt={webtoonData ? `${webtoonData.thumbnailFileName}의 썸네일 사진` : ''} />
+          <Img src={thumbnailPreview} alt={webtoonData ? `${webtoonData.thumbnailFileName}의 썸네일 사진` : ''} />
         </WebtoonImgContainer>
         <ToonInsideInfoBox>
           <ToonTitle>{webtoonData ? webtoonData.title : ''}</ToonTitle>
           {!isEditing ? (
             <>
               <ToonInfoContainer>
-                <ToonInfoBox>작가 <ToonInfoData>{webtoonData ? webtoonData.artist : ''}</ToonInfoData></ToonInfoBox>
-                <ToonInfoBox>그림 <ToonInfoData>{webtoonData ? webtoonData.illustrator : ''}</ToonInfoData></ToonInfoBox>
-                <ToonInfoBox>업로드 요일 <ToonInfoData>{webtoonData ? webtoonData.category : ''}</ToonInfoData></ToonInfoBox>
-                <ToonInfoBox>키워드 <ToonInfoData>{webtoonData ? webtoonData.keyword : ''}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>작가 <ToonInfoData>{editedAuthor}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>그림 <ToonInfoData>{editedDrawer}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>업로드 요일 <ToonInfoData>{editedDay}</ToonInfoData></ToonInfoBox>
+                <ToonInfoBox>키워드 <ToonInfoData>{editedKeyword}</ToonInfoData></ToonInfoBox>
               </ToonInfoContainer>
               <ToonInsideInfoTextBox>
-                <ToonInfoBox>작품 설명 <ToonInfoTextData>{webtoonData ? webtoonData.intro : ''}</ToonInfoTextData></ToonInfoBox>
+                <ToonInfoBox>작품 설명 <ToonInfoTextData>{editedContent}</ToonInfoTextData></ToonInfoBox>
               </ToonInsideInfoTextBox>
             </>
           ) : (

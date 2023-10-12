@@ -18,7 +18,13 @@ const CalendarArea = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          setEvents(response.data);
+          console.log("response", response.data);
+          const formattedEvents = response.data.map((eventData) => ({
+            title: eventData.title,
+            start: eventData.startDate,
+            end: eventData.endDate,
+          }));
+          setEvents(formattedEvents);
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -30,20 +36,21 @@ const CalendarArea = () => {
         console.error('Error fetching events:', error);
       });
   }, []);
+  
 
   return (
     <div className={`calendar-area ${isLoading ? 'loading' : ''}`}>
       {isLoading ? (
-        <div className="skeleton-loader"/>
+        <div className="skeleton-loader" />
       ) : (
-        <FullCalendar 
-          defaultView="dayGridMonth" 
-          plugins={[dayGridPlugin, timeGridPlugin]} 
+        <FullCalendar
+          defaultView="dayGridMonth"
+          plugins={[dayGridPlugin, timeGridPlugin]}
           events={events}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek'
+            right: 'dayGridMonth,timeGridWeek',
           }}
         />
       )}
