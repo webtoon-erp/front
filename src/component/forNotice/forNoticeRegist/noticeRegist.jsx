@@ -14,46 +14,84 @@ const NoticeRegist = () => {
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [userId, setUserId] = useState('');
+    const [employeeToken, setEmployeeToken] = useState('');
+
+    // useEffect(() => {
+    //     const data = savedData.noticeAdd
+    //     if (data.selectedTag !== null) setSelectedTag(data.selectedTag);
+    //     if (data.selectedDep !== null) setSelectedDep(data.selectedDep);
+    //     if (data.writer !== null) setWriter(data.writer);
+    //     if (data.title !== null) setTitle(data.title);
+    //     if (data.content !== null) setContent(data.content);
+    //     if (data.selectedFile !== null) setSelectedFile(data.selectedFile);
+    // }, []);
 
     useEffect(() => {
-        const data = savedData.noticeAdd
-        if (data.selectedTag !== null) setSelectedTag(data.selectedTag);
-        if (data.selectedDep !== null) setSelectedDep(data.selectedDep);
-        if (data.writer !== null) setWriter(data.writer);
-        if (data.title !== null) setTitle(data.title);
-        if (data.content !== null) setContent(data.content);
-        if (data.selectedFile !== null) setSelectedFile(data.selectedFile);
+        setUserId(sessionStorage.getItem("employeeId"));
     }, []);
 
+    useEffect(() => {
+        setEmployeeToken(sessionStorage.getItem("accessToken"));
+        console.log("employeeToken", employeeToken)
+    }, [employeeToken]);
+
     const handleSubmitClick = () => {
-        //console.log(finalId, "finalId 결과값"); 
+        if (
+            !selectedTag ||
+            !selectedDep ||
+            !writer ||
+            !title ||
+            !content
+        ) {
+            message.error('모든 필수 항목을 입력해주세요.');
+            return;
+        }
+
+        const requestData = {
+            title: title,
+            content: content,
+            deptName: writer,
+            noticeType: selectedTag,
+            employeeId: userId,
+        };
+        
+        // FormData 객체 생성
+        const formData = new FormData();
+
+        // JSON 데이터를 FormData에 추가
+        formData.append('dto', JSON.stringify(requestData));
+
+        // 썸네일 파일을 'file' 키로 추가
+        formData.append('file', selectedFile);
+
+        console.log(
+            title,
+            content,
+            writer,
+            selectedTag,
+            userId,
+            selectedFile
+        )
+        console.log("employeeToken", employeeToken)
     
-        axios.post('http://146.56.98.153:8080/notice',
-            {
-                selectedTag: selectedTag,           
-                selectedDep: selectedDep,  
-                writer: writer,  
-                title: title,
-                content: content,
-                selectedFile: selectedFile,
-            },
-            {
+        axios
+            .post('http://146.56.98.153:8080/notice',formData, {
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: 'Bearer ' + employeeToken,
                 },
             })
             .then((result) => {
-                if (result.status === 'done') {
-                    message.success(`공지사항이 정상적으로 등록되었습니다.`);
-                } 
+                if (result.status === 200) {
+                    message.success(`공지사항 등록이 정상적으로 등록되었습니다.`);
+                }
             })
             .catch((error) => {
-                message.error('공지사항이 정상적으로 등록되지 않았습니다.');
-                console.log(error);
-            })
+                message.error('공지사항 등록이 정상적으로 등록되지 않았습니다.');
+            });
         };
 
-        const assigners = [];
         const SelectedTagHandler = (e) => {
             setSelectedTag(e.target.value);
             savedData.noticeAdd.selectedTag = e.target.value;
@@ -74,16 +112,11 @@ const NoticeRegist = () => {
             setContent(e.target.value);
             savedData.noticeAdd.content = e.target.value;
         };
-        const SelectedFileHandler = (e) => {
+        // 썸네일 이미지 업로드 핸들러
+        const handleThumbnailChange = (e) => {
             const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setSelectedFile(event.target.result);
-            };
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        };    
+            setSelectedFile(file); // 썸네일 파일 저장
+        };
 
     const editorRef = useRef();
 
@@ -158,7 +191,15 @@ const NoticeRegist = () => {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-            <FileInput />
+            <Container>
+                <FileTitle>첨부 파일</FileTitle>
+                <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
+            </Container>
+            {selectedFile && (
+                <Container>
+                    <ImagePreview src={URL.createObjectURL(selectedFile)} alt="Thumbnail Preview" />
+                </Container>
+            )}
         </NoticeRegistContainer>
     )
 };
@@ -173,6 +214,31 @@ const NoticeRegistContainer = styled.div`
 const Title = styled.div`
     font-size: 30px;
     font-weight: bold;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+`;
+
+const Input = styled.input`
+    height: 30px;
+    border: transparent;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+`;
+
+const FileTitle = styled.div`
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-right: 15px;
+`;
+
+const ImagePreview = styled.img`
+    max-width: 300px;
+    max-height: 200px;
+    margin-top: 10px;
 `;
 
 const Btn = styled.button`
