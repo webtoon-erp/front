@@ -2,25 +2,14 @@ import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import { Radio, Select, Space } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import {
-    CellValueChangedEvent,
-    ColDef,
-    ColGroupDef,
-    Grid,
-    GridOptions,
-    ICellEditorComp,
-    ICellEditorParams,
-    RowValueChangedEvent,
-} from '@ag-grid-community/core';
+import axios from 'axios';
+import { message } from 'antd';
+import { savedData } from '../../../data.js';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { MenuModule } from '@ag-grid-enterprise/menu';
-import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
-import FileInput from '../../fileUpload';
 import ApprRefGrid from './apprRefGrid';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
@@ -28,14 +17,7 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 let newCount = 1;
 
 function createNewRowData() {
-    const newData = {
-        // make: 'Toyota ' + newCount,
-        // model: 'Celica ' + newCount,
-        // price: 35000 + newCount * 17,
-        // zombies: 'Headless',
-        // style: 'Little',
-        // clothes: 'Airbag',
-    };
+    const newData = {};
     newCount++;
     return newData;
 }
@@ -49,19 +31,84 @@ for (let i = 10; i < 20; i++) {
     });
 }
 
-const handleChange = (value) => {
-    console.log(`Selected: ${value}`);
-};
-
 const CorporateCardUsageView = () => {
+    const [title, setTitle] = useState(null);
+    const [content, setContent] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [userId, setUserId] = useState('');
+    const [employeeToken, setEmployeeToken] = useState('');
+
+    useEffect(() => {
+        setUserId(sessionStorage.getItem("employeeId"));
+    }, []);
+
+    useEffect(() => {
+        setEmployeeToken(sessionStorage.getItem("accessToken"));
+        console.log("employeeToken", employeeToken)
+    }, [employeeToken]);
+
+    const handleRequestClick = () => {
+        if (
+            !userId ||
+            !title ||
+            !content
+        ) {
+            message.error('모든 필수 항목을 입력해주세요.');
+            return;
+        }
+
+        const requestData = {
+            title: title,
+            content: content,
+            templateName: "구매품의서",
+            writeEmployeeId: userId,
+            documentRcvRequests: [
+                {
+                    sortSequence: 1,
+                    receiveType: "APPV",
+                    rcvEmployeeId: userId,
+                },
+            ],
+        };
+        
+        // FormData 객체 생성
+        const formData = new FormData();
+
+        // JSON 데이터를 FormData에 추가
+        formData.append('dto', JSON.stringify(requestData));
+
+        // 썸네일 파일을 'file' 키로 추가
+        formData.append('file', selectedFile);
+
+        console.log(
+            userId,
+            title,
+            content,
+            selectedFile
+        )
+        console.log("employeeToken", employeeToken)
+
+        axios
+            .post('http://146.56.98.153:8080/plas/documents',formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: 'Bearer ' + employeeToken,
+                },
+            })
+            .then((result) => {
+                if (result.status === 200) {
+                    message.success(`구매 품의서 결재 요청이 정상적으로 등록되었습니다.`);
+                }
+            })
+            .catch((error) => {
+                message.error('구매 품의서 결재 요청이 정상적으로 등록되지 않았습니다.');
+            });
+    }
+
     const gridRef = useRef(null);
 
     const rowData = [
         {'시작일시': '', '종료일시': '', '부서코드': '', '사용부서' : '', '거래처명': '', '비용타입': '', 수량: '', 단가: '', '공급가액': '', '부가세액': '', '총 금액': '', '비고': ''},
-    ];
-
-    const rowData2 = [
-        {'결재자': '', '참조자': ''},
     ];
 
     const onCellValueChanged = useCallback((event) => {
@@ -97,17 +144,6 @@ const CorporateCardUsageView = () => {
         {field: '비고', sortable: true, filter: true},
     ]);
 
-    const [columnDefs2, setColumnDefs2] = useState([
-        {field: '결재자', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
-        {field: '참조자', sortable: true, filter: true},
-    ]);
-
-    // useEffect(() => {
-    //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
-    //     .then(result => result.json())
-    //     .then(rowData => setRowData(rowData))
-    // }, []);
-
     const defaultColDef = useMemo(() => {
         return {
             flex: 1,
@@ -142,11 +178,6 @@ const CorporateCardUsageView = () => {
     let count = 1;
 
     const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-            editorRef.current.setContent('<p>전자결재</p>');
-        }
-    };
 
     function autoCreateTable(columnList, newColumnList, location) {
         if (!Array.isArray(columnList)) {
@@ -291,6 +322,21 @@ const CorporateCardUsageView = () => {
         }
     }
 
+    const TitleHandler = (e) => {
+        setTitle(e.target.value);
+        savedData.noticeAdd.title = e.target.value;
+    };
+    const ContentHandler = (e) => {
+        setContent(e.target.value);
+        savedData.noticeAdd.content = e.target.value;
+    };
+
+    // 썸네일 이미지 업로드 핸들러
+    const handleThumbnailChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file); // 썸네일 파일 저장
+    };
+
     const [todayDate, setTodayDate] = useState('');
 
     useEffect(() => {
@@ -303,12 +349,14 @@ const CorporateCardUsageView = () => {
         <CorporateCardUsageContainer>
             <FlexBox>
                 <Title>법인카드 사용내역서</Title>
-                <RequestBtn>요 청</RequestBtn>
+                <RequestBtn onClick={handleRequestClick}>요 청</RequestBtn>
             </FlexBox>
 
-            <InputTitle placeholder='제목을 입력해주세요.'/>
+            <InputTitle placeholder='제목을 입력해주세요.' value={title} onChange={TitleHandler} />
 
             <Editor
+                value={content} 
+                onChange={ContentHandler}
                 ref={editorRef}
                 onInit={(evt, editor) => editorRef.current = editor}
                 initialValue={`
@@ -396,8 +444,15 @@ const CorporateCardUsageView = () => {
 
                 <ApprRefGrid />
 
-                <FileInput />
-            {/* <button onClick={log}>Log editor content</button> */}
+                <Container>
+                    <FileTitle>첨부 파일</FileTitle>
+                    <Input type="file" accept="image/*" onChange={handleThumbnailChange} />
+                </Container>
+                {selectedFile && (
+                    <Container>
+                        <ImagePreview src={URL.createObjectURL(selectedFile)} alt="Thumbnail Preview" />
+                    </Container>
+                )}
         </CorporateCardUsageContainer>
     )
 };
@@ -421,6 +476,31 @@ const Title = styled.div`
 const FlexBox = styled.div`
     display: flex;
 `
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+`;
+
+const Input = styled.input`
+    height: 30px;
+    border: transparent;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+`;
+
+const FileTitle = styled.div`
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-right: 15px;
+`;
+
+const ImagePreview = styled.img`
+    max-width: 300px;
+    max-height: 200px;
+    margin-top: 10px;
+`;
 
 const RequestBtn = styled.button`
     width: 90px;
