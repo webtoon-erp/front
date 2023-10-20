@@ -1,4 +1,4 @@
-import { Link, Route, Routes, BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/common/home';
 import Login from './pages/common/login';
@@ -31,22 +31,20 @@ import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import EpRequestDetail from './pages/electropayment/epRequestDetail';
-import EpFormAnnualLeaveRequest from './pages/electropayment/epFormAnnualLeaveRequest';
-import EpFormCorporateCardUsage from './pages/electropayment/epFormCorporateCardUsage';
-import EpFormPurchaseOrder from './pages/electropayment/epFormPurchaseOrder';
-import EpFormReimbursementRequest from './pages/electropayment/epFormReimbursementRequest';
-import EpFormWorkRequest from './pages/electropayment/epFormWorkRequest';
-import NoticeAdd from './pages/system/noticeAdd';
+// import EpFormAnnualLeaveRequest from './pages/electropayment/epFormAnnualLeaveRequest';
+// import EpFormCorporateCardUsage from './pages/electropayment/epFormCorporateCardUsage';
+// import EpFormPurchaseOrder from './pages/electropayment/epFormPurchaseOrder';
+// import EpFormReimbursementRequest from './pages/electropayment/epFormReimbursementRequest';
+// import EpFormWorkRequest from './pages/electropayment/epFormWorkRequest';
+// import NoticeAdd from './pages/system/noticeAdd';
 import Tab from './component/Tab';
 import TabComponent from './component/TabComponent';
 import ScheduleAdd from './pages/system/scheduleAdd';
 import Schedule from './pages/common/schedule';
 import ScheduleDetail from './pages/system/scheduleDetail';
 import EpisodeDetail from './pages/webtoon/episodeDetail';
-import Modal from './component/modal'; // Assuming you have a Modal component
 import NoticeDetail from './pages/system/noticeDetail';
 import ItRequestDetail from './pages/itsm/itRequestDetail';
-import { savedData } from './data.js';
 
 function App() {
   const [token, setToken] = useState<string | null>(null)
@@ -174,12 +172,12 @@ function App() {
                 <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
                 <Route path="/epRefDocsView" element={<EpRefDocsView />} />
                 <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
-                <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
+                {/* <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
                 <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
                 <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
                 <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
                 <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
-                <Route path="/noticeAdd" element={<NoticeAdd />} />
+                <Route path="/noticeAdd" element={<NoticeAdd />} /> */}
                 <Route path="/noticeDetail" element={<NoticeDetail /> } />
                 <Route path="/scheduleAdd" element={<ScheduleAdd />} />
                 <Route path="/schedule" element={<Schedule />} />
