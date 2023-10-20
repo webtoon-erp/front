@@ -1,36 +1,20 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import axios from 'axios';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import { message } from 'antd';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
-import {
-    CellValueChangedEvent,
-    ColDef,
-    ColGroupDef,
-    Grid,
-    GridOptions,
-    ICellEditorComp,
-    ICellEditorParams,
-    RowValueChangedEvent,
-} from '@ag-grid-community/core';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { MenuModule } from '@ag-grid-enterprise/menu';
-import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 const EntitlementPayDetail = () => {
     const gridRef = useRef(null);
     const [rowData, setRowData] = useState([]);
-
-    // const rowData = [
-    //     {'자격증 명': '정보처리기사', 지급액: '150,000'},
-    // ];
 
     const onCellValueChanged = useCallback((event) => {
         console.log(

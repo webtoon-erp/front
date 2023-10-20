@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios'; 
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 
 const EmployeeAttendanceView = () => {
   const [selectedCell, setSelectedCell] = useState(null);

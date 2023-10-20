@@ -3,38 +3,18 @@ import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import {
-    CellValueChangedEvent,
-    ColDef,
-    ColGroupDef,
-    Grid,
-    GridOptions,
-    ICellEditorComp,
-    ICellEditorParams,
-    RowValueChangedEvent,
-} from '@ag-grid-community/core';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { MenuModule } from '@ag-grid-enterprise/menu';
-import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 let newCount = 1;
 
 function createNewRowData() {
-    const newData = {
-        // make: 'Toyota ' + newCount,
-        // model: 'Celica ' + newCount,
-        // price: 35000 + newCount * 17,
-        // zombies: 'Headless',
-        // style: 'Little',
-        // clothes: 'Airbag',
-    };
+    const newData = {};
     newCount++;
-    // return newData;
 }
 
 
@@ -89,12 +69,6 @@ const HrProfileDetail = () => {
         {field: '만료일자', sortable: true, filter: true},
     ]);
 
-    // useEffect(() => {
-    //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
-    //     .then(result => result.json())
-    //     .then(rowData => setRowData(rowData))
-    // }, []);
-
     const defaultColDef = useMemo(() => {
         return {
             flex: 1,
@@ -102,16 +76,6 @@ const HrProfileDetail = () => {
             cellDataType: false,
         };
     }, []);
-    
-    // const clearData = useCallback(() => {
-    //     const rowData = [];
-    //     gridRef.current.api.forEachNode(function (node) {
-    //         rowData.push(node.data);
-    //     });
-    //     const res = gridRef.current.api.applyTransaction({
-    //         remove: rowData,
-    //     });
-    // }, []);
     
     const addItems = useCallback((addIndex) => {
         count++;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CgAlignLeft } from "react-icons/cg";
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import styled from 'styled-components';
 
 const TabComponent = () => {

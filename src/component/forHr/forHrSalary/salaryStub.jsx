@@ -1,6 +1,6 @@
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import styled from 'styled-components';
 import HorizonLine from '../../horizonLine';
 import { useEffect, useState } from 'react';

@@ -1,8 +1,8 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Collapse } from 'antd';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import axios from 'axios'; // Import axios for making the API request
 
 const ScheduleComponent = () => {

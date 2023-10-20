@@ -2,35 +2,16 @@ import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import {
-    CellValueChangedEvent,
-    ColDef,
-    ColGroupDef,
-    Grid,
-    GridOptions,
-    ICellEditorComp,
-    ICellEditorParams,
-    RowValueChangedEvent,
-} from '@ag-grid-community/core';
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { MenuModule } from '@ag-grid-enterprise/menu';
-import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 let newCount = 1;
 
 function createNewRowData() {
-    const newData = {
-        // make: 'Toyota ' + newCount,
-        // model: 'Celica ' + newCount,
-        // price: 35000 + newCount * 17,
-        // zombies: 'Headless',
-        // style: 'Little',
-        // clothes: 'Airbag',
-    };
+    const newData = {};
     newCount++;
     return newData;
 }
