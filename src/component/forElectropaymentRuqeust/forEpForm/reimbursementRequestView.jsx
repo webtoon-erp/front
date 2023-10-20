@@ -97,11 +97,11 @@ const ReimbursementRequestView = () => {
             })
             .then((result) => {
                 if (result.status === 200) {
-                    message.success(`구매 품의서 결재 요청이 정상적으로 등록되었습니다.`);
+                    message.success(`비용 집행 요청서 결재 요청이 정상적으로 등록되었습니다.`);
                 }
             })
             .catch((error) => {
-                message.error('구매 품의서 결재 요청이 정상적으로 등록되지 않았습니다.');
+                message.error('비용 집행 요청서 결재 요청이 정상적으로 등록되지 않았습니다.');
             });
     }
 
