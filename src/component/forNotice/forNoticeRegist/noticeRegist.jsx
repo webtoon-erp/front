@@ -3,7 +3,6 @@ import theme from '../../../style/theme';
 import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
-import FileInput from '../../fileUpload';
 import { savedData } from '../../../data.js';
 import { message } from 'antd';
 
@@ -33,7 +32,6 @@ const NoticeRegist = () => {
 
     useEffect(() => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
-        console.log("employeeToken", employeeToken)
     }, [employeeToken]);
 
     const handleSubmitClick = () => {
@@ -73,7 +71,6 @@ const NoticeRegist = () => {
             userId,
             selectedFile
         )
-        console.log("employeeToken", employeeToken)
     
         axios
             .post('http://146.56.98.153:8080/notice',formData, {
