@@ -5,26 +5,8 @@ import HorizonLine from '../horizonLine';
 import { AgGridReact } from 'ag-grid-react';
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
-import { Button, Upload, message, Modal } from 'antd';
-import AnnualLeaveRequestView from '../forElectropaymentRuqeust/forEpForm/annualLeaveRequestView';
+import { message, Modal } from 'antd';
 import axios from 'axios';
-
-
-const FakeProfileData = [
-    {
-        id: 1,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        name: 'employee 1',
-        dep: '인사부',
-        rank: '사원',
-        empId: 1234,
-        joinDate: '2022-07-13',
-        phone: '010-1234-1234',
-        email: 'employee1@gmail.com',
-        birthDate: '1998-03-14',
-        annualLeave: 5
-    },
-];
 
 const MyPageView = () => {
     const [data, setData] = useState({});
@@ -36,11 +18,9 @@ const MyPageView = () => {
         if (userId) {
             axios.get(`http://146.56.98.153:8080/users/${userId}`)
             .then(function (response) {
-                // const qualifications = response.data.qualifications || [];
-                // setRowData(qualifications);
                 if (response.status === 200) {
                     setData(response.data);
-                    setRowData(response.data);
+                    setRowData(response.data.qualifications || []);
                     console.log("response.data", response.data);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
@@ -51,13 +31,6 @@ const MyPageView = () => {
             });
         }
     }, []);
-
-    // const rowData = [
-    //     {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
-    //     {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
-    //     {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
-    //     {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
-    // ];
 
     const columnDefs = [
         {headerName: '자격증명', field: 'qlfcType', sortable: true, filter: true, width: '390px'},
