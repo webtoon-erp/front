@@ -2,13 +2,11 @@ import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import FileInput from '../../fileUpload';
 import { AgGridReact } from 'ag-grid-react';
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
 import axios from 'axios';
 import { message } from 'antd';
-import { savedData } from '../../../data.js';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 import ApprRefGrid from './apprRefGrid';
@@ -325,11 +323,9 @@ const WorkRequestView = () => {
 
     const TitleHandler = (e) => {
         setTitle(e.target.value);
-        savedData.noticeAdd.title = e.target.value;
     };
     const ContentHandler = (e) => {
         setContent(e.target.value);
-        savedData.noticeAdd.content = e.target.value;
     };
 
     // 썸네일 이미지 업로드 핸들러
@@ -337,14 +333,6 @@ const WorkRequestView = () => {
         const file = e.target.files[0];
         setSelectedFile(file); // 썸네일 파일 저장
     };
-
-    const [todayDate, setTodayDate] = useState('');
-
-    useEffect(() => {
-        const date = new Date();
-        const TodayDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-        setTodayDate(TodayDate);
-    }, []);
 
     return (
         <WorkRequestContainer>
