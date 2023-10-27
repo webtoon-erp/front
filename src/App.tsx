@@ -31,7 +31,6 @@ import EpDepDocsView from './pages/electropayment/epDepDocsView';
 import EpHoldenDocsView from './pages/electropayment/epHoldenDocsView';
 import EpRefDocsView from './pages/electropayment/epRefDocsView';
 import EpRequestDetail from './pages/electropayment/epRequestDetail';
-import EpFormAnnualLeaveRequest from './pages/electropayment/epFormAnnualLeaveRequest';
 import EpFormCorporateCardUsage from './pages/electropayment/epFormCorporateCardUsage';
 import EpFormPurchaseOrder from './pages/electropayment/epFormPurchaseOrder';
 import EpFormReimbursementRequest from './pages/electropayment/epFormReimbursementRequest';
@@ -172,7 +171,6 @@ function App() {
                 <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
                 <Route path="/epRefDocsView" element={<EpRefDocsView />} />
                 <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
-                <Route path="/epFormAnnualLeaveRequest" element={<EpFormAnnualLeaveRequest /> } />
                 <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
                 <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
                 <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
