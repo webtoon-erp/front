@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import theme from '../../style/theme';
 import HorizonLine from '../horizonLine';
 import { AgGridReact } from 'ag-grid-react';
-import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
-import '@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { message, Modal } from 'antd';
 import axios from 'axios';
 
