@@ -40,8 +40,10 @@ const NoticeRegist = () => {
             !selectedDep ||
             !writer ||
             !title ||
-            !content
+            !content ||
+            !selectedFile
         ) {
+            console.log("selectedTag: " + selectedTag + "title: " + title + "content: " + content);
             message.error('모든 필수 항목을 입력해주세요.');
             return;
         }
@@ -49,19 +51,19 @@ const NoticeRegist = () => {
         const requestData = {
             title: title,
             content: content,
-            deptName: writer,
+            deptName: selectedDep,
             noticeType: selectedTag,
-            employeeId: userId,
+            employeeId: userId
         };
         
         // FormData 객체 생성
         const formData = new FormData();
 
         // JSON 데이터를 FormData에 추가
-        formData.append('dto', JSON.stringify(requestData));
+        formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
 
         // 썸네일 파일을 'file' 키로 추가
-        formData.append('file', selectedFile);
+        formData.append('files', selectedFile);
 
         console.log(
             title,
@@ -69,14 +71,21 @@ const NoticeRegist = () => {
             writer,
             selectedTag,
             userId,
-            selectedFile
+            selectedFile,
+            formData
         )
-    
+
+        // 데이터 출력
+        // FormData 객체 순회
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+            
         axios
             .post('http://146.56.98.153:8080/notice',formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: 'Bearer ' + employeeToken,
+                    'Content-Type': 'multipart/form-data'
+                    // Authorization: 'Bearer ' + employeeToken,
                 },
             })
             .then((result) => {
@@ -85,6 +94,7 @@ const NoticeRegist = () => {
                 }
             })
             .catch((error) => {
+                console.log(error);
                 message.error('공지사항 등록이 정상적으로 등록되지 않았습니다.');
             });
         };
@@ -106,8 +116,13 @@ const NoticeRegist = () => {
             savedData.noticeAdd.title = e.target.value;
         };
         const ContentHandler = (e) => {
-            setContent(e.target.value);
-            savedData.noticeAdd.content = e.target.value;
+            const editor = editorRef.current;
+            if (editor) {
+                const currentContent = editor.getContent(); 
+                console.log("content : " + currentContent)
+                setContent(currentContent);
+                savedData.noticeAdd.content = currentContent;
+            }
         };
         // 썸네일 이미지 업로드 핸들러
         const handleThumbnailChange = (e) => {
