@@ -1,195 +1,31 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
-const fakeData = [
-  {
-    tag: '시스템',
-    date: '2023-07-01',
-    title: 'notice 1',
-    author: '총관리자',
-    dep: '전체',
-    url: '/notice1',
-    count: 1,
-  },
-  {
-    tag: '서비스',
-    date: '2023-07-02',
-    title: 'notice 2',
-    author: '인사팀장',
-    dep: '인사부',
-    url: '/notice2',
-    count: 1,
-  },
-  {
-    tag: '시스템',
-    date: '2023-07-03',
-    title: 'notice 3',
-    author: '회계팀장',
-    dep: '회계부',
-    url: '/notice3',
-    count: 1,
-    },
-    {
-      tag: '시스템',
-        date: '2023-07-04',
-        title: 'notice 4',
-        author: '영업팀장',
-        dep: '웹툰관리부',
-        url: '/notice4',
-        count: 1,
-    },
-    {
-      tag: '서비스',
-        date: '2023-07-05',
-        title: 'notice 5',
-        author: '기술팀장',
-        dep: '개발부',
-        url: '/notice5',
-        count: 1,
-    },
-    {
-      tag: '서비스',
-        date: '2023-07-06',
-        title: 'notice 6',
-        author: '총관리자',
-        dep: '전체',
-        url: '/notice6',
-        count: 1,
-    },
-    {
-      tag: '행사',
-        date: '2023-07-07',
-        title: 'notice 7',
-        author: '인사팀장',
-        dep: '인사부',
-        url: '/notice7',
-        count: 1,
-    },
-    {
-      tag: '행사',
-        date: '2023-07-08',
-        title: 'notice 8',
-        author: '회계팀장',
-        dep: '회계부',
-        url: '/notice8',
-        count: 1,
-    },
-    {
-      tag: '행사',
-        date: '2023-07-09',
-        title: 'notice 9',
-        author: '영업팀장',
-        dep: '웹툰관리부',
-        url: '/notice9',
-        count: 1,
-    },
-    {
-      tag: '서비스',
-        date: '2023-07-10',
-        title: 'notice 10',
-        author: '기술팀장',
-        dep: '개발부',
-        url: '/notice10',
-        count: 1,
-    },
-    {
-      tag: '시스템',
-      date: '2023-07-01',
-      title: 'notice 11',
-      author: '총관리자',
-      dep: '전체',
-      url: '/notice1',
-      count: 1,
-    },
-    {
-      tag: '서비스',
-      date: '2023-07-02',
-      title: 'notice 12',
-      author: '인사팀장',
-      dep: '인사부',
-      url: '/notice2',
-      count: 1,
-    },
-    {
-      tag: '시스템',
-      date: '2023-07-03',
-      title: 'notice 13',
-      author: '회계팀장',
-      dep: '회계부',
-      url: '/notice3',
-      count: 1,
-      },
-      {
-        tag: '시스템',
-          date: '2023-07-04',
-          title: 'notice 14',
-          author: '영업팀장',
-          dep: '웹툰관리부',
-          url: '/notice4',
-          count: 1,
-      },
-      {
-        tag: '서비스',
-          date: '2023-07-05',
-          title: 'notice 15',
-          author: '기술팀장',
-          dep: '개발부',
-          url: '/notice5',
-          count: 1,
-      },
-      {
-        tag: '서비스',
-          date: '2023-07-06',
-          title: 'notice 16',
-          author: '총관리자',
-          dep: '전체',
-          url: '/notice6',
-          count: 1,
-      },
-      {
-        tag: '행사',
-          date: '2023-07-07',
-          title: 'notice 17',
-          author: '인사팀장',
-          dep: '인사부',
-          url: '/notice7',
-          count: 1,
-      },
-      {
-        tag: '행사',
-          date: '2023-07-08',
-          title: 'notice 18',
-          author: '회계팀장',
-          dep: '회계부',
-          url: '/notice8',
-          count: 1,
-      },
-      {
-        tag: '행사',
-          date: '2023-07-09',
-          title: 'notice 19',
-          author: '영업팀장',
-          dep: '웹툰관리부',
-          url: '/notice9',
-          count: 1,
-      },
-      {
-        tag: '서비스',
-          date: '2023-07-10',
-          title: 'notice 20',
-          author: '기술팀장',
-          dep: '개발부',
-          url: '/notice10',
-          count: 1,
-      },
-];
-
 const NoticeComponent = () => {
     const [selectedTag, setSelectedTag] = useState('전체');
+    const [rowData, setRowData] = useState([]);  
+  
+  useEffect(() => {
+    // Make a GET request to fetch data
+    axios.get('http://146.56.98.153:8080/notice', {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        setRowData(response.data);
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
   
     // 태그 선택 핸들러
     const selectTagHandler = (e) => {
@@ -197,16 +33,16 @@ const NoticeComponent = () => {
     };
   
     // 선택된 부서에 해당하는 프로필 필터링
-    const filteredNotices = fakeData.filter((emp) => emp.tag === selectedTag);
+    const filteredNotices = rowData.filter((emp) => emp.noticeType === selectedTag);
   
     // ag-grid
     const columnDefs = [
-      { headerName: '태그', field: 'tag', width: 100 },
+      { headerName: '태그', field: 'noticeType', width: 100 },
       { headerName: '제목', field: 'title', width: 400, cellRendererFramework: CellRenderer },
-      { headerName: '작성자', field: 'author', width: 100 },
-      { headerName: '부서', field: 'dep', width: 100 },
-      { headerName: '작성일자', field: 'date', width: 200 },
-      { headerName: '조회수', field: 'count', width: 100 },
+      { headerName: '작성자', field: 'name', width: 100 },
+      { headerName: '부서', field: 'deptName', width: 100 },
+      { headerName: '작성일자', field: 'noticeDate', width: 200 },
+      { headerName: '조회수', field: 'readCount', width: 100 },
     ];
   
     const gridOptions = {
@@ -263,7 +99,7 @@ const NoticeComponent = () => {
   
     return (
     <>
-     <Title>공지사항</Title>
+      <Title>공지사항</Title>
 
       <NoticeContainer>
         <SelectDepContainer>
@@ -275,11 +111,11 @@ const NoticeComponent = () => {
           </select>
           <Container />
             <input
-                        type="text"
-                        id="filter-text-box"
-                        placeholder="Filter..."
-                        onInput={onFilterTextBoxChanged}
-                      />
+              type="text"
+              id="filter-text-box"
+              placeholder="Filter..."
+              onInput={onFilterTextBoxChanged}
+            />
         </SelectDepContainer>
         
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
@@ -289,7 +125,7 @@ const NoticeComponent = () => {
             gridOptions={gridOptions}
           />
         </div>
-      </NoticeContainer>
+        </NoticeContainer>
       </>
 
     );
@@ -301,9 +137,8 @@ const NoticeComponent = () => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
-    padding: 50px;
-    padding-left: 70px;
+    padding: 40px;
+    padding-left: 55px;
   `;
   
   const SelectDepContainer = styled.div`
