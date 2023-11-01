@@ -16,16 +16,6 @@ const NoticeRegist = () => {
     const [userId, setUserId] = useState('');
     const [employeeToken, setEmployeeToken] = useState('');
 
-    // useEffect(() => {
-    //     const data = savedData.noticeAdd
-    //     if (data.selectedTag !== null) setSelectedTag(data.selectedTag);
-    //     if (data.selectedDep !== null) setSelectedDep(data.selectedDep);
-    //     if (data.writer !== null) setWriter(data.writer);
-    //     if (data.title !== null) setTitle(data.title);
-    //     if (data.content !== null) setContent(data.content);
-    //     if (data.selectedFile !== null) setSelectedFile(data.selectedFile);
-    // }, []);
-
     useEffect(() => {
         setUserId(sessionStorage.getItem("employeeId"));
     }, []);
@@ -43,7 +33,6 @@ const NoticeRegist = () => {
             !content ||
             !selectedFile
         ) {
-            console.log("selectedTag: " + selectedTag + "title: " + title + "content: " + content);
             message.error('모든 필수 항목을 입력해주세요.');
             return;
         }
@@ -72,7 +61,6 @@ const NoticeRegist = () => {
             selectedTag,
             userId,
             selectedFile,
-            formData
         )
 
         // 데이터 출력
@@ -94,7 +82,6 @@ const NoticeRegist = () => {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 message.error('공지사항 등록이 정상적으로 등록되지 않았습니다.');
             });
         };
