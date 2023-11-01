@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { AreaChartOutlined, LaptopOutlined, UserOutlined, FileTextOutlined, ToolOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Menu, Avatar, Space } from 'antd';
+import { Menu, Avatar, Space, message } from 'antd';
 import styled from 'styled-components';
 import theme from '../style/theme';
 import { useNavigate } from 'react-router-dom';
@@ -78,8 +79,61 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
         navigate("/myPage");
     };
 
+    const [userId, setUserId] = useState('');
+
+    useEffect(() => {
+        const employeeId = sessionStorage.getItem("employeeId");
+        setUserId(employeeId || "");
+    }, []);
+    
+    const workClickHandler = () => {
+        axios
+            .post('http://146.56.98.153:8080/attendance', 
+            {
+                attendType: "START",
+                employeeId: userId,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((result) => {
+                if (result.status === 200) {
+                    message.success('출근이 기록되었습니다.');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error('출근 기록이 실패하였습니다.');
+            });
+    }
+
+    const leaveClickHandler = () => {
+        axios
+            .post('http://146.56.98.153:8080/attendance', 
+            {
+                attendType: "END",
+                employeeId: userId,
+                
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((result) => {
+                if (result.status === 200) {
+                    message.success('퇴근이 기록되었습니다.');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error('퇴근 기록이 실패하였습니다.');
+            });
+    }
+
     return (
-        <>
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
             <Avatar onClick={toMyPage} size={64} style={{ marginLeft: '45px', cursor: 'pointer' }} icon={<UserOutlined />} />
@@ -92,8 +146,8 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
                 </div>
             </Space>
             <div style={{ marginLeft: '35px' }}>
-                <WorkBtn>출근</WorkBtn>
-                <WorkBtn>퇴근</WorkBtn>
+                <WorkBtn onClick={workClickHandler}>출근</WorkBtn>
+                <WorkBtn onClick={leaveClickHandler}>퇴근</WorkBtn>
             </div>
             <Menu
                 onClick={onClick}
@@ -104,8 +158,6 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
                 items={items}
             />
         </Space>
-          
-        </>
     );
 };
 
