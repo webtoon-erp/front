@@ -146,8 +146,6 @@ const NoticeRegist = () => {
                         <option value="기타">기타</option>
                     </select>
                 </SelectTagContainer>
-                
-                <InputWriter type="text" placeholder='작성자' value={writer} onChange={WriterHandler} />
             </FlexBox2>
 
             <InputTitle type="text" placeholder='제목을 입력해주세요.' value={title} onChange={TitleHandler} />
@@ -293,17 +291,3 @@ const SelectTagContainer = styled.div`
         margin-right: 30px;
     }
 `;
-
-const InputWriter = styled.input`
-    width: 170px; 
-    height: 38px;
-    margin-bottom: 10px;
-    border: 1px solid #bfbfbf;
-    border-radius: 7px;
-    padding-left: 10px;
-    margin-right: 30px;
-    font-size: 14px;
-    &::placeholder {
-        color: #898989;
-    }
-`
