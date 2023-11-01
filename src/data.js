@@ -18,4 +18,12 @@ export const savedData = {
         "content" :null,
         "selectedFile" : null,
       },
+
+      "elecReq" : {
+        "selectedApprId" :null,
+        "selectedRefId" :null,
+        "title" :null,
+        "content" :null,
+        "selectedFile" : null,
+      },
 }
