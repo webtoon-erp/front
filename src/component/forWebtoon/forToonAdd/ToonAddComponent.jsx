@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ToonAddComponent = () => {
   const [selectedTitle, setSelectedTitle] = useState('');
@@ -12,6 +13,8 @@ const ToonAddComponent = () => {
   const [selectedKeyword, setSelectedKeyword] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
   const [thumbnailFile, setThumbnailFile] = useState(null); // 변경된 변수명
+
+  const navigate = useNavigate();
 
   // 각각의 input 값에 대한 핸들러 함수들
   const SelectTitlehandler = (e) => {
@@ -99,6 +102,7 @@ const handleSubmitClick = () => {
       console.log('result', result);
       if (result.status === 200) {
         message.success('작품이 정상적으로 등록되었습니다.');
+        navigate("/allToonView");
       } else {
         message.error('작품이 정상적으로 등록되지 않았습니다.');
       }

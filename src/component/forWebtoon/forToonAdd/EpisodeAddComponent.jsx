@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import theme from '../../../style/theme';
 import { Button, Upload, message } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EpisodeAddComponent = ({ ToonId }) => {
   const { Id } = useParams();
@@ -13,6 +13,8 @@ const EpisodeAddComponent = ({ ToonId }) => {
   const [selectedWorks, setSelectedWorks] = useState(null);
   const [employeeId, setEmployeeId] = useState('');
   const [toonId, setToonId] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setEmployeeId(sessionStorage.getItem("employeeId"));
@@ -76,6 +78,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
         console.log('result', result);
         if (result.status === 200) {
           message.success('회차가 정상적으로 등록되었습니다.');
+          //navigate('/toonDetail/'+ToonId);
         } else {
           message.error('회차가 정상적으로 등록되지 않았습니다.');
         }

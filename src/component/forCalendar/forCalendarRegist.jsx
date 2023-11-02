@@ -4,6 +4,7 @@ import theme from '../../style/theme';
 import dayjs from 'dayjs';
 import { TimePicker, DatePicker, Space, message } from 'antd';
 import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ForCalendarRegist = () => {
   const [registDate, setRegistDate] = useState(new Date());
@@ -15,6 +16,8 @@ const ForCalendarRegist = () => {
   const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
   const [userId, setUserId] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setUserId(sessionStorage.getItem("employeeId"));
   }, [userId]);
@@ -22,6 +25,13 @@ const ForCalendarRegist = () => {
   const handleSubmitClick = () => {
     const startDateD = selectedStartDate.$d;
     const endDateD = selectedEndDate.$d;
+
+    if (
+      startDateD > endDateD
+    ) {
+      message.error('종료일자가 시작일자보다 빠를 수 없습니다.');
+      return;
+    }
 
     if (
       !userId ||
@@ -55,6 +65,7 @@ const ForCalendarRegist = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success('[일정] 등록이 정상적으로 등록되었습니다.');
+          navigate('/schedule');
         } else {
           message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
         }

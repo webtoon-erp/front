@@ -54,29 +54,29 @@ const CalendarComponent = () => {
 
   const handleDelete = () => {
     if (selectedCellData) {
-      const headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
-      };
-  
+      const planId = selectedCellData.planId; // Replace 'id' with the actual property that holds the plan's unique identifier.
+      
       axios
-        .delete(`http://146.56.98.153:8080/plans/${selectedCellData}`, 
-        {
-          planId: selectedCellData
-        }
-        ,
-        {
-          headers: headers,
+        .delete('http://146.56.98.153:8080/plans/'+planId, {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
         })
         .then((response) => {
-          message.success('삭제 성공:', response);
-          // navigate(`/toonDetail/${planId}`);
-          setSelectedCellData(null);
+          if (response.status === 200) {
+            message.success('삭제 성공');
+            navigate('/schedule');
+            setSelectedCellData(null);
+          } else {
+            message.error('삭제 실패: 서버 응답 오류');
+          }
         })
         .catch((error) => {
-          message.error('삭제 실패:', error);
+          message.error(`삭제 실패: ${error.message}`);
         });
     }
   };
+  
   
   
 

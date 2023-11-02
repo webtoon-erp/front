@@ -29,6 +29,7 @@ const MyHours = () => {
         .then((response) => {
           if (response.status === 200) {
             const data = response.data;
+            console.log("data",data)
 
             // Transform the data into an array of objects
             const transformedData = [
