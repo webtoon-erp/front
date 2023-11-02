@@ -204,7 +204,7 @@ const ForEpisodeDetail = ({Id}) => {
             </WebtoonWorksContainer>
             
             <CommentContainer>
-            <CommentComponent webtoonDtId={Id}/>
+                <CommentComponent webtoonDtId={Id}/>
             </CommentContainer>
 
         </>
