@@ -9,4 +9,13 @@ export const savedData = {
         "selectedRequest" :null,
         "selectedthumbnail" :null
       },
+
+      "noticeAdd" : {
+        "selectedTag" :null,
+        "selectedDep" :null,
+        "writer" :null,
+        "title" :null,
+        "content" :null,
+        "selectedFile" : null,
+      },
 }

@@ -66,7 +66,7 @@ const BeforeUploadToon = () => {
     const [selectedWeek, setSelectedWeek] = useState('요일');
 
     useEffect(() => {
-        axios.get('http://localhost:5050/webtoon').then((response)=> {
+        axios.get('http://146.56.98.153:8080/webtoon').then((response)=> {
             setData(response.data);
         })
     }, []);

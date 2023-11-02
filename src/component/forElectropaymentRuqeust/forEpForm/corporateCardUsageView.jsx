@@ -21,6 +21,7 @@ import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-mod
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
 import FileInput from '../../fileUpload';
+import ApprRefGrid from './apprRefGrid';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -28,12 +29,12 @@ let newCount = 1;
 
 function createNewRowData() {
     const newData = {
-        make: 'Toyota ' + newCount,
-        model: 'Celica ' + newCount,
-        price: 35000 + newCount * 17,
-        zombies: 'Headless',
-        style: 'Little',
-        clothes: 'Airbag',
+        // make: 'Toyota ' + newCount,
+        // model: 'Celica ' + newCount,
+        // price: 35000 + newCount * 17,
+        // zombies: 'Headless',
+        // style: 'Little',
+        // clothes: 'Airbag',
     };
     newCount++;
     return newData;
@@ -147,6 +148,149 @@ const CorporateCardUsageView = () => {
         }
     };
 
+    function autoCreateTable(columnList, newColumnList, location) {
+        if (!Array.isArray(columnList)) {
+            columnList = [columnList];
+        }
+
+        const gridApi = gridRef.current.api;
+        const allData = gridApi.getModel().rowsToDisplay.map(row => row.data);
+    
+        const filteredData = allData.map(row => {
+            const newData = {};
+            for (const key of columnList) {
+                newData[key] = row[key] || "";
+            }
+            return newData;
+        });
+        
+        // 테이블 생성
+        const table = document.createElement('table');
+        table.className = 'my-table';
+        table.style.borderCollapse = 'collapse'; 
+        table.style.width = '100%'; 
+        table.setAttribute('border', '1'); 
+    
+        // colgroup 생성
+        const colgroup = document.createElement('colgroup');
+        for (const _ in filteredData[0]) {
+            const col = document.createElement('col');
+            colgroup.appendChild(col);
+        }
+        table.appendChild(colgroup);
+    
+        // 테이블 헤더 생성
+        const thead = document.createElement('thead');
+        thead.style.backgroundColor = 'lightyellow'; 
+        const headerRow = document.createElement('tr');
+    
+        for (const i in newColumnList) {
+            const th = document.createElement('th');
+            th.textContent = newColumnList[i];
+            headerRow.appendChild(th);
+        }
+    
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+    
+        // 테이블 본문 생성
+        const tbody = document.createElement('tbody');
+    
+        filteredData.forEach(rowData => {
+            const row = document.createElement('tr');
+    
+            for (const key in rowData) {
+                const cell = document.createElement('td');
+                cell.textContent = rowData[key];
+                cell.style.textAlign = 'center';
+                row.appendChild(cell);
+            }
+    
+            tbody.appendChild(row);
+        });
+    
+        table.appendChild(tbody);
+    
+        const tableHtmlString = table.outerHTML;
+
+        const editor = editorRef.current;
+        if (editor) {
+            const currentContent = editor.getContent(); 
+            const updatedContent = currentContent.replace('<div id="'+location+'"></div>', tableHtmlString); 
+            editor.setContent(updatedContent); 
+        }
+    }
+
+    function autoCreateSumTable(location) {
+        const gridApi = gridRef.current.api;
+        const allData = gridApi.getModel().rowsToDisplay.map(row => row.data);
+
+        const groupedData = {};
+
+        for (let i = 0; i < allData.length; i++) {
+            const item = allData[i];
+            const type = item["비용타입"];
+            const amount = item["총 금액"];
+
+            if (!groupedData[type]) {
+                groupedData[type] = { 총금액: 0, 건수: 0 };
+            }
+
+            groupedData[type].총금액 += Number(amount);
+            groupedData[type].건수++;
+        }
+
+        // 테이블 엘리먼트 생성
+        const table = document.createElement('table');
+        table.style.borderCollapse = 'collapse'; 
+        table.style.width = '100%'; 
+        table.setAttribute('border', '1'); 
+
+        // colgroup 생성
+        const colgroup = document.createElement('colgroup');
+        for (const _ in groupedData[0]) {
+            const col = document.createElement('col');
+            colgroup.appendChild(col);
+        }
+        table.appendChild(colgroup);
+
+        // 테이블 헤더 생성
+        const headerRow = document.createElement('tr');
+        const headers = ['바용항목', '전표건수', '금액소계'];
+        headers.forEach(headerText => {
+            const headerCell = document.createElement('th');
+            headerCell.style.backgroundColor = 'lightyellow'; 
+            headerCell.textContent = headerText;
+            headerRow.appendChild(headerCell);
+        });
+        table.appendChild(headerRow);
+
+        // 데이터 행 생성
+        for (const key in groupedData) {
+            if (groupedData.hasOwnProperty(key)) {
+                const item = groupedData[key];
+                const row = document.createElement('tr');
+                const cellValues = [key, item['건수'], item['총금액']];
+                cellValues.forEach(cellText => {
+                    const cell = document.createElement('td');
+                    cell.textContent = cellText;
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+                table.appendChild(row);
+            }
+        }
+
+        const tableHtmlString = table.outerHTML;
+        
+        const editor = editorRef.current;
+        if (editor) {
+            const currentContent = editor.getContent(); 
+            const updatedContent = currentContent.replace('<div id="'+location+'"></div>', tableHtmlString); 
+            editor.setContent(updatedContent); 
+        }
+    }
+
     const [todayDate, setTodayDate] = useState('');
 
     useEffect(() => {
@@ -165,6 +309,7 @@ const CorporateCardUsageView = () => {
             <InputTitle placeholder='제목을 입력해주세요.'/>
 
             <Editor
+                ref={editorRef}
                 onInit={(evt, editor) => editorRef.current = editor}
                 initialValue={`
                     <div>
@@ -172,12 +317,18 @@ const CorporateCardUsageView = () => {
                         <p>&nbsp;</p>
                         
                         <h3>1. 사용자 현황</h3>
+                        <p>- 사용부서: </p>
+                        <p>- 사용자: </p>
+                        <p>- 카드번호: </p>
+                        <p>- 월사용계: </p>
                         
                         <p>&nbsp;</p>
                         <h3>2. 비용항목별 소계</h3>
+                        <div id="insert-sum-table-here"></div>
                         
                         <p>&nbsp;</p>
                         <h3>3. 사용 상세 현황</h3>
+                        <div id="insert-table-here"></div>
                         
                         <p>&nbsp;</p>
                         <p>위와 같이 상신하오니  검토 후 재가 바랍니다.</p>
@@ -221,7 +372,10 @@ const CorporateCardUsageView = () => {
                         <Btn onClick={() => addItems(count)}>추 가</Btn>
                         <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
                         <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn>표 삽입</Btn>
+                        <Btn onClick={() => {
+                                autoCreateTable(["시작일시", "비용타입", "거래처명", "총 금액", "비고"], ["사용일자", "비용항목/상세", "거래처", "금액", "비고"], "insert-table-here");
+                                autoCreateSumTable('insert-sum-table-here');
+                            }}>표 삽입</Btn>
                     </BtnBox>
                     <div style={{ flexGrow: '1' }}>
                         <TableGrid className="ag-theme-alpine">
@@ -240,29 +394,7 @@ const CorporateCardUsageView = () => {
                     </div>
                 </div>
 
-                <div id='apprReferGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                    <BtnBox>
-                        <Btn onClick={() => addItems(count)}>추 가</Btn>
-                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                        <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn>표 삽입</Btn>
-                    </BtnBox>
-                    <div style={{ flexGrow: '1' }}>
-                        <ApprReferGrid className="ag-theme-alpine">
-                            <AgGridReact 
-                                ref={gridRef}
-                                rowData={rowData2}
-                                columnDefs={columnDefs2}
-                                defaultColDef={defaultColDef}
-                                rowSelection="multiple"
-                                animateRows={true}
-                                editType="fullRow"
-                                onCellValueChanged={onCellValueChanged}
-                                onRowValueChanged={onRowValueChanged}
-                            />
-                        </ApprReferGrid>
-                    </div>
-                </div>
+                <ApprRefGrid />
 
                 <FileInput />
             {/* <button onClick={log}>Log editor content</button> */}

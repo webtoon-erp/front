@@ -1,19 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { message } from 'antd';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const ViewList = () => {
+    const [rowData, setRowData] = useState([]);
 
-    const rowData = [
-        {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '완료', url: '/title1'},
-        {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '완료', url: '/title2'},
-        {제목: 'title3', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee4', 상태: '완료', url: '/title3'},
-        {제목: 'title4', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '진행', url: '/title4'},
-        {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '요청', url: '/title5'},
-        {제목: 'title6', 요청자: 'employee2', 납기일: '2023-07-14', 승인자: '', 상태: '반려', url: '/title6'},
-    ];
+    // const rowData = [
+    //     {제목: 'title1', 요청자: 'employee1', 납기일: '2023-06-15', 승인자: 'employee3', 상태: '완료', url: '/title1'},
+    //     {제목: 'title2', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee3', 상태: '완료', url: '/title2'},
+    //     {제목: 'title3', 요청자: 'employee2', 납기일: '2023-06-30', 승인자: 'employee4', 상태: '완료', url: '/title3'},
+    //     {제목: 'title4', 요청자: 'employee3', 납기일: '2023-07-03', 승인자: 'employee2', 상태: '진행', url: '/title4'},
+    //     {제목: 'title5', 요청자: 'employee4', 납기일: '2023-07-14', 승인자: '', 상태: '요청', url: '/title5'},
+    //     {제목: 'title6', 요청자: 'employee2', 납기일: '2023-07-14', 승인자: '', 상태: '반려', url: '/title6'},
+    // ];
 
     const columnDefs = [
         {field: '제목', sortable: true, filter: true, width: '150px'},
@@ -35,14 +39,46 @@ const ViewList = () => {
         },
     ];
 
-    function handleCellClick(event) {
-        const column = event.colDef.field;
-        const requests = event.data;
-        const url = requests.url;
-        if (column  && url) {
-            window.location.href = url;
+    const navigate = useNavigate();
+
+    // function handleCellClick(event) {
+    //     const column = event.colDef.field;
+    //     const requests = event.data;
+    //     const url = requests.url;
+    //     if (column  && url) {
+    //         window.location.href = url;
+    //     }
+    // }
+
+    const handleRowClick = (event) => {
+        if (event.data.id) {
+            navigate(`/itRequestView/${event.data.id}`);
+            console.log('확인');
         }
-    }
+    };
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem('employeeId');
+
+        if(userId) {
+            axios.get(`http://146.56.98.153:8080/request/all/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setRowData(response.data);
+                    console.log("response.data", response.data);
+                } else {
+                    message.error('데이터를 불러오는데 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+        }
+    }, []);
     
     return(
         <ViewListContainer>
@@ -55,7 +91,7 @@ const ViewList = () => {
                     domLayout= 'autoHeight'
                     pagination= {true}
                     paginationPageSize= {5}
-                    onCellClicked= {handleCellClick}
+                    onCellClicked= {handleRowClick}
 
                 />
             </RequestListGrid>

@@ -3,29 +3,50 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import styled from 'styled-components';
 import HorizonLine from '../../horizonLine';
-// import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { message } from 'antd';
 
 const SalaryStub = () => {
-    const rowData = [
-        {급여월: '2023-02', '급여 지급일': '2023-02-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-        {급여월: '2023-03', '급여 지급일': '2023-03-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-        {급여월: '2023-04', '급여 지급일': '2023-04-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-        {급여월: '2023-05', '급여 지급일': '2023-05-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-        {급여월: '2023-06', '급여 지급일': '2023-06-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    ];
+    const [rowData, setRowData] = useState([]);
 
-    const columnDefs = [
+    // const rowData = [
+    //     {급여월: '2023-02', '급여 지급일': '2023-02-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
+    //     {급여월: '2023-03', '급여 지급일': '2023-03-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
+    //     {급여월: '2023-04', '급여 지급일': '2023-04-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
+    //     {급여월: '2023-05', '급여 지급일': '2023-05-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
+    //     {급여월: '2023-06', '급여 지급일': '2023-06-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
+    // ];
+
+    const [columnDefs, setColumnDefs] = useState([
         {field: '급여월', sortable: true, filter: true, width: '150px'},
         {field: '급여 지급일', sortable: true, filter: true, width: '180px'},
         {field: '지급 합계', sortable: true, filter: true, width: '180px'},
         {field: '공제 후 지급액', sortable: true, filter: true, width: '180px'},
-    ];
+    ]);
 
-    // useEffect(() => {
-    //     fetch('https://www.ag-grid.com/example-assets/row-data.json')
-    //     .then(result => result.json())
-    //     .then(rowData => setRowData(rowData))
-    // }, []);
+    useEffect(() => {
+        const userId = sessionStorage.getItem('employeeId');
+
+        if(userId) {
+            axios.get(`http://146.56.98.153:8080/pays/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setRowData(response.data);
+                    console.log("response.data", response.data);
+                } else {
+                    message.error('데이터를 불러오는데 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+        }
+    }, []);
 
     return (
         <SalaryStubContainer>

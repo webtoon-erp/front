@@ -1,12 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import axios from 'axios';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { message } from 'antd';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import HorizonLine from '../../horizonLine';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import {
     CellValueChangedEvent,
     ColDef,
@@ -21,16 +18,42 @@ import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
-
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
-const EntitlementPayDetail = () => {
-    const gridRef = useRef(null);
-    const [rowData, setRowData] = useState([]);
+let newCount = 1;
 
-    // const rowData = [
-    //     {'자격증 명': '정보처리기사', 지급액: '150,000'},
-    // ];
+function createNewRowData() {
+    const newData = {
+        // make: 'Toyota ' + newCount,
+        // model: 'Celica ' + newCount,
+        // price: 35000 + newCount * 17,
+        // zombies: 'Headless',
+        // style: 'Little',
+        // clothes: 'Airbag',
+    };
+    newCount++;
+    return newData;
+}
+
+const options = [];
+
+for (let i = 10; i < 20; i++) {
+    options.push({
+        value: 'employee' + i,
+        label: 'employee' + i,
+    });
+}
+
+const handleChange = (value) => {
+    console.log(`Selected: ${value}`);
+};
+
+const ApprRefGrid = () => {
+    const gridRef = useRef(null);
+
+    const rowData = [
+        {'결재자': '', '참조자': ''},
+    ];
 
     const onCellValueChanged = useCallback((event) => {
         console.log(
@@ -52,33 +75,9 @@ const EntitlementPayDetail = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        { field: '자격증 명', editable: true,
-            headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
-        { field: '지급액', editable: true , width: 100 },
+        {field: '결재자', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {field: '참조자', sortable: true, filter: true},
     ]);
-
-    useEffect(() => {
-        const userId = sessionStorage.getItem('employeeId');
-
-        if(userId) {
-            axios.get(`http://146.56.98.153:8080/pays/${userId}`, {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                },
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    setRowData(response.data);
-                    console.log("response.data", response.data);
-                } else {
-                    message.error('데이터를 불러오는데 실패했습니다.');
-                }
-            })
-            .catch((error) => {
-                console.error('데이터를 불러오는데 실패했습니다.', error);
-            });
-        }
-    }, []);
 
     const defaultColDef = useMemo(() => {
         return {
@@ -88,21 +87,41 @@ const EntitlementPayDetail = () => {
         };
     }, []);
     
+    const addItems = useCallback((addIndex) => {
+        count++;
+        const newItems = [
+            createNewRowData(),
+        ];
+        const res = gridRef.current.api.applyTransaction({
+            add: newItems,
+            addIndex: addIndex,
+        });
+    }, []);
+    
     //  ag-grid 현재 편집 모드 종료하는 역할
     const onBtStopEditing = useCallback(() => {
         gridRef.current.api.stopEditing();
     }, []);
     
+    const onRemoveSelected = useCallback(() => {
+        const selectedData = gridRef.current.api.getSelectedRows();
+        const res = gridRef.current.api.applyTransaction({
+            remove: selectedData,
+        });
+    }, []);
+
     let count = 1;
 
     return (
-        <EntitlementPayDetailContainer>
-            <Title>자격수당 상세</Title>
-            <HorizonLine />
-            <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                <Btn onClick={onBtStopEditing}>완료</Btn>
-                <div style={{ flexGrow: '1' }}>
-                <EntitlementPayGrid className="ag-theme-alpine">
+        <div id='apprReferGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+            <BtnBox>
+                <Btn onClick={() => addItems(count)}>추 가</Btn>
+                <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
+                <Btn onClick={onBtStopEditing}>등 록</Btn>
+                <Btn>표 삽입</Btn>
+            </BtnBox>
+            <div style={{ flexGrow: '1' }}>
+                <ApprReferGrid className="ag-theme-alpine">
                     <AgGridReact 
                         ref={gridRef}
                         rowData={rowData}
@@ -114,33 +133,17 @@ const EntitlementPayDetail = () => {
                         onCellValueChanged={onCellValueChanged}
                         onRowValueChanged={onRowValueChanged}
                     />
-                </EntitlementPayGrid>
+                </ApprReferGrid>
             </div>
-            </div>
-        </EntitlementPayDetailContainer>
+        </div>
     )
 };
 
-export default EntitlementPayDetail;
-
-const EntitlementPayDetailContainer = styled.div`
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-`;
-
-const Title = styled.h3`
-    margin-left: 10px;
-`;
-
-const EntitlementPayGrid = styled.div`
-    width: 405px;
-    height: 261px;
-`
+export default ApprRefGrid;
 
 const Btn = styled.button`
-    width: 70px;
-    height: 30px;
+    width: 90px;
+    height: 40px;
     background-color: ${theme.colors.btn};
     border: none;
     color: ${theme.colors.white};
@@ -151,5 +154,17 @@ const Btn = styled.button`
         background-color: #00B757;
     }
     cursor: pointer;
-    margin: 0px 15px 20px 330px;
+    margin: 0px 15px 0px 20px;
+    float: right;
+`
+
+const BtnBox = styled.div`
+    margin: 20px 0px 20px 10px;
+    display: flex;
+    justify-content: flex-end;
+`
+
+const ApprReferGrid = styled.div`
+    width: 500px;
+    height: 260px;
 `

@@ -21,6 +21,7 @@ import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 import { MenuModule } from '@ag-grid-enterprise/menu';
 import { ColumnsToolPanelModule } from '@ag-grid-enterprise/column-tool-panel';
+import ApprRefGrid from './apprRefGrid';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -28,12 +29,12 @@ let newCount = 1;
 
 function createNewRowData() {
     const newData = {
-        make: 'Toyota ' + newCount,
-        model: 'Celica ' + newCount,
-        price: 35000 + newCount * 17,
-        zombies: 'Headless',
-        style: 'Little',
-        clothes: 'Airbag',
+        // make: 'Toyota ' + newCount,
+        // model: 'Celica ' + newCount,
+        // price: 35000 + newCount * 17,
+        // zombies: 'Headless',
+        // style: 'Little',
+        // clothes: 'Airbag',
     };
     newCount++;
     return newData;
@@ -147,6 +148,79 @@ const WorkRequestView = () => {
         }
     };
 
+    function autoCreateTable(columnList, newColumnList, location) {
+        if (!Array.isArray(columnList)) {
+            columnList = [columnList];
+        }
+
+        const gridApi = gridRef.current.api;
+        const allData = gridApi.getModel().rowsToDisplay.map(row => row.data);
+    
+        const filteredData = allData.map(row => {
+            const newData = {};
+            for (const key of columnList) {
+                newData[key] = row[key] || "";
+            }
+            return newData;
+        });
+        
+        // 테이블 생성
+        const table = document.createElement('table');
+        table.className = 'my-table';
+        table.style.borderCollapse = 'collapse'; 
+        table.style.width = '100%'; 
+        table.setAttribute('border', '1'); 
+    
+        // colgroup 생성
+        const colgroup = document.createElement('colgroup');
+        for (const _ in filteredData[0]) {
+            const col = document.createElement('col');
+            colgroup.appendChild(col);
+        }
+        table.appendChild(colgroup);
+    
+        // 테이블 헤더 생성
+        const thead = document.createElement('thead');
+        thead.style.backgroundColor = 'lightyellow'; 
+        const headerRow = document.createElement('tr');
+    
+        for (const i in newColumnList) {
+            const th = document.createElement('th');
+            th.textContent = newColumnList[i];
+            headerRow.appendChild(th);
+        }
+    
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+    
+        // 테이블 본문 생성
+        const tbody = document.createElement('tbody');
+    
+        filteredData.forEach(rowData => {
+            const row = document.createElement('tr');
+    
+            for (const key in rowData) {
+                const cell = document.createElement('td');
+                cell.textContent = rowData[key];
+                cell.style.textAlign = 'center';
+                row.appendChild(cell);
+            }
+    
+            tbody.appendChild(row);
+        });
+    
+        table.appendChild(tbody);
+    
+        const tableHtmlString = table.outerHTML;
+
+        const editor = editorRef.current;
+        if (editor) {
+            const currentContent = editor.getContent(); 
+            const updatedContent = currentContent.replace('<div id="'+location+'"></div>', tableHtmlString); 
+            editor.setContent(updatedContent); 
+        }
+    }
+
     return (
         <WorkRequestContainer>
             <FlexBox>
@@ -157,12 +231,13 @@ const WorkRequestView = () => {
             <InputTitle placeholder='제목을 입력해주세요.'/>
 
             <Editor
+                ref={editorRef}
                 onInit={(evt, editor) => editorRef.current = editor}
                 initialValue={`
                     <div>
                         <h3>문서 종류: 연장/휴일근무 신청서</h3>
                         <p>&nbsp;</p>
-                        
+                        <div id="insert-table-here"></div>
                         <p>&nbsp;</p>
                         <p>위와 같이 상신하오니  검토 후 재가 바랍니다.</p>
                     </div>
@@ -206,7 +281,7 @@ const WorkRequestView = () => {
                         <Btn onClick={() => addItems(count)}>추 가</Btn>
                         <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
                         <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn>표 삽입</Btn>
+                        <Btn onClick={() => autoCreateTable(["사용부서", "시작일시", "종료일시", "비고"], ["소속", "시작일시", "종료일시", "사유"], "insert-table-here")}>표 삽입</Btn>
                     </BtnBox>
                     <div style={{ flexGrow: '1' }}>
                         <TableGrid className="ag-theme-alpine">
@@ -225,29 +300,7 @@ const WorkRequestView = () => {
                     </div>
                 </div>
 
-                <div id='apprReferGrid' style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-                    <BtnBox>
-                        <Btn onClick={() => addItems(count)}>추 가</Btn>
-                        <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                        <Btn onClick={onBtStopEditing}>등 록</Btn>
-                        <Btn>표 삽입</Btn>
-                    </BtnBox>
-                    <div style={{ flexGrow: '1' }}>
-                        <ApprReferGrid className="ag-theme-alpine">
-                            <AgGridReact 
-                                ref={gridRef}
-                                rowData={rowData2}
-                                columnDefs={columnDefs2}
-                                defaultColDef={defaultColDef}
-                                rowSelection="multiple"
-                                animateRows={true}
-                                editType="fullRow"
-                                onCellValueChanged={onCellValueChanged}
-                                onRowValueChanged={onRowValueChanged}
-                            />
-                        </ApprReferGrid>
-                    </div>
-                </div>
+                <ApprRefGrid />
             
             <FileInput />
             {/* <button onClick={log}>Log editor content</button> */}
