@@ -9,7 +9,6 @@ import { message } from 'antd';
 const NoticeRegist = () => {
     const [selectedTag, setSelectedTag] = useState('');
     const [selectedDep, setSelectedDep] = useState('');
-    const [writer, setWriter] = useState(null);
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -28,7 +27,6 @@ const NoticeRegist = () => {
         if (
             !selectedTag ||
             !selectedDep ||
-            !writer ||
             !title ||
             !content ||
             !selectedFile
@@ -57,7 +55,6 @@ const NoticeRegist = () => {
         console.log(
             title,
             content,
-            writer,
             selectedTag,
             userId,
             selectedFile,
@@ -93,10 +90,6 @@ const NoticeRegist = () => {
         const SelectedDepHandler = (e) => {
             setSelectedDep(e.target.value);
             savedData.noticeAdd.selectedDep = e.target.value;
-        };
-        const WriterHandler = (e) => {
-            setWriter(e.target.value);
-            savedData.noticeAdd.writer = e.target.value;
         };
         const TitleHandler = (e) => {
             setTitle(e.target.value);
