@@ -32,8 +32,7 @@ const NoticeComponent = () => {
       setSelectedTag(e.target.value);
     };
   
-    // 선택된 부서에 해당하는 프로필 필터링
-    const filteredNotices = rowData.filter((emp) => emp.noticeType === selectedTag);
+    const filteredNotices = rowData.filter((notice) => selectedTag === '전체' ? true : notice.noticeType === selectedTag);
   
     // ag-grid
     const columnDefs = [
@@ -118,7 +117,7 @@ const NoticeComponent = () => {
             />
         </SelectDepContainer>
         
-        <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
+        <div className="ag-theme-alpine" style={{ height: '400px', width: '1000px' }}>
           <AgGridReact
             columnDefs={columnDefs}
             rowData={filteredNotices}
