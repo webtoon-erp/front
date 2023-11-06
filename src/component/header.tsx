@@ -1,8 +1,9 @@
+import React, { useState ,useEffect } from 'react';
 import styled from "styled-components";
 import theme from "../style/theme";
 import { BellOutlined, UserOutlined } from '@ant-design/icons';
-import { Popover } from 'antd';
-import React from 'react';
+import axios from 'axios';
+import { message, Popover } from 'antd';
 import { useNavigate } from "react-router-dom";
 import HorizonLine from "./horizonLine";
 
@@ -33,12 +34,40 @@ const Header: React.FC = () => {
         navigate("/myPage");
     };
 
+    const [employeeToken, setEmployeeToken] = useState('');
+
+    useEffect(() => {
+        const employeeToken = sessionStorage.getItem("accessToken");
+        if (employeeToken !== null) {
+            setEmployeeToken(employeeToken);
+        }
+    }, []);
+
+    const logoutHandler = () => {
+        axios
+            .post('http://146.56.98.153:8080/users/logout', null, {
+                headers: {
+                    Authorization: `Bearer ${employeeToken}`
+                }
+            })
+            .then((result) => {
+                if (result.status === 200) {
+                    message.success('로그아웃 완료');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log(employeeToken);
+                message.error('로그아웃 실패');
+            });
+    }
+
     return (
             <HeaderStyle>
                     <ContentStyle>
                     <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Naver_Line_Webtoon_logo.png" />
                         <FlexBox>
-                            <LogoutBtn>Logout</LogoutBtn>
+                            <LogoutBtn onClick={logoutHandler}>Logout</LogoutBtn>
                             <Popover placement="bottom" title={text} content={content} trigger="click">
                                 <BellOutlined style={ {color: 'white', fontSize: '20px', marginRight: '15px'} } />
                             </Popover>
