@@ -1,4 +1,4 @@
-import MyDocsView from "../../component/forElectropayment/myDocsView";
+import MyDocsView from "../../component/forElectropayment/myDocsView.jsx";
 import { styled } from "styled-components";
 
 export default function EpMyDocsView (){

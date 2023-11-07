@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { savedData } from '../../data.js'; 
 
 const BoldText = styled.span`
@@ -46,6 +46,12 @@ const PasswordResetButton = styled(Button)`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/passwordReset');
+  }  
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -91,11 +97,10 @@ const Login = () => {
         <LoginButton type="primary" htmlType="submit">
           로그인
         </LoginButton>
-        <Link to="/passwordReset">
-          <PasswordResetButton type="link">
-            비밀번호 초기화
-          </PasswordResetButton>
-        </Link>
+        <PasswordResetButton onClick={handleClick}>
+          비밀번호 초기화
+        </PasswordResetButton>
+
       </LoginForm>
     </LoginContainer>
   );

@@ -1,4 +1,4 @@
-import NoticeComponent from "../../component/forNotice/NoticeComponent";
+import NoticeComponent from "../../component/forNotice/NoticeComponent.jsx";
 import styled from 'styled-components';
 
 const Container = styled.div`

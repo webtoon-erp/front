@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import TabComponent from "../../component/forHr/forMyAttendance/TabComponent";
-import ScheduleComponent from "../../component/forHr/forMyAttendance/ScheduleComponent";
-import MyHours from "../../component/forHr/forMyAttendance/MyHours";
-import theme from '../../style/theme';
+import TabComponent from "../../component/forHr/forMyAttendance/TabComponent.jsx";
+import ScheduleComponent from "../../component/forHr/forMyAttendance/ScheduleComponent.jsx";
+import MyHours from "../../component/forHr/forMyAttendance/MyHours.jsx";
+import theme from '../../style/theme.js';
 
 
 export default function HrMyAttendance() {

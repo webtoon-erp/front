@@ -1,4 +1,4 @@
-import EpisodeAddComponent from "../../component/forWebtoon/forToonAdd/EpisodeAddComponent";
+import EpisodeAddComponent from "../../component/forWebtoon/forToonAdd/EpisodeAddComponent.jsx";
 import { useParams } from 'react-router-dom';
 
 export default function EpisodeAdd (){

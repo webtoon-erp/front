@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
-import ProfileInHrSalary from "../../component/forHr/forHrSalary/profileInHrSalary";
-import HrSalaryDetail from "../../component/forHr/forHrSalary/hrSalaryDetail";
-import SalaryStub from "../../component/forHr/forHrSalary/salaryStub";
-import EntitlementPayDetail from "../../component/forHr/forHrSalary/entitlementPayDetail";
+import ProfileInHrSalary from "../../component/forHr/forHrSalary/profileInHrSalary.jsx";
+import HrSalaryDetail from "../../component/forHr/forHrSalary/hrSalaryDetail.jsx";
+import SalaryStub from "../../component/forHr/forHrSalary/salaryStub.jsx";
+import EntitlementPayDetail from "../../component/forHr/forHrSalary/entitlementPayDetail.jsx";
 
 export default function HrSalary (){
     return(

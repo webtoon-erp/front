@@ -51,7 +51,7 @@ const Header: React.FC = () => {
 export default Header;
 
 const HeaderStyle = styled.header`
-    background-color: ${theme.colors.main};
+    background-color: #00AA44;
     position: fixed;
     left: 262px;
     top: 0;

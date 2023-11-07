@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import HoldenDocsView from "../../component/forElectropayment/holdenDocsView";
+import HoldenDocsView from "../../component/forElectropayment/holdenDocsView.jsx";
 
 export default function EpHoldenDocsView (){
     return(

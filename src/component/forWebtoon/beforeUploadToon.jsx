@@ -4,7 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
-import theme from '../../style/theme';
+import theme from '../../style/theme.js';
 
 const currentDate = new Date();
 

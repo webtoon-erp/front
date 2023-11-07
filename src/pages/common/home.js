@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import CalendarArea from '../../component/forHome/CalendarArea';
-import NoticeArea from '../../component/forHome/NoticeArea';
+import CalendarArea from '../../component/forHome/CalendarArea.jsx';
+import NoticeArea from '../../component/forHome/NoticeArea.jsx';
 import { useLocation } from 'react-router-dom';
 
 const MainContainer = styled.div`

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import theme from '../../../style/theme';
+import theme from '../../../style/theme.js';
 import { TimePicker, DatePicker, Space, message } from 'antd';
 
 

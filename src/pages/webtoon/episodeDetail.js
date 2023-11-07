@@ -1,4 +1,4 @@
-import ForEpisodeDetail from "../../component/forWebtoon/forEpisodeDetail/forEpisodeDetail";
+import ForEpisodeDetail from "../../component/forWebtoon/forEpisodeDetail/forEpisodeDetail.jsx";
 import { useParams } from 'react-router-dom';
 
 

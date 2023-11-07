@@ -1,4 +1,4 @@
-import RefDocsView from "../../component/forElectropayment/refDocsView";
+import RefDocsView from "../../component/forElectropayment/refDocsView.jsx";
 import { styled } from "styled-components";
 
 export default function EpRefDocsView (){

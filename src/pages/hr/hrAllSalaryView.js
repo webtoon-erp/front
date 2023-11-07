@@ -1,4 +1,4 @@
-import AllSalaryView from "../../component/forHr/forHrAllSalaryView/AllSalaryView";
+import AllSalaryView from "../../component/forHr/forHrAllSalaryView/AllSalaryView.jsx";
 import { styled } from "styled-components";
 
 export default function HrAllSalaryView (){

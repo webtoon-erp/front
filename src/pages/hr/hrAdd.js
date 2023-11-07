@@ -1,4 +1,4 @@
-import HrAddComponent from "../../component/forHr/forHrAdd/hrAddComponent";
+import HrAddComponent from "../../component/forHr/forHrAdd/hrAddComponent.jsx";
 
 export default function HrAdd (){
     return(

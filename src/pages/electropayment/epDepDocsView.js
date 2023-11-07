@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import DepDocsView from "../../component/forElectropayment/depDocsView";
+import DepDocsView from "../../component/forElectropayment/depDocsView.jsx";
 
 export default function EpDepDocsView (){
     return(

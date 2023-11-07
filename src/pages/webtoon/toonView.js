@@ -1,6 +1,6 @@
-import EpisodeList from "../../component/forWebtoon/forToonView/episodeList";
-import TextAndBtnArea from "../../component/forWebtoon/forToonView/textAndBtnArea";
-import ToonContent from "../../component/forWebtoon/forToonView/toonContent";
+import EpisodeList from "../../component/forWebtoon/forToonView/episodeList.jsx";
+import TextAndBtnArea from "../../component/forWebtoon/forToonView/textAndBtnArea.jsx";
+import ToonContent from "../../component/forWebtoon/forToonView/toonContent.jsx";
 import styled from 'styled-components';
 
 export default function ToonView (){

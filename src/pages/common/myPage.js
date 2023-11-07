@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import MyPageView from '../../component/forMyPage/myPageView';
+import MyPageView from '../../component/forMyPage/myPageView.jsx';
 
 export default function myPage (){
     return(

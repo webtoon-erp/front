@@ -27,7 +27,6 @@ function getItem(
 const items: MenuProps['items'] = [
 
     getItem('작품', 'menu2', <AreaChartOutlined />, [
-        getItem('작품 관리', 'webtoon'),
         getItem('작품 조회', 'allToonView'),
     ]), 
 

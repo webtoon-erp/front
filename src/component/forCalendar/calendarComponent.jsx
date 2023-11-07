@@ -10,13 +10,15 @@ import { message } from 'antd';
 import axios from 'axios';
 
 const CalendarComponent = () => {
-  const [selectedTag, setSelectedTag] = useState('전체');
   const [rowData, setRowData] = useState([]);
   const [selectedCellData, setSelectedCellData] = useState(null);
-  
-  
+
   useEffect(() => {
-    // Make a GET request to fetch data
+    // Fetch data when the component mounts
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     axios.get('http://146.56.98.153:8080/plans/list', {
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -30,32 +32,12 @@ const CalendarComponent = () => {
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
-  }, []);
-  
-  // ag-grid
-  const columnDefs = [
-    { headerName: '제목', field: 'title', width: 350 },
-    { headerName: '작성자', field: 'author', width: 100 },
-    { headerName: '작성일자', field: 'date', width: 200 },
-    { headerName: '시작일자', field: 'startDate', width: 200 },
-    { headerName: '종료일자', field: 'endDate', width: 200 },
-  ];
-
-  const gridOptions = {
-    columnDefs: columnDefs,
-    rowSelection: 'single',
-    animateRows: true,
-    pagination: true,
-    paginationPageSize: 10,
-    onCellClicked: handleCellClick,
   };
-
-  const navigate = useNavigate();
 
   const handleDelete = () => {
     if (selectedCellData) {
-      const planId = selectedCellData.planId; // Replace 'id' with the actual property that holds the plan's unique identifier.
-      
+      const planId = selectedCellData.planId;
+
       axios
         .delete('http://146.56.98.153:8080/plans/'+planId, {
           headers: {
@@ -65,8 +47,9 @@ const CalendarComponent = () => {
         .then((response) => {
           if (response.status === 200) {
             message.success('삭제 성공');
-            navigate('/schedule');
             setSelectedCellData(null);
+            // Update the grid's data after a successful deletion
+            fetchData();
           } else {
             message.error('삭제 실패: 서버 응답 오류');
           }
@@ -76,14 +59,29 @@ const CalendarComponent = () => {
         });
     }
   };
-  
-  
-  
 
-  // 셀 클릭 핸들러
-  function handleCellClick(event) {
+  // ag-grid
+  const columnDefs = [
+    { headerName: '제목', field: 'title', width: 350 },
+    { headerName: '작성자', field: 'author', width: 100 },
+    { headerName: '작성일자', field: 'date', width: 200 },
+    { headerName: '시작일자', field: 'startDate', width: 200 },
+    { headerName: '종료일자', field: 'endDate', width: 200 },
+  ];
+
+   // 셀 클릭 핸들러
+   function handleCellClick(event) {
     setSelectedCellData(event.data);
   }
+
+  const gridOptions = {
+    columnDefs: columnDefs,
+    rowSelection: 'single',
+    animateRows: true,
+    pagination: true,
+    paginationPageSize: 10,
+    onCellClicked: handleCellClick,
+  };
 
   return (
     <>

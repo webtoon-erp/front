@@ -1,4 +1,4 @@
-import NoticeRegist from "../../component/forNotice/forNoticeRegist/noticeRegist";
+import NoticeRegist from "../../component/forNotice/forNoticeRegist/noticeRegist.jsx";
 import { styled } from "styled-components";
 
 export default function NoticeAdd (){

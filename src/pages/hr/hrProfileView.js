@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import HrProfileDetail from "../../component/forHr/forHrProfileView/hrProfileDetail";
+import HrProfileDetail from "../../component/forHr/forHrProfileView/hrProfileDetail.jsx";
 
 export default function HrProfileView (){
     return(

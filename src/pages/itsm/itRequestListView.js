@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import ServiceState from "../../component/forITSM/forServiceView/serviceState";
-import ViewList from "../../component/forITSM/forServiceView/viewList";
+import ServiceState from "../../component/forITSM/forServiceView/serviceState.jsx";
+import ViewList from "../../component/forITSM/forServiceView/viewList.jsx";
 
 export default function ItRequestListView (){
     return(

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance';
-import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension';
-import DepartmentExtension from '../../component/forHr/forHrAttendance/DepartmentExtension';
-import DepartmentAvgExtension from '../../component/forHr/forHrAttendance/DepartmentAvgExtension';
+import WholeAttendance from '../../component/forHr/forHrAttendance/WholeAttendance.jsx';
+import WorkExtension from '../../component/forHr/forHrAttendance/WorkExtension.jsx';
+import DepartmentExtension from '../../component/forHr/forHrAttendance/DepartmentExtension.jsx';
+import DepartmentAvgExtension from '../../component/forHr/forHrAttendance/DepartmentAvgExtension.jsx';
 
 export default function HrAttendance() {
   return (

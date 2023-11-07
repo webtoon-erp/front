@@ -1,7 +1,7 @@
-import ToonDetailComponent from "../../component/forWebtoon/forToonDetail/toonDetailComponent";
+import ToonDetailComponent from "../../component/forWebtoon/forToonDetail/toonDetailComponent.jsx";
 import styled from 'styled-components'
-import ToonGrid from "../../component/forWebtoon/forToonDetail/toonGrid";
-import theme from '../../style/theme';
+import ToonGrid from "../../component/forWebtoon/forToonDetail/toonGrid.jsx";
+import theme from '../../style/theme.js';
 import { useParams } from 'react-router-dom';
 
 export default function ToonDetail (){

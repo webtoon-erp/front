@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import EmployeeView from "../../component/forHr/forHrView/employeeView";
+import EmployeeView from "../../component/forHr/forHrView/employeeView.jsx";
 
 const EmpProfileContainer = styled.div`
     margin-top: 45px;
