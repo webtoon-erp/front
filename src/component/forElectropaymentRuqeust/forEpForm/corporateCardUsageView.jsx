@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
@@ -45,6 +46,8 @@ const CorporateCardUsageView = () => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
         console.log("employeeToken", employeeToken)
     }, [employeeToken]);
+
+    const navigate = useNavigate();
 
     const handleRequestClick = () => {
         if (
@@ -97,6 +100,9 @@ const CorporateCardUsageView = () => {
             .then((result) => {
                 if (result.status === 200) {
                     message.success(`법인카드 사용내역서 결재 요청이 정상적으로 등록되었습니다.`);
+                    setTimeout(() => {
+                        navigate('/epRequestAdd');
+                    }, 3000);
                 }
             })
             .catch((error) => {

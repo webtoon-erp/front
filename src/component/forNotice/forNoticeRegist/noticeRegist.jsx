@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Editor } from '@tinymce/tinymce-react';
 import { savedData } from '../../../data.js';
@@ -22,6 +23,8 @@ const NoticeRegist = () => {
     useEffect(() => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
     }, [employeeToken]);
+
+    const navigate = useNavigate();
 
     const handleSubmitClick = () => {
         if (
@@ -76,6 +79,9 @@ const NoticeRegist = () => {
             .then((result) => {
                 if (result.status === 200) {
                     message.success(`공지사항 등록이 정상적으로 등록되었습니다.`);
+                    setTimeout(() => {
+                        navigate('/notice');
+                    }, 3000);
                 }
             })
             .catch((error) => {
