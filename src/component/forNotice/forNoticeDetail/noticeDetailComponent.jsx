@@ -1,70 +1,172 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from './../../../style/theme';
 import { useNavigate } from 'react-router-dom'
 import HorizonLine from '../../horizonLine';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, message } from 'antd';
 import FileDownloader from '../../fileDownloader';
+import axios from 'axios';
 
-const FakeNoticeData = [
-    {
-        id: 1,
-        tag: '서비스',
-        dept: '인사부',
-        author: '작성자',
-        title: '제목',
-        date: '2023.08.22',
-        content: `안녕하세요, 네이버웍스입니다.
-        ​
-        네이버웍스 비정기 업데이트가 2023년 7월 27일(목)에 진행됩니다.
-        자세한 업데이트 사항은 아래 내용을 확인해 주시기 바랍니다.
-        ​
-        ■ 업데이트 일정 : 2023년 7월 27일(목) 오후 2시경
-        ※ 앱 노출 시간은 앱스토어 사정에 따라 상이할 수 있습니다.
-        ※ Mobile앱은 선택 업데이트 방식으로 [Mobile앱 > 더보기 > 애플리케이션 정보]를 통해서도 최신 버전으로 업데이트 할 수 있습니다.`,
-        file: 'fileName'
-    },
-];
-
-
-const NoticeDetailComponent = () => {
-
-  const [selectedId, setSelectedId] = useState('');
+const NoticeDetailComponent = ({Id}) => {
+  const [noticeData, setNoticeData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
+  const [selectedContent, setSelectedContent] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  
-  //아래는 파일 첨부 필요하면 넣기
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [selectedCellData, setSelectedCellData] = useState(null);
+  const [selectedReadCount, setSelectedReadCount] = useState('');
 
-  
-    //const [data, setData] = useState({});
+  const navigate = useNavigate();
 
-    //seEffect(() => {
-    //    axios.get('http://localhost:5050/quals/'+Id).then((response)=> {
-    //      setData(response.data);
-    //      //console.log("ddddddd");
-    //    })
-    //  }, []);
-
-    const navigate = useNavigate();
-
-    const handleHomeClick = () => {
+  const handleHomeClick = () => {
       navigate('/');
     }
 
     const handleNoticeClick = () => {
       navigate('/notice');
     }
+  
+  useEffect(() => {
+    const data = {
+      noticeId: Id,
+    };
+    console.log("테스트ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ");
+
+    axios
+      .get('http://146.56.98.153:8080/notice/' + Id, {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setNoticeData(response.data.info);
+          setSelectedTag(response.data.info.noticeType);
+          setSelectedAuthor(response.data.info.name);
+          setSelectedTitle(response.data.info.title);
+          setSelectedDate(response.data.info.noticeDate);
+          setSelectedContent(response.data.info.content);
+          setSelectedReadCount(response.data.info.readCount);
+          setSelectedFiles(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.files}`);
+        }
+      })
+      .catch((error) => {
+        console.error('데이터를 불러오는데 실패했습니다.', error);
+      });
+  }, []);
+
+  const handleToggleEdit = () => {
+    setIsEditing((prevState) => !prevState);
+  };
+
+  const handleTitleChange = (e) => {
+    setSelectedTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+    setSelectedContent(e.target.value);
+  };
+
+  const handleTagChange = (e) => {
+    setSelectedTag(e.target.value);
+  };
+
+  const handleFilesChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      setSelectedFiles(event.target.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveChanges = () => {
+    // JSON 데이터 객체 생성
+    const jsonData = {
+      title: noticeData.selectedTitle,
+      content: selectedContent,
+      name: selectedAuthor,
+      noticeType: selectedTag,
+      noticeDate: selectedDate
+    };
+
+    // FormData 객체 생성
+    const formData = new FormData();
+
+    // JSON 데이터를 'dto' 키로 추가
+    formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+    // notice ID (Path Parameter)
+    const noticeId = Id;
+
+    // PUT 요청 보내기
+    axios
+      .put(`http://146.56.98.153:8080/notice/${noticeId}`, formData, {
+        params: {
+          noticeId: noticeId,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((result) => {
+        message.success('공지사항 상세정보가 정상적으로 수정되었습니다.');
+        setIsEditing(false);
+        // 작품 정보 업데이트
+        setNoticeData((prevData) => ({
+          ...prevData,
+          content: selectedContent,
+          noticeType: selectedTag,
+          noticeDate: selectedDate
+        }));
+      })
+      .catch((error) => {
+        message.error('공지사항 상세정보가 정상적으로 수정되지 않았습니다.');
+        console.log(error);
+      });
+  };
+
+  const deleteNoticeHandler = () => {
+    if (selectedCellData) {
+      const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+  
+      axios
+        .delete(`http://146.56.98.153:8080/notice/${selectedCellData}`, 
+        {
+          noticeId: selectedCellData
+        }
+        ,
+        {
+          headers: headers,
+        })
+        .then((response) => {
+          message.success('공지 삭제 성공:', response);
+          setSelectedCellData(null);
+        })
+        .catch((error) => {
+          message.error('공지 삭제 실패:', error);
+        });
+    }
+  };
 
   return (
     <NoticeDetailContainer>
       <BtnContainer>
-        <Btn>수 정</Btn>
-        <Btn>삭 제</Btn>
+        <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
+          {isEditing ? '등 록' : '수 정'}
+        </Btn>
+        <Btn onClick={() => deleteNoticeHandler()}>삭 제</Btn>
       </BtnContainer>
     <FlexBox>
       <Title>공지사항</Title>
@@ -85,7 +187,7 @@ const NoticeDetailComponent = () => {
                 ),
               },
               {
-                title: `${FakeNoticeData[0].title}`,
+                title: {selectedTitle},
               },
             ]}
           />
@@ -93,7 +195,12 @@ const NoticeDetailComponent = () => {
     </FlexBox>
     
         <NoticeContainer>
-          <ContentTitle>{FakeNoticeData[0].title}</ContentTitle>
+          <ContentTitle>{!isEditing ? (
+                  {selectedTitle}
+                  ) : (
+                    <InputContainer><InputField type="text" value={selectedTitle} onChange={handleTitleChange} /></InputContainer>
+                  )}
+          </ContentTitle>
 
           <ContainerBox>
             <ContainerBox>
@@ -101,7 +208,12 @@ const NoticeDetailComponent = () => {
                 <SmallTitle>태그</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].tag}</SmallContent>
+                <SmallContent>{!isEditing ? (
+                  {selectedTag}
+                  ) : (
+                    <InputContainer><InputField type="text" value={selectedTag} onChange={handleTagChange} /></InputContainer>
+                  )}
+                </SmallContent>
               </SmallContentContainer>
             </ContainerBox>
 
@@ -110,7 +222,7 @@ const NoticeDetailComponent = () => {
                 <SmallTitle>부서</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].dept}</SmallContent>
+                <SmallContent>{selectedDept}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
           </ContainerBox>
@@ -121,7 +233,7 @@ const NoticeDetailComponent = () => {
                 <SmallTitle>등록일</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].date}</SmallContent>
+                <SmallContent>{selectedDate}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
 
@@ -130,15 +242,21 @@ const NoticeDetailComponent = () => {
                 <SmallTitle>작성자</SmallTitle>
               </Container>
               <SmallContentContainer>
-                <SmallContent>{FakeNoticeData[0].author}</SmallContent>
+                <SmallContent>{selectedAuthor}</SmallContent>
               </SmallContentContainer>
             </ContainerBox>
           </ContainerBox>
         <HorizonLine />
-        <ContentContainer>{FakeNoticeData[0].content}</ContentContainer>
+        <ContentContainer>
+          {!isEditing ? (
+            {selectedContent}
+            ) : (
+              <InputContainer><InputField type="text" value={selectedContent} onChange={handleContentChange} /></InputContainer>
+            )}
+        </ContentContainer>
 
         <FileContainer>
-          <FileDownloader files={[{ name: FakeNoticeData[0].title, filename: FakeNoticeData[0].file }]}/>
+          <FileDownloader files={[{ name: noticeData.title, filename: selectedFiles }]}/>
         </FileContainer>
         </NoticeContainer>
         
@@ -248,3 +366,19 @@ const FlexBox = styled.div`
   align-items: center;
   margin-top: 30px;
 `
+
+const InputContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const InputField = styled.input`
+    background-color: ${theme.colors.textBox};
+    height: 25px;
+    width: 60px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+`;
