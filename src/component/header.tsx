@@ -28,7 +28,6 @@ const content = (
 );
 
 const Header: React.FC = () => {
-    const navigate = useNavigate();
 
     const toMyPage = () => {
         navigate("/myPage");
@@ -43,6 +42,8 @@ const Header: React.FC = () => {
         }
     }, []);
 
+    const navigate = useNavigate();
+
     const logoutHandler = () => {
         axios
             .post('http://146.56.98.153:8080/users/logout', null, {
@@ -53,11 +54,13 @@ const Header: React.FC = () => {
             .then((result) => {
                 if (result.status === 200) {
                     message.success('로그아웃 완료');
+                    setTimeout(() => {
+                        window.location.replace('/');
+                    }, 3000);
+
                 }
             })
             .catch((error) => {
-                console.log(error);
-                console.log(employeeToken);
                 message.error('로그아웃 실패');
             });
     }
