@@ -2,6 +2,7 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/common/home';
 import Login from './pages/common/login';
+import PasswordReset from './pages/common/passwordReset';
 import Notice from './pages/common/notice';
 import Webtoon from './pages/common/webtoon';
 import MyPage from './pages/common/myPage';
@@ -21,7 +22,6 @@ import EpRequestAdd from './pages/electropayment/epRequestAdd';
 import NavBar from './component/navBar';
 import Header from './component/header';
 import HrMyAttendance from './pages/hr/hrMyAttendance';
-import PasswordReset from './pages/common/passwordReset';
 import ToonAdd from './pages/webtoon/toonAdd';
 import EpisodeAdd from './pages/webtoon/episodeAdd';
 import AllToonView from './pages/webtoon/allToonView';
@@ -122,7 +122,7 @@ function App() {
           <>
             <Routes>
               <Route path="/" element={<Login />} />
-              <Route path="/passwordReset" element={<PasswordReset />}/>
+              <Route path="/passwordReset" element={<PasswordReset />} />
             </Routes>
           </>
         )

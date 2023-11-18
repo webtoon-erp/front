@@ -24,7 +24,6 @@ const BeforeUploadToon = () => {
             console.log(response.data);
             if (isMounted) {
                 setData(response.data.notFinalWebtoons);
-                console.log("before toon ok");
             }
         });
         return () => {
@@ -67,8 +66,8 @@ const BeforeUploadToon = () => {
                     ))
                 ) : (
                     filteredToon.map((toon) => (
-                        <CardButton key={toon.id} onClick={() => navigate(toon.fileurl)}>
-                            <Img src={toon.imageUrl} alt={toon.title} />
+                        <CardButton key={toon.id} onClick={() => navigate(`/toonDetail/${toon.webtoonId}`)}>
+                            <Img src={`http://146.56.98.153:8080${toon.fileName}`} alt={toon.title} />
                             <CardTitle>{toon.title}</CardTitle>
                         </CardButton>
                     ))
