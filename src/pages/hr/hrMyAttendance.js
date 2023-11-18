@@ -9,9 +9,6 @@ export default function HrMyAttendance() {
     return (
         <>
         <Title>개인 근태 현황</Title>
-        <RegistBtnContainer>
-                    <RegistBtn>휴가 신청</RegistBtn>
-      </RegistBtnContainer>
             <Container2>
                 <MyHours />
             </Container2>
