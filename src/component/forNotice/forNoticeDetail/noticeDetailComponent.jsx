@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import theme from './../../../style/theme';
 import { useNavigate } from 'react-router-dom'
 import HorizonLine from '../../horizonLine';
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, message } from 'antd';
+import { message } from 'antd';
 import FileDownloader from '../../fileDownloader';
 import axios from 'axios';
 
 const NoticeDetailComponent = ({Id}) => {
-  const [noticeData, setNoticeData] = useState(null);
+  const [noticeData, setNoticeData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
@@ -22,43 +21,37 @@ const NoticeDetailComponent = ({Id}) => {
   const [selectedReadCount, setSelectedReadCount] = useState('');
 
   const navigate = useNavigate();
-
-  const handleHomeClick = () => {
-      navigate('/');
-    }
-
-    const handleNoticeClick = () => {
-      navigate('/notice');
-    }
   
-  useEffect(() => {
-    const data = {
-      noticeId: Id,
-    };
-    console.log("테스트ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ");
+    useEffect(() => {
 
-    axios
-      .get('http://146.56.98.153:8080/notice/' + Id, {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setNoticeData(response.data.info);
-          setSelectedTag(response.data.info.noticeType);
-          setSelectedAuthor(response.data.info.name);
-          setSelectedTitle(response.data.info.title);
-          setSelectedDate(response.data.info.noticeDate);
-          setSelectedContent(response.data.info.content);
-          setSelectedReadCount(response.data.info.readCount);
-          setSelectedFiles(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.files}`);
-        }
-      })
-      .catch((error) => {
-        console.error('데이터를 불러오는데 실패했습니다.', error);
-      });
-  }, []);
+      const data = {
+        webtoonId: Id,
+      };
+
+      axios
+        .get(`http://146.56.98.153:8080/notice/${Id}`, {
+          data: data,
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            const noticeInfo = response.data;
+            setNoticeData(noticeInfo);
+            setSelectedTag(noticeInfo.noticeType);
+            setSelectedAuthor(noticeInfo.name);
+            setSelectedTitle(noticeInfo.title);
+            setSelectedDate(noticeInfo.noticeDate);
+            setSelectedContent(noticeInfo.content);
+            setSelectedReadCount(noticeInfo.readCount);
+            setSelectedFiles(`http://146.56.98.153:8080/home/opc/file_repo/${noticeInfo.files}`);
+          } 
+        })
+        .catch((error) => {
+          console.error('데이터를 불러오는데 실패했습니다.', error);
+        });
+    }, []);
 
   const handleToggleEdit = () => {
     setIsEditing((prevState) => !prevState);
@@ -94,9 +87,11 @@ const NoticeDetailComponent = ({Id}) => {
     const jsonData = {
       title: noticeData.selectedTitle,
       content: selectedContent,
-      name: selectedAuthor,
+      readCount: selectedReadCount,
       noticeType: selectedTag,
-      noticeDate: selectedDate
+      noticeDate: selectedDate,
+      name: selectedAuthor,
+      files: selectedFiles
     };
 
     // FormData 객체 생성
@@ -136,26 +131,29 @@ const NoticeDetailComponent = ({Id}) => {
   };
 
   const deleteNoticeHandler = () => {
-    if (selectedCellData) {
+    if (Id) {
       const headers = {
         'Content-Type': 'application/json;charset=UTF-8',
       };
   
       axios
-        .delete(`http://146.56.98.153:8080/notice/${selectedCellData}`, 
+        .delete(`http://146.56.98.153:8080/notice/${Id}`, 
         {
-          noticeId: selectedCellData
+          noticeId: Id
         }
         ,
         {
           headers: headers,
         })
         .then((response) => {
-          message.success('공지 삭제 성공:', response);
+          message.success('공지 삭제 성공');
           setSelectedCellData(null);
+          setTimeout(() => {
+            navigate('/notice');
+        }, 3000);
         })
         .catch((error) => {
-          message.error('공지 삭제 실패:', error);
+          message.error('공지 삭제 실패', error);
         });
     }
   };
@@ -170,98 +168,110 @@ const NoticeDetailComponent = ({Id}) => {
       </BtnContainer>
     <FlexBox>
       <Title>공지사항</Title>
-      <BreadContainer>
-        <Breadcrumb
-            items={[
-              {
-                onClick: handleHomeClick,
-                title: <HomeOutlined />,
-              },
-              {
-                onClick: handleNoticeClick,
-                title: (
-                  <>
-                    <UserOutlined />
-                    <span>공지사항 조회</span>
-                  </>
-                ),
-              },
-              {
-                title: {selectedTitle},
-              },
-            ]}
-          />
-      </BreadContainer>
+      
     </FlexBox>
-    
-        <NoticeContainer>
-          <ContentTitle>{!isEditing ? (
-                  {selectedTitle}
-                  ) : (
-                    <InputContainer><InputField type="text" value={selectedTitle} onChange={handleTitleChange} /></InputContainer>
-                  )}
-          </ContentTitle>
-
-          <ContainerBox>
+    {!isEditing ? (
+      <NoticeContainer>
+            <ContentTitle>{selectedTitle}</ContentTitle>
+            
             <ContainerBox>
-              <Container>
-                <SmallTitle>태그</SmallTitle>
-              </Container>
-              <SmallContentContainer>
-                <SmallContent>{!isEditing ? (
-                  {selectedTag}
-                  ) : (
-                    <InputContainer><InputField type="text" value={selectedTag} onChange={handleTagChange} /></InputContainer>
-                  )}
-                </SmallContent>
-              </SmallContentContainer>
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>태그</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedTag}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
+
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>조회수</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedReadCount}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
             </ContainerBox>
 
             <ContainerBox>
-              <Container>
-                <SmallTitle>부서</SmallTitle>
-              </Container>
-              <SmallContentContainer>
-                <SmallContent>{selectedDept}</SmallContent>
-              </SmallContentContainer>
-            </ContainerBox>
-          </ContainerBox>
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>등록일</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedDate}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
 
-          <ContainerBox>
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>작성자</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedAuthor}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
+            </ContainerBox>
+          <HorizonLine />
+          <ContentContainer>{selectedContent}</ContentContainer>
+
+          <FileContainer>
+            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]}/>
+          </FileContainer>
+          </NoticeContainer>
+        ) : (
+            <NoticeContainer>
+            <ContentTitle><InputContainer><InputField type="text" value={selectedTitle} onChange={handleTitleChange} /></InputContainer></ContentTitle>
+            
             <ContainerBox>
-              <Container>
-                <SmallTitle>등록일</SmallTitle>
-              </Container>
-              <SmallContentContainer>
-                <SmallContent>{selectedDate}</SmallContent>
-              </SmallContentContainer>
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>태그</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent><InputContainer><InputField type="text" value={selectedTag} onChange={handleTagChange} /></InputContainer></SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
+
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>조회수</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedReadCount}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
             </ContainerBox>
 
             <ContainerBox>
-              <Container>
-                <SmallTitle>작성자</SmallTitle>
-              </Container>
-              <SmallContentContainer>
-                <SmallContent>{selectedAuthor}</SmallContent>
-              </SmallContentContainer>
-            </ContainerBox>
-          </ContainerBox>
-        <HorizonLine />
-        <ContentContainer>
-          {!isEditing ? (
-            {selectedContent}
-            ) : (
-              <InputContainer><InputField type="text" value={selectedContent} onChange={handleContentChange} /></InputContainer>
-            )}
-        </ContentContainer>
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>등록일</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedDate}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
 
-        <FileContainer>
-          <FileDownloader files={[{ name: noticeData.title, filename: selectedFiles }]}/>
-        </FileContainer>
-        </NoticeContainer>
-        
+              <ContainerBox>
+                <Container>
+                  <SmallTitle>작성자</SmallTitle>
+                </Container>
+                <SmallContentContainer>
+                  <SmallContent>{selectedAuthor}</SmallContent>
+                </SmallContentContainer>
+              </ContainerBox>
+            </ContainerBox>
+          <HorizonLine />
+          <ContentContainer><InputContainer><InputField type="text" value={selectedContent} onChange={handleContentChange} /></InputContainer></ContentContainer>
+
+          <FileContainer>
+            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]}/>
+          </FileContainer>
+          </NoticeContainer>
+        )}
       </NoticeDetailContainer>
-
     );
 };
   

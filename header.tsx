@@ -52,6 +52,9 @@ const Header: React.FC = () => {
             })
             .then((result) => {
                 if (result.status === 200) {
+                    sessionStorage.removeItem("accessToken");
+                    sessionStorage.removeItem("employeeId");
+                    sessionStorage.removeItem("position");
                     message.success('로그아웃 완료');
                 }
             })

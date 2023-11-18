@@ -53,6 +53,7 @@ const Header: React.FC = () => {
             })
             .then((result) => {
                 if (result.status === 200) {
+                    sessionStorage.clear();
                     message.success('로그아웃 완료');
                     setTimeout(() => {
                         window.location.replace('/');
