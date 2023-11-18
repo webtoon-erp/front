@@ -39,6 +39,7 @@ const ToonDetailComponent = ({Id}) => {
           setEditedContent(response.data.info.intro)
           setWebtoonData(response.data.info);
           setThumbnailPreview(`http://146.56.98.153:8080/home/opc/file_repo/${response.data.info.thumbnailFileName}`);
+          console.log("response.data.info.thumbnailFileName", response.data.info.thumbnailFileName);
         }
       })
       .catch((error) => {
