@@ -2,78 +2,43 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
-import theme from '../../style/theme';
+import theme from '../../style/theme.js';
 
 const currentDate = new Date();
 
 const month = currentDate.getMonth() + 1;
 const week = Math.ceil(currentDate.getDate() / 7);
 
-const FakeData = [
-    {
-        id: 1,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 1',
-        url: '/toon1',
-        week: '월요일',
-    },
-    {
-        id: 2,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 2',
-        url: '/toon2',
-        week: '월요일',
-    },
-    {
-        id: 3,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 3',
-        url: '/toon3',
-        week: '화요일',
-    },
-    {
-        id: 4,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 4',
-        url: '/toon4',
-        week: '수요일',
-    },
-    {
-        id: 5,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 5',
-        url: '/toon5',
-        week: '수요일',
-    },
-    {
-        id: 6,
-        imageUrl: 'https://image.newdaily.co.kr/site/data/img/2023/05/30/2023053000065_0.png',
-        title: 'toon 6',
-        url: '/toon6',
-        week: '목요일',
-    },
-];
-
 const AfterUploadToon = () => {
     const isLoading = false;
+    const navigate = useNavigate();
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [selectedWeek, setSelectedWeek] = useState('요일');
+    const [filteredToon, setFilteredToon] = useState([]);
 
     useEffect(() => {
-        axios.get('http://146.56.98.153:8080/webtoon').then((response)=> {
-            setData(response.data);
+        let isMounted = true;
+        axios.get('http://146.56.98.153:8080/webtoon/cardview').then((response)=> {
+            console.log(response.data);
+            if (isMounted) {
+                setData(response.data.finalWebtoons);
+                console.log("after toon ok");
+            }
         })
     }, []);
+
+    useEffect(() => {
+        setFilteredToon(selectedWeek === '요일' ? data : data.filter((toon) => `${toon.category}요일` === selectedWeek));
+        console.log("week", selectedWeek);
+    }, [selectedWeek, data]);
 
     const SelectWeekhandler = (e) => {
         setSelectedWeek(e.target.value);
     };
-
-    const filteredToon = selectedWeek === '요일' ? data : data.filter((toon) => toon.week === selectedWeek);
-
+    
     return(
         <AfterUploadToonContainer>
             <FlexBox>
@@ -100,12 +65,10 @@ const AfterUploadToon = () => {
                     ))
                 ) : (
                     filteredToon.map((toon) => (
-                        <Link to={toon.url} key={toon.id} style={{ textDecoration: 'none' }}>
-                        <CardButton>
+                        <CardButton key={toon.id} onClick={() => navigate(toon.fileurl)}>
                             <Img src={toon.imageUrl} alt={toon.title} />
                             <CardTitle>{toon.title}</CardTitle>
                         </CardButton>
-                        </Link>
                     ))
                 )}          
             </CardGrid>

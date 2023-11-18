@@ -13,10 +13,12 @@ const CalendarComponent = () => {
   const [selectedTag, setSelectedTag] = useState('전체');
   const [rowData, setRowData] = useState([]);
   const [selectedCellData, setSelectedCellData] = useState(null);
-  
-  
+
   useEffect(() => {
-    // Make a GET request to fetch data
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     axios.get('http://146.56.98.153:8080/plans/list', {
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -30,8 +32,35 @@ const CalendarComponent = () => {
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
-  }, []);
-  
+  };
+
+  // 셀 클릭 핸들러
+  function handleCellClick(event) {
+    setSelectedCellData(event.data);
+  }
+
+  const handleDelete = () => {
+    if (selectedCellData) {
+      const planId = selectedCellData.planId;
+      axios
+        .delete('http://146.56.98.153:8080/plans/'+planId, {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            message.success('삭제 성공');
+            setSelectedCellData(null);
+            // Update the grid's data after a successful deletion
+            fetchData();
+          } else {
+            message.error('삭제 실패: 서버 응답 오류');
+          }
+          });
+    }
+  };
+
   // ag-grid
   const columnDefs = [
     { headerName: '제목', field: 'title', width: 350 },
@@ -50,50 +79,13 @@ const CalendarComponent = () => {
     onCellClicked: handleCellClick,
   };
 
-  const navigate = useNavigate();
-
-  const handleDelete = () => {
-    if (selectedCellData) {
-      const headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
-      };
-  
-      axios
-        .delete(`http://146.56.98.153:8080/plans/${selectedCellData}`, 
-        {
-          planId: selectedCellData
-        }
-        ,
-        {
-          headers: headers,
-        })
-        .then((response) => {
-          message.success('삭제 성공:', response);
-          // navigate(`/toonDetail/${planId}`);
-          setSelectedCellData(null);
-        })
-        .catch((error) => {
-          message.error('삭제 실패:', error);
-        });
-    }
-  };
-  
-  
-
-  // 셀 클릭 핸들러
-  function handleCellClick(event) {
-    setSelectedCellData(event.data);
-  }
-
   return (
     <>
       <Title>일정 조회</Title>
-
-            <RegistBtnContainer>
-              <Btn onClick={() => handleDelete()}>삭제</Btn>
-            </RegistBtnContainer>
+      <RegistBtnContainer>
+        <Btn onClick={() => handleDelete()}>삭제</Btn>
+      </RegistBtnContainer>
       <NoticeContainer>
-        
         <div className="ag-theme-alpine" style={{ height: '400px', width: '1050px' }}>
           <AgGridReact
             columnDefs={columnDefs}
@@ -109,25 +101,25 @@ const CalendarComponent = () => {
 export default CalendarComponent;
 
 const Btn = styled.button`
-    width: 100px;
-    height: 40px;
-    background-color: ${theme.colors.btn};
-    border: none;
-    color: ${theme.colors.white};
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
-    &:hover {
-        background-color: #00B757;
-    }
-    cursor: pointer;
-    margin: 0px 15px 0px 15px;
-`
+  width: 100px;
+  height: 40px;
+  background-color: ${theme.colors.btn};
+  border: none;
+  color: ${theme.colors.white};
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+  &:hover {
+    background-color: #00B757;
+  }
+  cursor: pointer;
+  margin: 0px 15px 0px 15px;
+`;
 
 const RegistBtnContainer = styled.div`
-    display: flex;
-    padding-left: 75%;
-    margin-bottom: 20px;
+  display: flex;
+  padding-left: 75%;
+  margin-bottom: 20px;
 `;
 
 const NoticeContainer = styled.div`

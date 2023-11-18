@@ -122,6 +122,7 @@ function App() {
           <>
             <Routes>
               <Route path="/" element={<Login />} />
+              <Route path="/passwordReset" element={<PasswordReset />}/>
             </Routes>
           </>
         )
@@ -143,7 +144,6 @@ function App() {
               />
               <Routes>
                 <Route path="/home" element={<Home />} />
-                <Route path="/passwordReset" element={<PasswordReset />}/>
                 <Route path="/notice" element={<Notice />} />
                 <Route path="/webtoon" element={<Webtoon />} />
                 <Route path="/myPage" element={<MyPage />} />
