@@ -4,129 +4,74 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import theme from '../../../style/theme';
+import { message } from 'antd';
 
-const FakeData = [
-    {
-        id: 1,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '사장',
-        dep: '',
-        name: 'employee 1',
-        url: '/employee1',
-    },
-    {
-        id: 2,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '전무',
-        dep: '',
-        name: 'employee 2',
-        url: '/employee2',
-    },
-    {
-        id: 3,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '상무',
-        dep: '',
-        name: 'employee 3',
-        url: '/employee3',
-    },
-    {
-        id: 4,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '부장',
-        dep: '인사부',
-        name: 'employee 4',
-        url: '/employee4',
-    },
-    {
-        id: 5,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '부장',
-        dep: '회계부',
-        name: 'employee 5',
-        url: '/employee5',
-    },
-    {
-        id: 6,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '차장',
-        dep: '인사부',
-        name: 'employee 6',
-        url: '/employee6',
-    },
-    {
-        id: 7,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '과장',
-        dep: '인사부',
-        name: 'employee 7',
-        url: '/employee7',
-    },
-    {
-        id: 8,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '팀장',
-        dep: '웹툰관리부',
-        name: 'employee 8',
-        url: '/employee8',
-    },
-    {
-        id: 9,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '팀장',
-        dep: '회계부',
-        name: 'employee 9',
-        url: '/employee9',
-    },
-    {
-        id: 10,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '사원',
-        dep: '웹툰관리부',
-        name: 'employee 10',
-        url: '/employee10',
-    },
-    {
-        id: 11,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        rank: '사원',
-        dep: '개발부',
-        name: 'employee 11',
-        url: '/employee11',
-    },
-];
-
-    
 const EmployeeView = () => {
     const isLoading = false;
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [selectedDep, setSelectedDep] = useState('전체');
+    const [filteredEmp, setFilteredEmp] = useState([]);
+    const [employeeToken, setEmployeeToken] = useState('');
+    const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        axios.get('http://146.56.98.153:8080/users').then((response)=> {
-            setData(response.data);
-        })
+        setUserId(sessionStorage.getItem("employeeId"));
+    }, [userId]);
+
+    useEffect(() => {
+        const employeeToken = sessionStorage.getItem("accessToken");
+        if (employeeToken !== null) {
+            setEmployeeToken(employeeToken);
+        }
     }, []);
 
+    useEffect(() => {
+        axios
+            .get('http://146.56.98.153:8080/users', {
+                headers: {
+                    Authorization: `Bearer ${employeeToken}`
+                },
+                params: {
+                    page: 1,
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setData(response.data);
+                }
+            })
+            .then((result) => {
+                if (result.status === 200) {
+                    message.success(`직원 정보를 정상적으로 불러왔습니다.`);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                //message.error('직원 정보를 정상적으로 불러오지 못했습니다.');
+            });
+    }, []);
+
+    useEffect(() => {
+        setFilteredEmp(selectedDep === '전체' ? data : data.filter((emp) => `${emp.deptCode}` === selectedDep));
+        console.log("부서", selectedDep);
+    }, [selectedDep, data]);
+
     // 부서 선택 핸들러
-    const SelectDephandler = (e) => {
+    const SelectDepHandler = (e) => {
         setSelectedDep(e.target.value);
     };
-
-    // 선택된 부서에 해당하는 프로필 필터링
-    const filteredProfiles = selectedDep === '전체' ? data : data.filter((emp) => emp.dep === selectedDep);
 
     return(
         <EmpProfileContainer>
             <SelectAndBtnContainer>
                 <SelectDepContainer>
-                    <SelectDep value={selectedDep} onChange={SelectDephandler}>
+                    <SelectDep value={selectedDep} onChange={SelectDepHandler}>
                         <OptionDep value="전체">전체</OptionDep>
-                        <OptionDep value="인사부">인사부</OptionDep>
-                        <OptionDep value="회계부">회계부</OptionDep>
-                        <OptionDep value="웹툰관리부">웹툰관리부</OptionDep>
-                        <OptionDep value="개발부">개발부</OptionDep>
+                        <OptionDep value="HR">인사부</OptionDep>
+                        <OptionDep value="AM">회계부</OptionDep>
+                        <OptionDep value="WT">웹툰관리부</OptionDep>
+                        <OptionDep value="IT">개발부</OptionDep>
                         <OptionDep value="">기타</OptionDep>
                     </SelectDep>
                 </SelectDepContainer>
@@ -142,20 +87,18 @@ const EmployeeView = () => {
                 {isLoading ? (
                 Array.from({ length: 10 }).map((_, index) => (
                     <SkeletonCardButton key={index}>
-                    <Skeleton width={80} height={120} />
+                        <Skeleton width={80} height={120} />
                     </SkeletonCardButton>
                 ))
             ) : (
-                filteredProfiles.map((emp) => (
-                    <Link to={emp.url} key={emp.id} style={{ textDecoration: 'none' }}>
-                    <CardButton>
-                        <Img src={emp.imageUrl} alt={`${emp.rank} ${emp.name}의 프로필 사진`} />
+                filteredEmp.map((emp) => (
+                    <CardButton key={emp.employeeId}>
+                        <Img src={emp.photo ? emp.photo : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${emp.position} ${emp.name}의 프로필 사진`} />
                         <EmpInfContainer>
-                        <CardRank>{emp.rank}</CardRank>
-                        <CardName>{emp.name}</CardName>
+                            <CardRank>{emp.position}</CardRank>
+                            <CardName>{emp.name}</CardName>
                         </EmpInfContainer>
                     </CardButton>
-                    </Link>
                 ))
                 )}
             </CardGrid>
@@ -196,12 +139,12 @@ const SelectDep = styled.select`
     outline: 0 none;
     padding: 0 5px;
     cursor: pointer;
-`
+`;
 
 const OptionDep = styled.option`
     background: #f1f1f1;
     font-size: 15px;
-`
+`;
 
 const BtnContainer = styled.div`
     display: flex;
@@ -221,7 +164,7 @@ const Btn = styled.button`
     }
     cursor: pointer;
     margin: 0px 15px 0px 15px;
-`
+`;
 
 const EmpInfContainer = styled.div`
     width: 110px;
