@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import theme from '../../../style/theme';
 import { Button, Upload, message } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EpisodeAddComponent = ({ ToonId }) => {
   const { Id } = useParams();
@@ -14,6 +14,8 @@ const EpisodeAddComponent = ({ ToonId }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [toonId, setToonId] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setEmployeeId(sessionStorage.getItem("employeeId"));
     setToonId(localStorage.getItem('Id'));
@@ -23,9 +25,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = (event) => {
-      setSelectedThumbnail(event.target.result); // 썸네일 파일 저장
-    };
+    setSelectedThumbnail(file); // 썸네일 파일 저장
 
     if (file) {
       reader.readAsDataURL(file);
@@ -76,6 +76,8 @@ const EpisodeAddComponent = ({ ToonId }) => {
         console.log('result', result);
         if (result.status === 200) {
           message.success('회차가 정상적으로 등록되었습니다.');
+          console.log("res", result.data);
+          navigate(`${result.data.webtoonId}`);
         } else {
           message.error('회차가 정상적으로 등록되지 않았습니다.');
         }
@@ -116,7 +118,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
           </Container>
           {selectedThumbnail && (
             <Container>
-              <ImagePreview src={selectedThumbnail} alt="Thumbnail Preview" />
+              <ImagePreview />
             </Container>
           )}
           <Container>
@@ -125,7 +127,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
           </Container>
           {selectedWorks && (
             <Container>
-              <ImagePreview src={URL.createObjectURL(selectedWorks)} alt="Works Preview" />
+              <ImagePreview />
             </Container>
           )}
         </RangeContainer>

@@ -4,6 +4,7 @@ import theme from '../../style/theme';
 import dayjs from 'dayjs';
 import { TimePicker, DatePicker, Space, message } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ForCalendarRegist = () => {
   const [registDate, setRegistDate] = useState(new Date());
@@ -18,6 +19,8 @@ const ForCalendarRegist = () => {
   useEffect(() => {
     setUserId(sessionStorage.getItem("employeeId"));
   }, [userId]);
+
+  const navigate = useNavigate();
 
   const handleSubmitClick = () => {
     const startDateD = selectedStartDate.$d;
@@ -55,6 +58,7 @@ const ForCalendarRegist = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success('[일정] 등록이 정상적으로 등록되었습니다.');
+          navigate("/schedule");
         } else {
           message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
         }

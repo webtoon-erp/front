@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
@@ -9,7 +9,7 @@ import { message } from 'antd';
 import theme from '../../../style/theme';
 
 const AllWebtoonListView = () => {
-   const [filterText, setFilterText] = useState('');
+    const [filterText, setFilterText] = useState('');
     const [selectedCell, setSelectedCell] = useState(null);
     const [rowData, setRowData] = useState([]);
     const gridRef = useRef(null);

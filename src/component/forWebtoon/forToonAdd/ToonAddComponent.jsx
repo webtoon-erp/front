@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ToonAddComponent = () => {
   const [selectedTitle, setSelectedTitle] = useState('');
@@ -43,6 +44,8 @@ const ToonAddComponent = () => {
     const file = e.target.files[0];
     setThumbnailFile(file); // 썸네일 파일 저장
   };
+
+  const navigate = useNavigate();
 
  // 작품 등록 버튼 클릭 핸들러
 const handleSubmitClick = () => {
@@ -99,6 +102,7 @@ const handleSubmitClick = () => {
       console.log('result', result);
       if (result.status === 200) {
         message.success('작품이 정상적으로 등록되었습니다.');
+        navigate("/allToonView");
       } else {
         message.error('작품이 정상적으로 등록되지 않았습니다.');
       }
