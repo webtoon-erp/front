@@ -22,6 +22,8 @@ export const savedData = {
       "elecReq" : {
         "selectedApprId" :null,
         "selectedRefId" :null,
+        "selectedApprAssigner" :null,
+        "selectedRefAssigner" :null,
         "title" :null,
         "content" :null,
         "selectedFile" : null,
