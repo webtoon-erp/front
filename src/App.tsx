@@ -176,7 +176,7 @@ function App() {
                 <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
                 <Route path="/epFormWorkRequest" element={<EpFormWorkRequest /> } />
                 <Route path="/noticeAdd" element={<NoticeAdd />} />
-                <Route path="/noticeDetail" element={<NoticeDetail /> } />
+                <Route path="/noticeDetail/:Id" element={<NoticeDetail /> } />
                 <Route path="/scheduleAdd" element={<ScheduleAdd />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/scheduleDetail" element={<ScheduleDetail />} />
