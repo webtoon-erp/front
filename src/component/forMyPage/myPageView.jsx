@@ -19,9 +19,10 @@ const MyPageView = () => {
             axios.get(`http://146.56.98.153:8080/users/${userId}`)
             .then(function (response) {
                 if (response.status === 200) {
-                    setData(response.data);
+                    setData(response.data.info);
                     setRowData(response.data.qualifications || []);
-                    console.log("response.data", response.data);
+                    console.log("응답 데이터: ", response.data);
+                    console.log("데이터: " + data);;
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
