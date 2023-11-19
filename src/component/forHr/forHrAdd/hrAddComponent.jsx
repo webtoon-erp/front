@@ -2,7 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
-import { TimePicker, DatePicker, Space, message } from 'antd';
+import { DatePicker, message } from 'antd';
+import { useNavigate } from "react-router-dom";
 
 
 const HrAddComponent = () => {
@@ -10,9 +11,9 @@ const HrAddComponent = () => {
   const [selectedID, setSelectedID] = useState('');
   const [selectedTeamID, setSelectedTeamID] = useState('');
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedDept, setSelectedDept] = useState('');
-  const [selectedDeptCode, setSelectedDeptCode] = useState('');
-  const [selectedPosition, setSelectedPosition] = useState('');
+  const [selectedDept, setSelectedDept] = useState('인사부');
+  const [selectedDeptCode, setSelectedDeptCode] = useState('HR');
+  const [selectedPosition, setSelectedPosition] = useState('부장');
   const [selectedPhoneNumber, setSelectedPhoneNumber] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedBirthdayDate, setSelectedBirthdayDate] = useState(null);
@@ -66,32 +67,44 @@ const HrAddComponent = () => {
     }
   };
 
-  const handleSubmitClick = () => {
+  const navigate = useNavigate();
 
-    axios.post('http://146.56.98.153:8080/users',
-      {
-        name: selectedName,           
-        deptName: selectedDept,           
-        deptCode: selectedDeptCode,           
-        position: selectedPosition,
-        teamNum: selectedTeamID,
-        employeeId: selectedID,
-        joinDate: selectedStartDate,
-        tel: selectedPhoneNumber,
-        email: selectedEmail,
-        birthDate: selectedBirthdayDate
-      },
-      {
+  const handleSubmitClick = () => {
+    const requestData = {
+          name: selectedName,           
+          deptName: selectedDept,           
+          deptCode: selectedDeptCode,           
+          position: selectedPosition,
+          teamNum: selectedTeamID,
+          employeeId: selectedID,
+          joinDate: selectedStartDate,
+          tel: selectedPhoneNumber,
+          email: selectedEmail,
+          birthDate: selectedBirthdayDate
+        };
+        
+        const formData = new FormData();
+
+        formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
+
+        formData.append('file', setProfilePreview);
+
+    axios.post('http://146.56.98.153:8080/users', formData, {
         headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+            'Content-Type': 'multipart/form-data'
+            // Authorization: 'Bearer ' + employeeToken,
+        }
+    })
       .then((result) => {
-        if (result.status == 201) {
+        if (result.status === 201) {
          message.success(`사원등록이 정상적으로 완료되었습니다.`);
+         setTimeout(() => {
+          navigate('/hrView');
+      }, 3000);
        }  
       })
       .catch((error) => {
+        console.log(error);
        message.error('사원등록이 정상적으로 완료되지 않았습니다.');
       })
   };
@@ -131,8 +144,8 @@ const HrAddComponent = () => {
                           <Option value="부장">부장</Option>
                           <Option value="과장">과장</Option>
                           <Option value="차장">차장</Option>
+                          <Option value="인턴">대리</Option>
                           <Option value="사원">사원</Option>
-                          <Option value="인턴">인턴</Option>
                 </Select>
           </Container>
           <Container>
