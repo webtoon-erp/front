@@ -105,7 +105,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             })
             .catch((error) => {
                 console.log(error);
-                message.error('출근 기록이 실패하였습니다.');
+                message.error('이미 오늘 출근 정보를 등록하였습니다.');
             });
     }
 
@@ -129,7 +129,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             })
             .catch((error) => {
                 console.log(error);
-                message.error('퇴근 기록이 실패하였습니다.');
+                message.error('오늘 등록된 출근 정보가 없거나 이미 퇴근 정보를 등록하였습니다.');
             });
     }
 
