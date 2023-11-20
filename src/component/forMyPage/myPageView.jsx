@@ -21,8 +21,6 @@ const MyPageView = () => {
                 if (response.status === 200) {
                     setData(response.data.info);
                     setRowData(response.data.qualifications || []);
-                    console.log("응답 데이터: ", response.data);
-                    console.log("데이터: " + data);;
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
