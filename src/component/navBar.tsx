@@ -156,7 +156,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
             {data.photo ? (
-                <ProfileImg src={data.photo} />
+                <ProfileImg src={data.photo} onClick={toMyPage} />
             ) : (
                 <Avatar
                     onClick={toMyPage}
