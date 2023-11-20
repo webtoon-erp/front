@@ -69,7 +69,7 @@ const MyPageView = () => {
             </FlexBox>            
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
-                    <Img src={data.imageUrl} alt={`${data.position} ${data.name}의 프로필 사진`} />
+                    <Img src={data.imageUrl ? data.imageUrl : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${data.position} ${data.name}의 프로필 사진`} />
                 </ProfileImgContainer>
                 <ProfileInfoContainer>
                     <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>
