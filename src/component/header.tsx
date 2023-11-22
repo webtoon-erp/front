@@ -1,6 +1,7 @@
 import React, { useState ,useEffect } from 'react';
 import styled from "styled-components";
 import theme from "../style/theme";
+import logo from "../img/logo1.png";
 import { BellOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { message, Popover } from 'antd';
@@ -19,14 +20,6 @@ const BellContent = styled.div`
 
 const text = <span>알림</span>;
 
-const content = (
-    <div>
-        <HorizonLine text={''}/>
-        <BellContent>Content</BellContent>
-        <BellContent>Content</BellContent>
-    </div>
-);
-
 const Header: React.FC = () => {
 
     const toMyPage = () => {
@@ -34,6 +27,8 @@ const Header: React.FC = () => {
     };
 
     const [employeeToken, setEmployeeToken] = useState('');
+    const [data, setData] = useState<any[]>([]);
+    const [messageId, setMessageId] = useState('');
 
     useEffect(() => {
         const employeeToken = sessionStorage.getItem("accessToken");
@@ -66,13 +61,55 @@ const Header: React.FC = () => {
             });
     }
 
+    const employeeId = sessionStorage.getItem("employeeId");
+
+    useEffect(() => {
+        axios.get(`http://146.56.98.153:8080/message/${employeeId}`)
+        .then((response) => {
+            if (response.status === 200) {
+                setData(response.data);
+                setMessageId(response.data);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }, []);
+
+    const statChangeHandler = (messageId: any) => {
+        const stat = 'R';
+        axios
+            .patch(`http://146.56.98.153:8080/message/${messageId}/${stat}`)
+            .then((result) => {
+                if (result.status === 200) {
+                    console.log('정상 작동');
+                }
+            })
+            .catch((error) => {
+                console.error('상태 변경 실패', error);
+            });
+    }
+
+    const contentData = (
+        <div>
+            <HorizonLine text={''}/>
+            <div>
+                {data.map((data: any) => (
+                    <BellContent key={data.refId} onClick={() => statChangeHandler(data.messageId)}>
+                        {data.content}
+                    </BellContent>
+                ))}
+            </div>
+        </div>
+    );
+
     return (
             <HeaderStyle>
                     <ContentStyle>
-                    <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Naver_Line_Webtoon_logo.png" />
+                    <ImgStyle className="logo" alt="네이버 웹툰 로고 이미지" src={logo} />
                         <FlexBox>
                             <LogoutBtn onClick={logoutHandler}>Logout</LogoutBtn>
-                            <Popover placement="bottom" title={text} content={content} trigger="click">
+                            <Popover placement="bottom" title={text} content={contentData} trigger="click">
                                 <BellOutlined style={ {color: 'white', fontSize: '20px', marginRight: '15px'} } />
                             </Popover>
                             <UserOutlined onClick={toMyPage} style={ {color: 'white', fontSize: '20px', cursor: 'pointer'} } />
