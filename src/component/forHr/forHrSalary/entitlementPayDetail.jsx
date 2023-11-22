@@ -16,6 +16,10 @@ const EntitlementPayDetail = () => {
     const gridRef = useRef(null);
     const [rowData, setRowData] = useState([]);
 
+    const onGridReady = (params) => {
+        gridRef.current = params.api;
+    };
+
     const onCellValueChanged = useCallback((event) => {
         console.log(
             'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
@@ -36,9 +40,9 @@ const EntitlementPayDetail = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        { field: '자격증 명', editable: true,
+        {  headerName: '자격증 명', field: 'name', editable: true,
             headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
-        { field: '지급액', editable: true , width: 100 },
+        { headerName: '자격 수당', field: 'money', editable: true , width: 100 },
     ]);
 
     useEffect(() => {
@@ -52,7 +56,7 @@ const EntitlementPayDetail = () => {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    setRowData(response.data);
+                    setRowData(response.data.qualificationList);
                     console.log("response.data", response.data);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
@@ -76,6 +80,13 @@ const EntitlementPayDetail = () => {
     const onBtStopEditing = useCallback(() => {
         gridRef.current.api.stopEditing();
     }, []);
+
+    useEffect(() => {
+        // 컴포넌트가 마운트될 때 초기 필터 설정
+        if (gridRef.current) {
+            gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+        }
+    }, []);
     
     let count = 1;
 
@@ -97,6 +108,7 @@ const EntitlementPayDetail = () => {
                         editType="fullRow"
                         onCellValueChanged={onCellValueChanged}
                         onRowValueChanged={onRowValueChanged}
+                        onGridReady= {onGridReady}
                     />
                 </EntitlementPayGrid>
             </div>

@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -9,21 +10,25 @@ import { message } from 'antd';
 
 const SalaryStub = () => {
     const [rowData, setRowData] = useState([]);
+    const gridRef = useRef(null);
 
-    // const rowData = [
-    //     {급여월: '2023-02', '급여 지급일': '2023-02-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    //     {급여월: '2023-03', '급여 지급일': '2023-03-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    //     {급여월: '2023-04', '급여 지급일': '2023-04-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    //     {급여월: '2023-05', '급여 지급일': '2023-05-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    //     {급여월: '2023-06', '급여 지급일': '2023-06-10', '지급 합계': '72,250,000', '공제 후 지급액': '65,025,000'},
-    // ];
+    const onGridReady = (params) => {
+        gridRef.current = params.api;
+    };
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '급여월', sortable: true, filter: true, width: '150px'},
-        {field: '급여 지급일', sortable: true, filter: true, width: '180px'},
-        {field: '지급 합계', sortable: true, filter: true, width: '180px'},
-        {field: '공제 후 지급액', sortable: true, filter: true, width: '180px'},
+        {headerName: '급여월', field: 'payMonth', sortable: true, filter: true, width: '150px'},
+        {headerName: '급여 지급일', field: 'payDate', sortable: true, filter: true, width: '180px'},
+        {headerName: '지급 합계', field: 'totalMonthSalary', sortable: true, filter: true, width: '180px'},
+        {headerName: '공제 후 지급액', field: 'totalMonthSalary', sortable: true, filter: true, width: '180px'},
     ]);
+
+    useEffect(() => {
+        // 컴포넌트가 마운트될 때 초기 필터 설정
+        if (gridRef.current) {
+            gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+        }
+    }, []);
 
     useEffect(() => {
         const userId = sessionStorage.getItem('employeeId');
@@ -36,8 +41,8 @@ const SalaryStub = () => {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    setRowData(response.data);
-                    console.log("response.data", response.data);
+                    setRowData(response.data.payList);
+                    console.log("response.data", response.data.payList);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
@@ -58,6 +63,7 @@ const SalaryStub = () => {
                     columnDefs={columnDefs}
                     animateRows={true}
                     rowSelection='multiple'
+                    onGridReady= {onGridReady}
                 />
             </SalaryStubGrid>
         </SalaryStubContainer>
@@ -79,4 +85,4 @@ const Title = styled.h3`
 const SalaryStubGrid = styled.div`
     width: 720px;
     height: 300px;
-`
+`;
