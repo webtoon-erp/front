@@ -35,7 +35,7 @@ const items: MenuProps['items'] = [
     getItem('인사', 'menu3', <UserOutlined />, [
         getItem('직원 관리', '1', null, [getItem('전체 직원 관리', 'hrView'), getItem('조직도', 'hrOrgChart')]),
         getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
-        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', 'hrAllSalaryView')]),
+        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary')]),
     ]),
 
     getItem('ITSM', 'menu4', <LaptopOutlined />, [
