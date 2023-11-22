@@ -1,7 +1,9 @@
+import HrAddComponent from "../../component/forHr/forHrAdd/hrAddComponent";
+
 export default function HrAdd (){
     return(
         <>
-        <div>hrAdd</div>
+         <HrAddComponent />
         </>
-    )
+    );
 }

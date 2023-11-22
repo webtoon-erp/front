@@ -119,3 +119,50 @@ const Header: React.FC = () => {
     )
 }
 export default Header;
+
+const HeaderStyle = styled.header`
+    background-color: #22BB33;
+    position: fixed;
+    left: 262px;
+    top: 0;
+    width: 83%;
+    height: 80px;
+    z-index: 5;
+`;
+
+const ContentStyle = styled.div`
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-around;
+`;
+
+const ImgStyle = styled.img`
+    width: 68px;
+    height: 68px;
+`
+
+const FlexBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const LogoutBtn = styled.button`
+    width: 70px;
+    height: 23px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 50px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 30px 0px 0px;
+`
