@@ -268,7 +268,6 @@ const HrProfileDetail = ({Id}) => {
                     <BtnBox>
                         <Btn onClick={() => addItems(count)}>추 가</Btn>
                         <Btn onClick={onRemoveSelected}>선택 삭제</Btn>
-                        {/* <Btn onClick={clearData}>모두 삭제</Btn> */}
                         <Btn onClick={onBtStopEditing}>등 록</Btn>
                     </BtnBox>
                     <div style={{ flexGrow: '1' }}>

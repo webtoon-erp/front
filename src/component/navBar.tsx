@@ -104,7 +104,6 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 message.error('이미 오늘 출근 정보를 등록하였습니다.');
             });
     }
@@ -128,7 +127,6 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 message.error('오늘 등록된 출근 정보가 없거나 이미 퇴근 정보를 등록하였습니다.');
             });
     }
@@ -140,7 +138,6 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             axios.get(`http://146.56.98.153:8080/users/${userId}`)
             .then(function (response) {
                 if (response.status === 200) {
-                    console.log(response.data.info);
                     setData(response.data.info);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
