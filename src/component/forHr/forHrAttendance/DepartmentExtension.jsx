@@ -11,7 +11,7 @@ export default function DepartmentExtension() {
   useEffect(() => {
     axios.get('http://146.56.98.153:8080/attendance/total')
       .then(response => {
-        const departmentOvertimeAvgDto = response.data.departmentOvertimeAvgDto;
+        const departmentOvertimeSumDto = response.data.departmentOvertimeSumDto;
 
         if (chartRef.current) {
           // Check if the chart exists and destroy it if it does
@@ -23,10 +23,10 @@ export default function DepartmentExtension() {
           chartRef.current.chart = new Chart(ctx, {
             type: 'bar',
             data: {
-              labels: Object.keys(departmentOvertimeAvgDto),
+              labels: Object.keys(departmentOvertimeSumDto),
               datasets: [{
                 label: '부서별 연장근무시간(월계)',
-                data: Object.values(departmentOvertimeAvgDto).map(value => parseTimeToMinutes(value)),
+                data: Object.values(departmentOvertimeSumDto).map(value => parseTimeToMinutes(value)),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
@@ -69,7 +69,7 @@ export default function DepartmentExtension() {
   return (
     <>
       <DepartmentVacationContainer>
-        <Title>그룹별 연장근무시간(월계평균)</Title>
+        <Title>그룹별 연장근무시간</Title>
         <HorizonLine />
         <DepartmentVacationGrid className="ag-theme-alpine" style={{ height: '300px', width: '300px' }}>
           <canvas ref={chartRef} width="300" height="200"></canvas>
