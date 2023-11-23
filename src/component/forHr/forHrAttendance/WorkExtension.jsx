@@ -106,7 +106,7 @@ export default function WorkExtension() {
       'mayOvertime', 'junOvertime', 'julOvertime', 'augOvertime',
       'sepOvertime', 'octOvertime', 'novOvertime', 'decOvertime'
     ];
-    return monthNames[monthIndex+1];
+    return monthNames[monthIndex - 1];
   };
 
   return (
