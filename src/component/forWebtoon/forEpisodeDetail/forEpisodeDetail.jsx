@@ -116,6 +116,24 @@ const ForEpisodeDetail = ({Id}) => {
             message.error('삭제 실패:', error);
         });
     }
+
+    const handleUpload = () => {
+        const headers = {
+            'Content-Type': 'application/json;charset=UTF-8',
+        };
+        axios
+        .post('http://146.56.98.153:8080/webtoonDt/'+Id, {
+            headers: headers,
+        })
+        .then((response) => {
+            message.success(' 회차 최종 업로드 성공', response);
+            navigate(`/webtoon`);
+        })
+        .catch((error) => {
+            message.error('회차 최종 업로드 실패', error);
+        });
+    }
+
     
     const navigate = useNavigate();
 
@@ -202,9 +220,15 @@ const ForEpisodeDetail = ({Id}) => {
             <WebtoonWorksContainer>
                 <ToonImg src={episodePreview} alt={` ${episodePreview}의 작품 사진`} />
             </WebtoonWorksContainer>
+
+            <CommentContainer>
+            <UploadBtnContainer>
+                <UploadBtn onClick={handleUpload}> 최종등록 </UploadBtn>
+            </UploadBtnContainer>
+            </CommentContainer>
             
             <CommentContainer>
-            <CommentComponent webtoonDtId={Id}/>
+                <CommentComponent webtoonDtId={Id}/>
             </CommentContainer>
 
         </>
@@ -268,9 +292,31 @@ const Btn = styled.button`
     margin: 0px 15px 0px 15px;
 `
 
+const UploadBtn = styled.button`
+    width: 400px;
+    height: 40px;
+    background-color: ${theme.colors.btn};
+    border: none;
+    color: ${theme.colors.white};
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+    &:hover {
+        background-color: #00B757;
+    }
+    cursor: pointer;
+    margin: 0px 15px 0px 15px;
+`
+
 const RegistBtnContainer = styled.div`
     display: flex;
     padding-left: 75%;
+    margin-bottom: 20px;
+`;
+
+const UploadBtnContainer = styled.div`
+    display: flex;
+    padding-left: 25%;
     margin-bottom: 20px;
 `;
 
@@ -285,7 +331,7 @@ const CommentContainer = styled.div`
     display: flex;
     padding: 20px;
     width: 1000px;
-    padding-left: 30px;
+    padding-left: 10%;
 `;
 
 const WebtoonImgContainer = styled.div`

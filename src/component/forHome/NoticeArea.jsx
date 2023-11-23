@@ -20,6 +20,7 @@ const NoticeArea = () => {
         // 응답이 성공하면 데이터를 설정하고 로딩 상태를 false로 변경
         setData(response.data);
         setIsLoading(false);
+        console.log("response.data", response.data);
       } else {
         console.error('데이터를 불러오는데 실패했습니다.');
       }
@@ -39,7 +40,7 @@ const NoticeArea = () => {
       </ButtonContainer>
       <CardGrid>
         {data.map((card) => (
-          <Link to={card.url} key={card.id}>
+          <Link to={`/noticeDetail/${card.id}`} key={card.id}>
             {/* Replace CardButton with SkeletonCardButton during loading */}
             {isLoading ? (
               <SkeletonCardButton>

@@ -36,12 +36,15 @@ const ForCalendarRegist = () => {
       return;
     }
 
+    console.log("calendar", 
+    userId, selectedTitle, startDateD, endDateD)
+
     axios
       .post(
         'http://146.56.98.153:8080/plans',
         {
           employeeId: userId,
-          planType: '', 
+          planType: 'service', 
           title: selectedTitle,
           startDate: startDateD,
           startTime: selectedStartTime,
