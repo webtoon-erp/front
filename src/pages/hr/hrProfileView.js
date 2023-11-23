@@ -1,10 +1,13 @@
+import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import HrProfileDetail from "../../component/forHr/forHrProfileView/hrProfileDetail";
 
-export default function HrProfileView (){
+export default function HrProfileView () {
+    const { Id } = useParams();
+
     return(
         <HrProfileDetailContainer>
-            <HrProfileDetail />
+            <HrProfileDetail Id={Id} />
         </HrProfileDetailContainer>
     )
 }

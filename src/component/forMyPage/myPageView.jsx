@@ -19,9 +19,8 @@ const MyPageView = () => {
             axios.get(`http://146.56.98.153:8080/users/${userId}`)
             .then(function (response) {
                 if (response.status === 200) {
-                    setData(response.data);
+                    setData(response.data.info);
                     setRowData(response.data.qualifications || []);
-                    console.log("response.data", response.data);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
@@ -70,7 +69,7 @@ const MyPageView = () => {
             </FlexBox>            
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
-                    <Img src={data.imageUrl} alt={`${data.position} ${data.name}의 프로필 사진`} />
+                    <Img src={data.imageUrl ? data.imageUrl : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${data.position} ${data.name}의 프로필 사진`} />
                 </ProfileImgContainer>
                 <ProfileInfoContainer>
                     <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>

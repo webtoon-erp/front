@@ -4,20 +4,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 
-const FakeProfileData = [
-    {
-        id: 1,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        name: 'employee 1',
-        dep: '인사부',
-        rank: '사원',
-        empId: 1234,
-        joinDate: '2022-07-13',
-        phone: '010-1234-1234',
-        email: 'employee1@gmail.com',
-    },
-];
-
 const ProfileInHrSalary = () => {
     const [data, setData] = useState({});
 
@@ -27,7 +13,7 @@ const ProfileInHrSalary = () => {
         if (userId) {
             axios
                 .get(`http://146.56.98.153:8080/pays/${userId}`).then((response)=> {
-                    setData(response.data);
+                    setData(response.data.userInfo);
                 })
                 .catch((error) => {
                     console.error('Error fetching attendance data:', error);
@@ -42,7 +28,7 @@ const ProfileInHrSalary = () => {
             </FlexBox>
             <ProfileInHrSalaryContainer>
                         <ProfileImgContainer>
-                            <Img src={data.photo} alt={`${data.position} ${data.name}의 프로필 사진`} />
+                            <Img src={data.photo ? data.photo : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${data.position} ${data.name}의 프로필 사진`} />
                         </ProfileImgContainer>
                         <ProfileInfoContainer>
                             <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>

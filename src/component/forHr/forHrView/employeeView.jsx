@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -54,12 +55,19 @@ const EmployeeView = () => {
 
     useEffect(() => {
         setFilteredEmp(selectedDep === '전체' ? data : data.filter((emp) => `${emp.deptCode}` === selectedDep));
-        console.log("부서", selectedDep);
     }, [selectedDep, data]);
 
     // 부서 선택 핸들러
     const SelectDepHandler = (e) => {
         setSelectedDep(e.target.value);
+    };
+
+    const navigate = useNavigate();
+
+    const handleProfileClick = (event) => {
+        if (event.data.id) {
+            navigate(`/hrProfileView/${event.data.id}`);
+        }
     };
 
     return(
@@ -92,7 +100,7 @@ const EmployeeView = () => {
                 ))
             ) : (
                 filteredEmp.map((emp) => (
-                    <CardButton key={emp.employeeId}>
+                    <CardButton key={emp.employeeId} onClick={handleProfileClick}>
                         <Img src={emp.photo ? emp.photo : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${emp.position} ${emp.name}의 프로필 사진`} />
                         <EmpInfContainer>
                             <CardRank>{emp.position}</CardRank>

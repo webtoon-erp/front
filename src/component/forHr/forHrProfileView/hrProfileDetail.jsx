@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
@@ -7,6 +8,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import { message } from 'antd';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -34,7 +36,7 @@ const FakeProfileData = [
     },
 ];
 
-const HrProfileDetail = () => {
+const HrProfileDetail = ({Id}) => {
     const gridRef = useRef(null);
 
     const rowData = [
@@ -103,12 +105,53 @@ const HrProfileDetail = () => {
     let count = 1;
 
     const [isEditing, setIsEditing] = useState(false); // 상태 추가
-    const [editedName, setEditedName] = useState(FakeProfileData[0].name);
-    const [editedDep, setEditedDep] = useState(FakeProfileData[0].dep);
-    const [editedRank, setEditedRank] = useState(FakeProfileData[0].rank);
-    const [editedPhone, setEditedPhone] = useState(FakeProfileData[0].phone);
-    const [editedEmail, setEditedEmail] = useState(FakeProfileData[0].email);
-    const [editedBirthDate, setEditedBirthDate] = useState(FakeProfileData[0].birthDate);
+    const [editedName, setEditedName] = useState('');
+    const [editedDep, setEditedDep] = useState('');
+    const [editedRank, setEditedRank] = useState('');
+    const [editedPhone, setEditedPhone] = useState('');
+    const [editedEmail, setEditedEmail] = useState('');
+    const [editedBirthDate, setEditedBirthDate] = useState('');
+    const [employeeId, setEmployeeId] = useState('');
+    const [joinDate, setJoinDate] = useState('');
+    const [dayOff, setDayOff] = useState('');
+    const [employeeToken, setEmployeeToken] = useState('');
+
+    useEffect(() => {
+        setEmployeeToken(sessionStorage.getItem("accessToken"));
+    }, [employeeToken]);
+
+    useEffect(() => {
+
+        const data = {
+            empId: Id,
+        };
+
+        axios
+            .get(`http://146.56.98.153:8080/users/${Id}`, {
+                data: data,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: 'Bearer ' + employeeToken,
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    const empInfo = response.data;
+                    setEditedName(empInfo.name);
+                    setEditedDep(empInfo.deptName);
+                    setEditedRank(empInfo.position);
+                    setEditedPhone(empInfo.tel);
+                    setEditedEmail(empInfo.email);
+                    setEditedBirthDate(empInfo.birthDate);
+                    setEmployeeId(empInfo.employeeId);
+                    setJoinDate(empInfo.joinDate);
+                    setDayOff(empInfo.dayOff);
+                } 
+            })
+            .catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
+        }, []);
 
 
     const handleToggleEdit = () => {
@@ -140,16 +183,30 @@ const HrProfileDetail = () => {
     };
 
     const handleSaveChanges = () => {
-        // You can implement the logic here to save the editedAccount value to your data source
-        // For now, let's just set it back to FakeSalData
-        setEditedName(editedName);
-        setEditedDep(editedDep);
-        setEditedRank(editedRank);
-        setEditedPhone(editedPhone);
-        setEditedEmail(editedEmail);
-        setEditedBirthDate(editedBirthDate);
-        setIsEditing(false);
-    };
+        (axios.patch('http://146.56.98.153:8080/users'),
+        {
+            name : editedName,
+            deptName : editedDep,
+            position : editedRank,
+            tel : editedPhone,
+            email : editedEmail,
+            birthDate: editedBirthDate,
+
+        },
+        {
+            headers: {
+                Authorization: 'Bearer ' + employeeToken
+            },
+        })
+        .then((result) => {
+            if (result.planId) {
+            message.success('직원 정보가 정상적으로 수정되었습니다.');
+        } 
+        })
+        .catch((error) => {
+            message.error('직원 정보가 정상적으로 수정되지 않았습니다.');
+        })
+    }
 
     return (
         <>
@@ -173,8 +230,8 @@ const HrProfileDetail = () => {
                                 <ProfileInfoBox>사원명 <ProfileInfoData>{editedName}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>부서 <ProfileInfoData>{editedDep}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>직급 <ProfileInfoData>{editedRank}</ProfileInfoData></ProfileInfoBox>
-                                <ProfileInfoBox>사원번호 <ProfileInfoData>{FakeProfileData[0].empId}</ProfileInfoData></ProfileInfoBox>
-                                <ProfileInfoBox>입사일 <ProfileInfoData>{FakeProfileData[0].joinDate}</ProfileInfoData></ProfileInfoBox>
+                                <ProfileInfoBox>사원번호 <ProfileInfoData>{employeeId}</ProfileInfoData></ProfileInfoBox>
+                                <ProfileInfoBox>입사일 <ProfileInfoData>{joinDate}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>휴대전화 <ProfileInfoData>{editedPhone}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>이메일 <ProfileInfoData>{editedEmail}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>생년월일 <ProfileInfoData>{editedBirthDate}</ProfileInfoData></ProfileInfoBox>
@@ -184,8 +241,8 @@ const HrProfileDetail = () => {
                                 <ProfileInfoBox>사원명 <InputContainer><InputField type="text" value={editedName} onChange={handleNameChange} /></InputContainer></ProfileInfoBox>
                                 <ProfileInfoBox>부서 <InputContainer><InputField type="text" value={editedDep} onChange={handleDepChange} /></InputContainer></ProfileInfoBox>
                                 <ProfileInfoBox>직급 <InputContainer><InputField type="text" value={editedRank} onChange={handleRankChange} /></InputContainer></ProfileInfoBox>
-                                <ProfileInfoBox>사원번호 <ProfileInfoData>{FakeProfileData[0].empId}</ProfileInfoData></ProfileInfoBox>
-                                <ProfileInfoBox>입사일 <ProfileInfoData>{FakeProfileData[0].joinDate}</ProfileInfoData></ProfileInfoBox>
+                                <ProfileInfoBox>사원번호 <ProfileInfoData>{employeeId}</ProfileInfoData></ProfileInfoBox>
+                                <ProfileInfoBox>입사일 <ProfileInfoData>{joinDate}</ProfileInfoData></ProfileInfoBox>
                                 <ProfileInfoBox>휴대전화 <InputContainer><InputField type="text" value={editedPhone} onChange={handlePhoneChange} /></InputContainer></ProfileInfoBox>
                                 <ProfileInfoBox>이메일 <InputContainer><InputField type="text" value={editedEmail} onChange={handleEmailChange} /></InputContainer></ProfileInfoBox>
                                 <ProfileInfoBox>생년월일 <InputContainer><InputField type="text" value={editedBirthDate} onChange={handleBirthDateChange} /></InputContainer></ProfileInfoBox>

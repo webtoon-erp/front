@@ -35,7 +35,7 @@ const items: MenuProps['items'] = [
     getItem('인사', 'menu3', <UserOutlined />, [
         getItem('직원 관리', '1', null, [getItem('전체 직원 관리', 'hrView'), getItem('조직도', 'hrOrgChart')]),
         getItem('근태 관리', '2', null, [getItem('내 근태 관리', 'hrMyAttendance'), getItem('전체 근태 관리', 'hrAttendance')]),
-        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary'), getItem('전체 급여 관리', 'hrAllSalaryView')]),
+        getItem('급여 관리', '3', null, [getItem('내 급여 관리', 'hrSalary')]),
     ]),
 
     getItem('ITSM', 'menu4', <LaptopOutlined />, [
@@ -60,9 +60,9 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
     const navigate = useNavigate();
-    //여기 수정함
     const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
     const [activeTab, setActiveTab] = useState<string | null>(null);
+    const [data, setData] = useState({});
 
     const onClick: MenuProps['onClick'] = (e) => {
         const selectedKey = e.key;
@@ -105,7 +105,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             })
             .catch((error) => {
                 console.log(error);
-                message.error('출근 기록이 실패하였습니다.');
+                message.error('이미 오늘 출근 정보를 등록하였습니다.');
             });
     }
 
@@ -129,19 +129,47 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             })
             .catch((error) => {
                 console.log(error);
-                message.error('퇴근 기록이 실패하였습니다.');
+                message.error('오늘 등록된 출근 정보가 없거나 이미 퇴근 정보를 등록하였습니다.');
             });
     }
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem('employeeId');
+
+        if (userId) {
+            axios.get(`http://146.56.98.153:8080/users/${userId}`)
+            .then(function (response) {
+                if (response.status === 200) {
+                    console.log(response.data.info);
+                    setData(response.data.info);
+                } else {
+                    message.error('데이터를 불러오는데 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching attendance data:', error);
+            });
+        }
+    }, []);
 
     return (
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
-            <Avatar onClick={toMyPage} size={64} style={{ marginLeft: '45px', cursor: 'pointer' }} icon={<UserOutlined />} />
+            {data.photo ? (
+                <ProfileImg src={data.photo} onClick={toMyPage} />
+            ) : (
+                <Avatar
+                    onClick={toMyPage}
+                    size={64}
+                    style={{ marginLeft: '45px', cursor: 'pointer' }}
+                    icon={<UserOutlined />}
+                />
+            )}
                 <div style={{ display: 'flex', alignItems: 'center', padding: '16px' }}>
                     <div style={{ marginLeft: '10px' }}>
-                        <div style={{ fontWeight: 'bold' }}>이름</div>
-                        <div>부서</div>
-                        <div>직급</div>
+                        <div style={{ fontWeight: 'bold' }}>{data.name}</div>
+                        <div>{data.deptName}</div>
+                        <div>{data.position}</div>
                     </div>
                 </div>
             </Space>
@@ -177,4 +205,12 @@ const WorkBtn = styled.button`
     }
     cursor: pointer;
     margin: 0px 30px 0px 0px;
+`
+
+const ProfileImg = styled.img`
+    margin-left: 45px;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
 `
