@@ -46,24 +46,23 @@ import NoticeDetail from './pages/system/noticeDetail';
 import ItRequestDetail from './pages/itsm/itRequestDetail';
 
 function App() {
-  const [token, setToken] = useState<string | null>(null)
-  const [position, setPosition] = useState<string | null>(null)
-  const [userId, setUserId] = useState<string | null>(null)
+  const [token, setToken] = useState(sessionStorage.getItem("accessToken"));
+  const [userId, setUserId] = useState(sessionStorage.getItem("employeeId"));
+  const [position, setPosition] = useState(sessionStorage.getItem("position"));
 
   useEffect(() => {
-    setUserId(sessionStorage.getItem("employeeId"));
-    console.log("token app: ", userId);
-  }, [userId])
-
-  useEffect(() => {
-    setPosition(sessionStorage.getItem("position"));
-    console.log("token app: ", position);
-  }, [position])
-
-  useEffect(() => {
-    setToken(sessionStorage.getItem("accessToken"));
-    console.log("token app: ", token);
-  }, [token])
+    function handleSessionChange() {
+      setToken(sessionStorage.getItem("accessToken"));
+      setUserId(sessionStorage.getItem("employeeId"));
+      setPosition(sessionStorage.getItem("position"));
+    }
+    
+    window.addEventListener('storage', handleSessionChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleSessionChange);
+    }
+  }, []);
 
   const [tabElements, setTabElements] = useState([
     { title: 'Home', fixed: true }

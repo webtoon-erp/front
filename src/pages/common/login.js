@@ -2,8 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
-import { savedData } from '../../data.js'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -40,8 +39,10 @@ const Login = () => {
       });
   };
 
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    window.location.replace('/passwordReset');
+    navigate('/passwordReset');
   }
 
   return (

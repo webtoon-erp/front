@@ -1,11 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from 'antd';
-
+import { Button, message } from 'antd';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 
 const PasswordReset = () => {
-  const handlePasswordReset = () => {
-    // Handle password reset logic here
+  const email = '';
+
+  const navigate = useNavigate();
+
+  const handlePasswordReset = (e) => {
+    e.preventDefault();
+
+    axios.post('http://146.56.98.153:8080/users/tempPassword',
+      {
+        Authourization: email,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((result) => {
+        if (result.status === 200) {
+          message.success('비밀번호 초기화 성공');
+          navigate('/login');
+        } else {
+
+          message.error('비밀번호 초기화 실패');
+        }
+      })
+      .catch((error) => {
+        message.error('비밀번호 초기화 에러');
+      });
   };
 
   return (
