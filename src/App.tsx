@@ -49,12 +49,15 @@ function App() {
   const [token, setToken] = useState(sessionStorage.getItem("accessToken"));
   const [userId, setUserId] = useState(sessionStorage.getItem("employeeId"));
   const [position, setPosition] = useState(sessionStorage.getItem("position"));
+  const [deptCode, setDeptCode] = useState(sessionStorage.getItem("deptCode"));
+
 
   useEffect(() => {
     function handleSessionChange() {
       setToken(sessionStorage.getItem("accessToken"));
       setUserId(sessionStorage.getItem("employeeId"));
       setPosition(sessionStorage.getItem("position"));
+      setDeptCode(sessionStorage.getItem("deptCode"));
     }
     
     window.addEventListener('storage', handleSessionChange);

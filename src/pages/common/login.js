@@ -24,13 +24,13 @@ const Login = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success('로그인 성공');
-          //console.log("result.data", result.data);
+          console.log("result.data", result.data);
           sessionStorage.setItem("accessToken", result.data.accessToken);
           sessionStorage.setItem("employeeId", result.data.employeeId); //직책
           sessionStorage.setItem("position", result.data.position); //사번
+          sessionStorage.setItem("deptCode", result.data.deptCode);
           window.location.replace('/home');
         } else {
-
           message.error('로그인 실패');
         }
       })

@@ -48,6 +48,7 @@ import ItRequestDetail from './pages/itsm/itRequestDetail';
 function App() {
   const [token, setToken] = useState<string | null>(null)
   const [position, setPosition] = useState<string | null>(null)
+  const [deptCode, setDeptCode] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -59,6 +60,11 @@ function App() {
     setPosition(sessionStorage.getItem("position"));
     console.log("token app: ", position);
   }, [position])
+
+  useEffect(() => {
+    setDeptCode(sessionStorage.getItem("depCode"));
+    console.log("token app: ", deptCode);
+  }, [deptCode])
 
   useEffect(() => {
     setToken(sessionStorage.getItem("accessToken"));
