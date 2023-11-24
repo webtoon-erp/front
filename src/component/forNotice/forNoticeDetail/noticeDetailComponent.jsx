@@ -25,7 +25,7 @@ const NoticeDetailComponent = ({Id}) => {
     useEffect(() => {
 
       const data = {
-        webtoonId: Id,
+        noticeId: Id,
       };
 
       axios
@@ -45,7 +45,8 @@ const NoticeDetailComponent = ({Id}) => {
             setSelectedDate(noticeInfo.noticeDate);
             setSelectedContent(noticeInfo.content);
             setSelectedReadCount(noticeInfo.readCount);
-            setSelectedFiles(`http://146.56.98.153:8080/home/opc/file_repo/${noticeInfo.files}`);
+            setSelectedFiles(`http://146.56.98.153:8080/home/opc/file_repo/${noticeInfo.files[0].filePath}`);
+            console.log("파일이름: " + noticeInfo.files[0].filePath);
           } 
         })
         .catch((error) => {
@@ -150,7 +151,7 @@ const NoticeDetailComponent = ({Id}) => {
           setSelectedCellData(null);
           setTimeout(() => {
             navigate('/notice');
-        }, 3000);
+        }, 1000);
         })
         .catch((error) => {
           message.error('공지 삭제 실패', error);
@@ -160,15 +161,14 @@ const NoticeDetailComponent = ({Id}) => {
 
   return (
     <NoticeDetailContainer>
+    <FlexBox>
+      <Title>공지사항 상세</Title>
       <BtnContainer>
         <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
           {isEditing ? '등 록' : '수 정'}
         </Btn>
         <Btn onClick={() => deleteNoticeHandler()}>삭 제</Btn>
       </BtnContainer>
-    <FlexBox>
-      <Title>공지사항</Title>
-      
     </FlexBox>
     {!isEditing ? (
       <NoticeContainer>
@@ -217,7 +217,8 @@ const NoticeDetailComponent = ({Id}) => {
           <ContentContainer>{selectedContent}</ContentContainer>
 
           <FileContainer>
-            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]}/>
+            <SmallTitle>첨부파일</SmallTitle>
+            <FileImg src={selectedFiles} />
           </FileContainer>
           </NoticeContainer>
         ) : (
@@ -267,7 +268,7 @@ const NoticeDetailComponent = ({Id}) => {
           <ContentContainer><InputContainer><InputField type="text" value={selectedContent} onChange={handleContentChange} /></InputContainer></ContentContainer>
 
           <FileContainer>
-            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]}/>
+            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]} onChange={handleFilesChange} />
           </FileContainer>
           </NoticeContainer>
         )}
@@ -278,7 +279,6 @@ const NoticeDetailComponent = ({Id}) => {
 export default NoticeDetailComponent; 
 
 const NoticeDetailContainer = styled.div`
-  padding-top: 20px;
   padding-left: 4%;
 `;
 
@@ -291,10 +291,6 @@ const NoticeContainer = styled.div`
   align-items: center;
 `;
 
-const BreadContainer = styled.div`
-  margin-left: 70%;
-`;
-
 const Container = styled.div`
   border: 1px dashed #ccc;
   width: 50px;
@@ -303,12 +299,10 @@ const Container = styled.div`
 `;
 
 const FileContainer = styled.div`
-  border: 1px dashed #ccc;
+  display: flex;
   width: 100%;
   height: 10px;
-  margin: 30px;
-  margin-top: 0px;
-  border-radius: 8px;
+  margin-top: 80px;
 `;
 
 const ContainerBox = styled.div`
@@ -317,6 +311,7 @@ const ContainerBox = styled.div`
 `;
 
   const Title = styled.div`
+  width: 300px;
   font-size: 30px;
   font-weight: bold;
 `;
@@ -351,7 +346,7 @@ const ContentContainer = styled.div`
 
 const BtnContainer = styled.div`
     display: flex;
-    margin-left: 930px;
+    margin-left: 650px;
     align-items: center;
 `;
 
@@ -385,10 +380,16 @@ const InputContainer = styled.div`
 const InputField = styled.input`
     background-color: ${theme.colors.textBox};
     height: 25px;
-    width: 60px;
+    width: 600px;
     padding-left: 5px;
     padding-right: 5px;
     margin-left: 10px;
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 2px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const FileImg = styled.img`
+  width: 300px;
+  height: 400px;
+  margin-left: 20px;
 `;
