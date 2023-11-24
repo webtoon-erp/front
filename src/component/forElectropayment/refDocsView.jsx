@@ -6,22 +6,20 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const RefDocsView = () => {
-    const [selectedCell, setSelectedCell] = useState(null);
     const [rowData, setRowData] = useState([]);
 
+    const employeeId = sessionStorage.getItem("employeeId");
+
     useEffect(() => {
-        if (selectedCell !== null) {
-            axios.get(`http://146.56.98.153:8080/plas/documents/myCC/${selectedCell}`)
-                .then(response => {
-                    const data = response.data[selectedCell + 'UserList'];
-                    setRowData(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-            
-        }
-    }, [selectedCell]);
+        axios.get(`http://146.56.98.153:8080/plas/documents/myCC/${employeeId}`)
+            .then(response => {
+                setRowData(rowData);
+                console.log('정상적 처리');
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     const columnDefs = [      
         {field: '문서종류', sortable: true, filter: true, width: '130px'},
@@ -33,15 +31,11 @@ const RefDocsView = () => {
         {field: '최종결재자', sortable: true, filter: true, width: '130px'},
         {field: '상태', sortable: true, filter: true, width: '130px', 
             cellStyle: params=> {
-                if(params.value === '상신') {
+                if(params.value === 'Y') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
                 } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
         }},
     ];
-
-    function handleCellClick(params) {
-        setSelectedCell(params.column.getColDef().field);
-    }
 
     return (
         <>
@@ -54,7 +48,6 @@ const RefDocsView = () => {
                         rowSelection='multiple'
                         pagination= {true}
                         paginationPageSize= {20}
-                        onCellClicked= {handleCellClick}
                     />
             </EntitlementGrid>
         </>

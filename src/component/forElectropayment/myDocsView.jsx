@@ -5,48 +5,37 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
-const MyDocsView = () => {
-    const [selectedCell, setSelectedCell] = useState(null);
+const MyDocsView = () => {    
     const [rowData, setRowData] = useState([]);
 
+    const employeeId = sessionStorage.getItem("employeeId");
+
     useEffect(() => {
-        if (selectedCell !== null) {
-            axios.get(`http://146.56.98.153:8080/plas/documents/my/${selectedCell}`)
-                .then(response => {
-                    const data = response.data[selectedCell + 'UserList'];
-                    setRowData(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-            
-        }
-    }, [selectedCell]);
+        axios.get(`http://146.56.98.153:8080/plas/documents/my/${employeeId}`)
+            .then(response => {
+                setRowData(rowData);
+                console.log('정상적 처리');
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     const columnDefs = [      
-        {field: '문서종류', sortable: true, filter: true, width: '130px'},
-        {field: '작성일', sortable: true, filter: true, width: '150px'},
-        {field: '제목', sortable: true, filter: true, width: '250px'},
-        {field: '부서', sortable: true, filter: true, width: '130px'},
-        {field: '작성자', sortable: true, filter: true, width: '110px'},
-        {field: '결재대기자', sortable: true, filter: true, width: '168px'},
-        {field: '최종결재자', sortable: true, filter: true, width: '130px'},
-        {field: '상태', sortable: true, filter: true, width: '130px',  
+        {headerName: '문서종류', field: 'templateName', sortable: true, filter: true, width: '130px'},
+        {headerName: '작성일', field: 'reg_date', sortable: true, filter: true, width: '150px'},
+        {headerName: '제목', field: 'title', sortable: true, filter: true, width: '250px'},
+        {headerName: '부서', field: 'writeDeptName', sortable: true, filter: true, width: '130px'},
+        {headerName: '작성자', field: 'writeUsername', sortable: true, filter: true, width: '110px'},
+        {headerName: '결재대기자', field: 'currentApprover', sortable: true, filter: true, width: '168px'},
+        {headerName: '최종결재자', field: 'lastApprover', sortable: true, filter: true, width: '130px'},
+        {headerName: '상태', field: 'stat', sortable: true, filter: true, width: '130px',  
             cellStyle: params=> {
-                if(params.value === '상신') {
+                if(params.value === 'Y') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
                 } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
         }},
     ];
-
-    // const rowData = [
-    //     {문서종류: '종류', 작성일 : '2023-08-02', 제목: '제목을 뭘 적어야하나', 부서: '인사부', 작성자: '나', 결재대기자: '', 최종결재자: '홍길동', 상태: '상신', url: '/content1'},
-    //     {문서종류: '종류', 작성일 : '2023-07-02', 제목: '제목 내 맘대로 할거야', 부서: '인사부', 작성자: '나', 결재대기자: '김철수', 최종결재자: '박영희', 상태: '임시', url: '/content2'},
-    // ];
-
-    function handleCellClick(params) {
-        setSelectedCell(params.column.getColDef().field);
-    }
 
     return (
         <>
@@ -59,7 +48,7 @@ const MyDocsView = () => {
                         rowSelection='multiple'
                         pagination= {true}
                         paginationPageSize= {20}
-                        onCellClicked= {handleCellClick}
+                        
                     />
             </EntitlementGrid>
         </>
