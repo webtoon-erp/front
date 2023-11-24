@@ -8,10 +8,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 const DepDocsView = () => {
     const [rowData, setRowData] = useState([]);
 
-    const employeeId = sessionStorage.getItem("employeeId");
+    const deptCode = sessionStorage.getItem("deptCode");
 
     useEffect(() => {
-        axios.get(`http://146.56.98.153:8080/plas/documents/myDept/`)
+        axios.get(`http://146.56.98.153:8080/plas/documents/myDept/${deptCode}`)
             .then(response => {
                 setRowData(rowData);
                 console.log('정상적 처리');
