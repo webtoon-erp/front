@@ -40,7 +40,7 @@ const EntitlementPayDetail = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {  headerName: '자격증 명', field: 'name', editable: true,
+        { headerName: '자격증 명', field: 'name', editable: true,
             headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: 250 },
         { headerName: '자격 수당', field: 'money', editable: true , width: 100 },
     ]);
