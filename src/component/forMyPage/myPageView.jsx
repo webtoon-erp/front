@@ -5,16 +5,25 @@ import HorizonLine from '../horizonLine';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { message, Modal } from 'antd';
+import { message, Modal, DatePicker } from 'antd';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 const MyPageView = () => {
     const [data, setData] = useState({});
     const [rowData, setRowData] = useState([]);
+    const [title, setTitle] = useState('');
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [content, setContent] = useState('');
+    const [userId, setUserId] = useState('');
+    const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
 
     useEffect(() => {
-        const userId = sessionStorage.getItem('employeeId');
+        setUserId(sessionStorage.getItem("employeeId"));
+    }, [userId]);
 
+    useEffect(() => {
+        const userId = sessionStorage.getItem("employeeId");
         if (userId) {
             axios.get(`http://146.56.98.153:8080/users/${userId}`)
             .then(function (response) {
@@ -31,6 +40,47 @@ const MyPageView = () => {
         }
     }, []);
 
+    const handleSubmitClick = () => {
+        const date = selectedDate.$d;
+    
+        if (
+            !userId ||
+            !title ||
+            !date ||
+            !content
+        ) {
+            message.error('모든 필수 항목을 입력해주세요.');
+            return;
+        }
+    
+        axios
+            .post(
+                'http://146.56.98.153:8080/plas/documents/dayOff',
+                {
+                    title: title,
+                    content: content, 
+                    templateName: '연차신청서',
+                    writeEmployeeId: userId,
+                    dayOffDate: date,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                    }
+                }
+            )
+            .then((result) => {
+                if (result.status === 200) {
+                message.success('연차 신청이 정상적으로 처리되었습니다.');
+                } else {
+                message.error('연차 신청이 정상적으로 처리되지 않았습니다.');
+                }
+            })
+            .catch((error) => {
+                message.error('연차 신청이 정상적으로 처리되지 않았습니다.');
+            });
+        };
+
     const columnDefs = [
         {headerName: '자격증명', field: 'qlfcType', sortable: true, filter: true, width: '390px'},
         {headerName: '자격증 상세', field: 'content', sortable: true, filter: true, width: '380px'},
@@ -39,13 +89,17 @@ const MyPageView = () => {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    const [todayDate, setTodayDate] = useState('');
+    const disabledDate = (current) => {
+        return current && current < dayjs().startOf('day');
+    };
 
-    useEffect(() => {
-        const date = new Date();
-        const TodayDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-        setTodayDate(TodayDate);
-    }, []);
+    const Titlehandler = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const Contenthandler = (e) => {
+        setContent(e.target.value);
+    };
 
     return (
         <>
@@ -56,14 +110,27 @@ const MyPageView = () => {
                     title="유급휴가 신청"
                     centered
                     open={modalOpen}
-                    onOk={() => setModalOpen(false)}
+                    onOk={() => {
+                        handleSubmitClick();
+                        setModalOpen(false);
+                    }}
                     onCancel={() => setModalOpen(false)}
                 >
-                    <InputTitle placeholder='제목을 입력해주세요.'/>
+                    <InputTitle placeholder='제목을 입력해주세요.' onChange={Titlehandler} />
                     <H3>문서 종류: 연차 신청서</H3>
-                    <H3>날짜: {todayDate}</H3>
+                    <FlexBox>
+                        <H3>날짜: </H3>
+                        <DatePicker
+                            selected={selectedDeliveryDate}
+                            onChange={(date) => setSelectedDate(date)}
+                            dateFormat="yyyy-MM-dd"
+                            disabledDate={disabledDate}
+                            placeholderText="연차일자"
+                        />
+                    </FlexBox>
+                    
                     <H3 style={{ marginBottom: '5px' }}>사유: </H3>
-                    <TextArea />
+                    <TextArea onChange={Contenthandler} />
                     <p>위와 같이 상신하오니 검토 후 재가 바랍니다.</p>
                 </Modal>
             </FlexBox>            
@@ -148,7 +215,7 @@ const InputTitle = styled.input`
 `
 
 const H3 = styled.h3`
-
+    margin-right: 10px;
 `
 
 const TextArea = styled.textarea`
