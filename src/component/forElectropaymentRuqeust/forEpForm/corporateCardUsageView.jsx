@@ -102,7 +102,7 @@ const CorporateCardUsageView = () => {
                     message.success(`법인카드 사용내역서 결재 요청이 정상적으로 등록되었습니다.`);
                     setTimeout(() => {
                         navigate('/epRequestAdd');
-                    }, 3000);
+                    }, 1000);
                 }
             })
             .catch((error) => {

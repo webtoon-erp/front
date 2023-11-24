@@ -55,16 +55,6 @@ const NoticeRegist = () => {
         // 썸네일 파일을 'file' 키로 추가
         formData.append('files', selectedFile);
 
-        console.log(
-            title,
-            content,
-            selectedTag,
-            userId,
-            selectedFile,
-        )
-
-        // 데이터 출력
-        // FormData 객체 순회
         for (const [key, value] of formData.entries()) {
             console.log(key, value);
         }
@@ -81,7 +71,7 @@ const NoticeRegist = () => {
                     message.success(`공지사항 등록이 정상적으로 등록되었습니다.`);
                     setTimeout(() => {
                         navigate('/notice');
-                    }, 3000);
+                    }, 1000);
                 }
             })
             .catch((error) => {

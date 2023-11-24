@@ -52,7 +52,7 @@ const Header: React.FC = () => {
                     message.success('로그아웃 완료');
                     setTimeout(() => {
                         window.location.replace('/');
-                    }, 3000);
+                    }, 1000);
 
                 }
             })
