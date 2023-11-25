@@ -1,20 +1,21 @@
-import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Button, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
 
 const PasswordReset = () => {
-  const email = '';
+  const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
 
   const handlePasswordReset = (e) => {
     e.preventDefault();
+    console.log("email", email);
 
-    axios.post('http://146.56.98.153:8080/users/tempPassword',
+    axios.post('http://146.56.98.153:8080/users/tempPassword/'+email,
       {
-        Authourization: email,
+        employeeId: email,
       },
       {
         headers: {
@@ -24,7 +25,7 @@ const PasswordReset = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success('비밀번호 초기화 성공');
-          navigate('/login');
+          navigate('/');
         } else {
 
           message.error('비밀번호 초기화 실패');
@@ -42,7 +43,10 @@ const PasswordReset = () => {
         <Description>
           비밀번호를 초기화하기 위해 사번을 입력한 후 아래 버튼을 클릭하세요.
         </Description>
-        <Input placeholder='사번'/>
+        <Input 
+          placeholder='사번'
+          value={email}
+          onChange={e => setEmail(e.target.value)}/>
         <br/>
         <ResetButton type="primary" onClick={handlePasswordReset}>
           비밀번호 초기화 요청
