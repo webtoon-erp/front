@@ -15,7 +15,6 @@ const MyDocsView = () => {
             .then(response => {
                 if (response.status === 200) {
                     setRowData(response.data);
-                    console.log(response);
                 }
             })
             .catch(error => {

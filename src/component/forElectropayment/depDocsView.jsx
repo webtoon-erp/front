@@ -13,8 +13,9 @@ const DepDocsView = () => {
     useEffect(() => {
         axios.get(`http://146.56.98.153:8080/plas/documents/myDept/${deptCode}`)
             .then(response => {
-                setRowData(rowData);
-                console.log('정상적 처리');
+                if (response.status === 200) {
+                    setRowData(response.data);
+                }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
