@@ -58,9 +58,7 @@ const HrAddComponent = () => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = (event) => {
-      setProfilePreview(event.target.result);
-    };
+    setProfilePreview(file);
 
     if (file) {
       reader.readAsDataURL(file);
@@ -82,12 +80,15 @@ const HrAddComponent = () => {
           email: selectedEmail,
           birthDate: selectedBirthdayDate
         };
+        console.log("requestData", requestData);
         
         const formData = new FormData();
 
         formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
 
-        formData.append('file', setProfilePreview);
+        formData.append('file', profilePreview);
+
+        console.log("profilePreview", profilePreview);
 
     axios.post('http://146.56.98.153:8080/users', formData, {
         headers: {
@@ -104,7 +105,7 @@ const HrAddComponent = () => {
        }  
       })
       .catch((error) => {
-        console.log(error);
+        console.log("에러", error);
        message.error('사원등록이 정상적으로 완료되지 않았습니다.');
       })
   };

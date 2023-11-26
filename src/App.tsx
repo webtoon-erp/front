@@ -172,7 +172,7 @@ function App() {
                 <Route path="/epDepDocsView" element={<EpDepDocsView />} />
                 <Route path="/epHoldenDocsView" element={<EpHoldenDocsView />} />
                 <Route path="/epRefDocsView" element={<EpRefDocsView />} />
-                <Route path="/epRequestDetail" element={<EpRequestDetail /> } />
+                <Route path="/epRequestDetail/:Id" element={<EpRequestDetail /> } />
                 <Route path="/epFormCorporateCardUsage" element={<EpFormCorporateCardUsage /> } />
                 <Route path="/epFormPurchaseOrder" element={<EpFormPurchaseOrder /> } />
                 <Route path="/epFormReimbursementRequest" element={<EpFormReimbursementRequest /> } />
