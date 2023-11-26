@@ -60,7 +60,6 @@ const PurchaseOrderView = () => {
             !selectedApprId ||
             !selectedRefId
         ) {
-            console.log("title: " + title + "content: " + content + "selectedFile: " + selectedFile + "selectedApprId: " + selectedApprId + "selectedRefId: " + selectedRefId);
             message.error('모든 필수 항목을 입력해주세요.');
             return;
         }
@@ -81,8 +80,7 @@ const PurchaseOrderView = () => {
                     receiveType: "CC",
                     rcvEmployeeId: selectedRefId,
                 },
-            ],
-            employeeId: userId
+            ]
         };
         
         // FormData 객체 생성
@@ -101,18 +99,17 @@ const PurchaseOrderView = () => {
         }
 
         axios
-            .post('http://146.56.98.153:8080/plas/documents',formData, {
+            .post('http://146.56.98.153:8080/plas/documents', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: 'Bearer ' + employeeToken,
-                },
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             .then((result) => {
                 if (result.status === 200) {
                     message.success(`구매 품의서 결재 요청이 정상적으로 등록되었습니다.`);
                     setTimeout(() => {
                         navigate('/epRequestAdd');
-                    }, 3000);
+                    }, 1000);
                 }
             })
             .catch((error) => {
@@ -166,17 +163,18 @@ const PurchaseOrderView = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '시작일시', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
-        {field: '종료일시', sortable: true, filter: true},
-        {field: '부서코드', sortable: true, filter: true},
-        {field: '사용부서', sortable: true, filter: true},
-        {field: '거래처명', sortable: true, filter: true},
-        {field: '비용타입', sortable: true, filter: true},
-        {field: '수량', sortable: true, filter: true},
-        {field: '단가', sortable: true, filter: true},
-        {field: '공급가액', sortable: true, filter: true},
-        {field: '총 금액', sortable: true, filter: true},
-        {field: '비고', sortable: true, filter: true},
+        {headerName: '시작일시', field: 'fromDate', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {headerName: '종료일시', field: 'toDate', sortable: true, filter: true},
+        {headerName: '부서코드', field: 'deptCode', sortable: true, filter: true},
+        {headerName: '사용부서', field: 'deptName', sortable: true, filter: true},
+        {headerName: '거래처명', field: 'company', sortable: true, filter: true},
+        {headerName: '비용타입', field: 'expenseType', sortable: true, filter: true},
+        {headerName: '수량', field: 'count', sortable: true, filter: true},
+        {headerName: '단가', field: 'price', sortable: true, filter: true},
+        {headerName: '공급가액', field: 'supAmt', sortable: true, filter: true},
+        {headerName: '부가세액', field: 'vatAmt', sortable: true, filter: true},
+        {headerName: '총 금액', field: 'totalAmt', sortable: true, filter: true},
+        {headerName: '비고', field: 'remark', sortable: true, filter: true},
     ]);
 
     const [columnDefs2, setColumnDefs2] = useState([
@@ -220,11 +218,6 @@ const PurchaseOrderView = () => {
     let count = 1;
 
     const editorRef = useRef(null);
-    // const log = () => {
-    //     if (editorRef.current) {
-    //         editorRef.current.setContent('<p>전자결재</p>');
-    //     }
-    // };
     
     function autoCreateTable(columnList, newColumnList, location) {
         if (!Array.isArray(columnList)) {

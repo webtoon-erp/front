@@ -114,6 +114,7 @@ const HrProfileDetail = ({Id}) => {
     const [employeeId, setEmployeeId] = useState('');
     const [joinDate, setJoinDate] = useState('');
     const [dayOff, setDayOff] = useState('');
+    const [photo, setPhoto] = useState(null);
     const [employeeToken, setEmployeeToken] = useState('');
 
     useEffect(() => {
@@ -136,7 +137,7 @@ const HrProfileDetail = ({Id}) => {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    const empInfo = response.data;
+                    const empInfo = response.data.info;
                     setEditedName(empInfo.name);
                     setEditedDep(empInfo.deptName);
                     setEditedRank(empInfo.position);
@@ -146,6 +147,7 @@ const HrProfileDetail = ({Id}) => {
                     setEmployeeId(empInfo.employeeId);
                     setJoinDate(empInfo.joinDate);
                     setDayOff(empInfo.dayOff);
+                    setPhoto(response.data.resource);
                 } 
             })
             .catch((error) => {
@@ -191,7 +193,6 @@ const HrProfileDetail = ({Id}) => {
             tel : editedPhone,
             email : editedEmail,
             birthDate: editedBirthDate,
-
         },
         {
             headers: {
@@ -208,6 +209,14 @@ const HrProfileDetail = ({Id}) => {
         })
     }
 
+    const quitterHandler = () => {
+        axios
+            .patch(`http://146.56.98.153:8080/users/${Id}`, {
+            headers: {
+                Authorization: 'Bearer ' + employeeToken
+        }
+    });
+
     return (
         <>
             <FlexBox>
@@ -216,12 +225,12 @@ const HrProfileDetail = ({Id}) => {
                     <Btn onClick={isEditing ? handleSaveChanges : handleToggleEdit}>
                         {isEditing ? '등 록' : '수 정'}
                     </Btn>
-                    <Btn>퇴사자 처리</Btn>
+                    <Btn onClick={quitterHandler}>퇴사자 처리</Btn>
                 </BtnContainer>
             </FlexBox>
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
-                    <Img src={FakeProfileData[0].imageUrl} alt={`${FakeProfileData[0].rank} ${FakeProfileData[0].name}의 프로필 사진`} />
+                    <Img src={photo} alt={`${editedRank} ${editedName}의 프로필 사진`} />
                 </ProfileImgContainer>
                 <ProfileInfoContainer>
                     <>
@@ -289,6 +298,7 @@ const HrProfileDetail = ({Id}) => {
             </EntitlementGridContainer>
         </>
     )
+    }
 };
 
 export default HrProfileDetail;
