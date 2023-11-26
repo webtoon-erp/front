@@ -77,7 +77,7 @@ const EpisodeAddComponent = ({ ToonId }) => {
         if (result.status === 200) {
           message.success('회차가 정상적으로 등록되었습니다.');
           console.log("res", result.data);
-          navigate(`${result.data.webtoonId}`);
+          navigate('/webtoon');
         } else {
           message.error('회차가 정상적으로 등록되지 않았습니다.');
         }

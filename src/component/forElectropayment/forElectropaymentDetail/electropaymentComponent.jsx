@@ -12,6 +12,11 @@ import ItemList from './itemList';
 
 const ElectropaymentComponent = ({Id}) => {
   const [epData, setEpData] = useState({});
+  const [employeeId, setEmployeeId] = useState('');
+
+  useEffect(() => {
+    setEmployeeId(sessionStorage.getItem("employeeId"));
+  }, []);
 
   const navigate = useNavigate();
   
@@ -59,7 +64,7 @@ const ElectropaymentComponent = ({Id}) => {
       };
   
       axios
-        .delete(`http://146.56.98.153:8080/notice/${Id}`, 
+        .delete(`http://146.56.98.153:8080/plas/documents/${Id}`, 
         {
           noticeId: Id
         }
@@ -68,27 +73,84 @@ const ElectropaymentComponent = ({Id}) => {
           headers: headers,
         })
         .then((response) => {
-          message.success('공지 삭제 성공');
+          message.success('결제란 삭제 성공');
           //setSelectedCellData(null);
           setTimeout(() => {
-            navigate('/notice');
+            navigate('/epMyDocsView');
         }, 3000);
         })
         .catch((error) => {
-          message.error('공지 삭제 실패', error);
+          message.error('결제란 삭제 실패', error);
+        });
+    }
+  };
+
+  const reportHandler = () => {
+    if (Id) {
+      const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+  
+      axios
+        .patch(`http://146.56.98.153:8080/plas/documents/${Id}`, 
+        {
+          noticeId: Id
+        }
+        ,
+        {
+          headers: headers,
+        })
+        .then((response) => {
+          message.success('상신 성공');
+          //setSelectedCellData(null);
+          setTimeout(() => {
+            navigate('/epRefDocsView');
+        }, 3000);
+        })
+        .catch((error) => {
+          message.error('상신 실패', error);
+        });
+    }
+  };
+
+  const assignHandler = () => {
+    if (Id) {
+      const headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+  
+      axios
+        .patch(`http://146.56.98.153:8080/plas/documents/${Id}/${employeeId}`, 
+        {
+          noticeId: Id
+        }
+        ,
+        {
+          headers: headers,
+        })
+        .then((response) => {
+          message.success('결제 성공');
+          //setSelectedCellData(null);
+          setTimeout(() => {
+            navigate('/epHoldenDocsView');
+        }, 3000);
+        })
+        .catch((error) => {
+          message.error('결제 실패', error);
         });
     }
   };
 
   return (
     <NoticeDetailContainer>
-      <BtnContainer>
-        <Btn onClick={() => deleteNoticeHandler()}>삭 제</Btn>
-      </BtnContainer>
     <FlexBox>
       <Title>전자결제 상세조회</Title>
-      
     </FlexBox>
+    <BtnContainer>
+        <Btn onClick={() => deleteNoticeHandler()}>삭 제 </Btn>  
+        <Btn onClick={() => reportHandler()}>상 신</Btn>
+        <Btn onClick={() => deleteNoticeHandler()}>결 제</Btn>
+      </BtnContainer>
       <NoticeContainer>
             <ContentTitle>{epData.title}</ContentTitle>
             
@@ -132,7 +194,7 @@ const ElectropaymentComponent = ({Id}) => {
                 </SmallAggridContainer>
               </ContainerBox>
             </ContainerBox>
-
+{/*
             <ContainerBox>
                 <Container>
                   <SmallTitle>요청 품목</SmallTitle>
@@ -142,7 +204,6 @@ const ElectropaymentComponent = ({Id}) => {
                 </BigAggridContainer>
               </ContainerBox>
 
-{/*
             <ContainerBox>
               <ContainerBox>
                 <Container>
@@ -271,7 +332,7 @@ const ContentContainer = styled.div`
 
 const BtnContainer = styled.div`
     display: flex;
-    margin-left: 930px;
+    margin-left: 820px;
     align-items: center;
 `;
 

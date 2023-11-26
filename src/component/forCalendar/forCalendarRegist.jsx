@@ -23,8 +23,8 @@ const ForCalendarRegist = () => {
   const navigate = useNavigate();
 
   const handleSubmitClick = () => {
-    const startDateD = selectedStartDate.$d;
-    const endDateD = selectedEndDate.$d;
+    const startDateD = selectedStartDate;
+    const endDateD = selectedEndDate;
 
     if (
       !userId ||
@@ -37,7 +37,7 @@ const ForCalendarRegist = () => {
     }
 
     console.log("calendar", 
-    userId, selectedTitle, startDateD, endDateD)
+    userId, selectedTitle, startDateD, endDateD);
 
     axios
       .post(
@@ -67,6 +67,7 @@ const ForCalendarRegist = () => {
         }
       })
       .catch((error) => {
+      console.log("에러", error);
         message.error('[일정] 등록이 정상적으로 등록되지 않았습니다.');
       });
   };

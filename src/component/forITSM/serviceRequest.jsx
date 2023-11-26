@@ -14,6 +14,7 @@ import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-mod
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Upload, message, Modal } from 'antd';
 import { savedData } from '../../data.js'; 
+import { useParams, useNavigate } from 'react-router-dom';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -31,6 +32,8 @@ const ServiceRequest = () => {
   const [employeeToken, setEmployeeToken] = useState('');
   const [employeeId, setEmployeeId] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setEmployeeId(sessionStorage.getItem("employeeId"));
   }, []);
@@ -41,8 +44,9 @@ const ServiceRequest = () => {
   }, []);
 
   const handleSubmitClick = () => {
+    console.log('selectedRequestType', selectedRequestType);
 
-    if (selectedRequest === "업무 지원") {
+    if (selectedRequestType == "업무 지원") {
       if (
         !selectedRequestType ||
         !selectedTitle ||
@@ -68,10 +72,10 @@ const ServiceRequest = () => {
     const formData = new FormData();
   
     // JSON 데이터를 FormData에 추가
-    formData.append('dto', JSON.stringify(requestData));
+    formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
   
     // 썸네일 파일을 'file' 키로 추가
-    formData.append('file', thumbnailFile);
+    formData.append('files', thumbnailFile);
   
     console.log(
       selectedRequestType,
@@ -94,6 +98,7 @@ const ServiceRequest = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success(`[ITSM] 지원 요청이 정상적으로 등록되었습니다.`);
+          navigate('/itRequestListView');
         }
       })
       .catch((error) => {
@@ -102,7 +107,6 @@ const ServiceRequest = () => {
   }
   else {
     // 구매
-
     if (
       !selectedRequestType ||
       !selectedTitle ||
@@ -141,10 +145,10 @@ const ServiceRequest = () => {
     const formData = new FormData();
   
     // JSON 데이터를 FormData에 추가
-    formData.append('dto', JSON.stringify(requestData));
+    formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
   
     // 썸네일 파일을 'file' 키로 추가
-    formData.append('file', thumbnailFile);
+    formData.append('files', thumbnailFile);
   
     console.log(
       selectedRequestType,
@@ -167,6 +171,7 @@ const ServiceRequest = () => {
       .then((result) => {
         if (result.status === 200) {
           message.success(`[ITSM] 구매 요청이 정상적으로 등록되었습니다.`);
+          navigate('/itRequestListView');
         }
       })
       .catch((error) => {
@@ -222,11 +227,14 @@ const ServiceRequest = () => {
   };
   const SelectRequesthandler = (e) => {
     setSelectedRequest(e.target.value);
-    savedData.itRequestAdd.selectedRequest = e.target.value
+    savedData.itRequestAdd.selectedRequest = e.target.value;
   };
+  
   const SelectRequestTypehandler = (e) => {
-    setSelectedRequestType(e.target.value);
-    savedData.itRequestAdd.selectedRequestType = e.target.value
+    const selectedType = e.target.value;
+    setSelectedRequestType(selectedType);
+    console.log("선택된 요청 타입: ", selectedType); // 콘솔에 출력
+    savedData.itRequestAdd.selectedRequestType = selectedType;
   };
   
   // 썸네일 이미지 업로드 핸들러

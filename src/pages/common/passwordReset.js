@@ -27,11 +27,12 @@ const PasswordReset = () => {
           message.success('비밀번호 초기화 성공');
           navigate('/');
         } else {
-
+          console.log("에러", result.data);
           message.error('비밀번호 초기화 실패');
         }
       })
       .catch((error) => {
+        console.log("에러", error);
         message.error('비밀번호 초기화 에러');
       });
   };

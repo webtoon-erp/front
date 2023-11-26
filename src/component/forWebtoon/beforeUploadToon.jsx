@@ -24,6 +24,7 @@ const BeforeUploadToon = () => {
             console.log(response.data);
             if (isMounted) {
                 setData(response.data.notFinalWebtoons);
+                console.log("연재예정회차", response.data.notFinalWebtoons);
             }
         });
         return () => {
