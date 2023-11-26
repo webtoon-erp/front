@@ -13,8 +13,10 @@ const MyDocsView = () => {
     useEffect(() => {
         axios.get(`http://146.56.98.153:8080/plas/documents/my/${employeeId}`)
             .then(response => {
-                setRowData(rowData);
-                console.log('정상적 처리');
+                if (response.status === 200) {
+                    setRowData(response.data);
+                    console.log(response);
+                }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
