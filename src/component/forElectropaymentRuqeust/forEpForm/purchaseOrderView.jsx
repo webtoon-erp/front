@@ -83,17 +83,12 @@ const PurchaseOrderView = () => {
             ]
         };
         
-        // FormData 객체 생성
         const formData = new FormData();
 
-        // JSON 데이터를 FormData에 추가
         formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
 
-        // 썸네일 파일을 'file' 키로 추가
-        formData.append('file', selectedFile);
+        formData.append('files', selectedFile);
 
-        // 데이터 출력
-        // FormData 객체 순회
         for (const [key, value] of formData.entries()) {
             console.log(key, value);
         }
