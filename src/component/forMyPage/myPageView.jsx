@@ -29,7 +29,7 @@ const MyPageView = () => {
             .then(function (response) {
                 if (response.status === 200) {
                     setData(response.data.info);
-                    setRowData(response.data.qualifications || []);
+                    setRowData(response.data.info.qualifications || []);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
