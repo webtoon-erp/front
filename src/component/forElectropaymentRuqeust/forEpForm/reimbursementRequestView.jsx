@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
+import { savedData } from '../../../data.js';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import axios from 'axios';
-import { message } from 'antd';
+import { message, Modal, Button } from 'antd';
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import ApprRefGrid from './apprRefGrid';
+import ModalComponent from '../../ModalComponent';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -37,6 +38,9 @@ const ReimbursementRequestView = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [userId, setUserId] = useState('');
     const [employeeToken, setEmployeeToken] = useState('');
+    const [rowData2, setRowData2] = useState('');
+    const [selectedApprId, setSelectedApprover] = useState('');
+    const [selectedRefId, setSelectedReferrer] = useState('');
 
     useEffect(() => {
         setUserId(sessionStorage.getItem("employeeId"));
@@ -44,16 +48,17 @@ const ReimbursementRequestView = () => {
 
     useEffect(() => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
-        console.log("employeeToken", employeeToken)
     }, [employeeToken]);
 
     const navigate = useNavigate();
 
     const handleRequestClick = () => {
         if (
-            !userId ||
             !title ||
-            !content
+            !content ||
+            !selectedFile ||
+            !selectedApprId ||
+            !selectedRefId
         ) {
             message.error('모든 필수 항목을 입력해주세요.');
             return;
@@ -62,40 +67,37 @@ const ReimbursementRequestView = () => {
         const requestData = {
             title: title,
             content: content,
-            templateName: "구매품의서",
+            templateName: "비용집행요청서",
             writeEmployeeId: userId,
             documentRcvRequests: [
                 {
                     sortSequence: 1,
                     receiveType: "APPV",
-                    rcvEmployeeId: userId,
+                    rcvEmployeeId: selectedApprId
                 },
-            ],
+                {
+                    sortSequence: 1,
+                    receiveType: "CC",
+                    rcvEmployeeId: selectedRefId,
+                },
+            ]
         };
         
-        // FormData 객체 생성
         const formData = new FormData();
 
-        // JSON 데이터를 FormData에 추가
-        formData.append('dto', JSON.stringify(requestData));
+        formData.append('dto', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
 
-        // 썸네일 파일을 'file' 키로 추가
-        formData.append('file', selectedFile);
+        formData.append('files', selectedFile);
 
-        console.log(
-            userId,
-            title,
-            content,
-            selectedFile
-        )
-        console.log("employeeToken", employeeToken)
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
         axios
             .post('http://146.56.98.153:8080/plas/documents',formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: 'Bearer ' + employeeToken,
-                },
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             .then((result) => {
                 if (result.status === 200) {
@@ -110,7 +112,26 @@ const ReimbursementRequestView = () => {
             });
     }
 
+    useEffect(() => {
+        axios
+            .get('http://146.56.98.153:8080/plas/approvers', {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                setRowData2(response.data);
+                }
+            })
+            .catch((error) => {
+                message.error('데이터를 불러오는데 실패했습니다.');
+            });
+    }, []);
+
     const gridRef = useRef(null);
+
+    const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
 
     const rowData = [
         {'시작일시': '', '종료일시': '', '부서코드': '', '사용부서' : '', '거래처명': '', '비용타입': '', 수량: '', 단가: '', '공급가액': '', '부가세액': '', '총 금액': '', '비고': ''},
@@ -136,17 +157,25 @@ const ReimbursementRequestView = () => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '시작일시', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
-        {field: '종료일시', sortable: true, filter: true},
-        {field: '부서코드', sortable: true, filter: true},
-        {field: '사용부서', sortable: true, filter: true},
-        {field: '거래처명', sortable: true, filter: true},
-        {field: '비용타입', sortable: true, filter: true},
-        {field: '수량', sortable: true, filter: true},
-        {field: '단가', sortable: true, filter: true},
-        {field: '공급가액', sortable: true, filter: true},
-        {field: '총 금액', sortable: true, filter: true},
-        {field: '비고', sortable: true, filter: true},
+        {headerName: '시작일시', field: 'fromDate', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {headerName: '종료일시', field: 'toDate', sortable: true, filter: true},
+        {headerName: '부서코드', field: 'deptCode', sortable: true, filter: true},
+        {headerName: '사용부서', field: 'deptName', sortable: true, filter: true},
+        {headerName: '거래처명', field: 'company', sortable: true, filter: true},
+        {headerName: '비용타입', field: 'expenseType', sortable: true, filter: true},
+        {headerName: '수량', field: 'count', sortable: true, filter: true},
+        {headerName: '단가', field: 'price', sortable: true, filter: true},
+        {headerName: '공급가액', field: 'supAmt', sortable: true, filter: true},
+        {headerName: '부가세액', field: 'vatAmt', sortable: true, filter: true},
+        {headerName: '총 금액', field: 'totalAmt', sortable: true, filter: true},
+        {headerName: '비고', field: 'remark', sortable: true, filter: true},
+    ]);
+
+    const [columnDefs2, setColumnDefs2] = useState([
+        {headerName: '이름', field: 'name', sortable: true, filter: true,  headerCheckboxSelection: true, checkboxSelection: true, showDisabledCheckboxes: true},
+        {headerName: '부서', field: 'deptName', sortable: true, filter: true},
+        {headerName: '팀번호', field: 'teamNum', sortable: true, filter: true},
+        {headerName: '직급', field: 'position', sortable: true, filter: true},
     ]);
 
     const defaultColDef = useMemo(() => {
@@ -327,11 +356,20 @@ const ReimbursementRequestView = () => {
         }
     }
 
+    const approvers = [];
+
     const TitleHandler = (e) => {
         setTitle(e.target.value);
+        savedData.elecReq.title = e.target.value;
     };
+
     const ContentHandler = (e) => {
-        setContent(e.target.value);
+        const editor = editorRef.current;
+        if (editor) {
+            const currentContent = editor.getContent(); 
+            setContent(currentContent);
+            savedData.elecReq.content = currentContent;
+        }
     };
 
     // 썸네일 이미지 업로드 핸들러
@@ -339,6 +377,29 @@ const ReimbursementRequestView = () => {
         const file = e.target.files[0];
         setSelectedFile(file); // 썸네일 파일 저장
     };
+
+    const SelectApproverhandler = (value) => {
+        setSelectedApprover(value);
+        approvers.push(value);
+    };
+
+    const ReferrerHandler = (value) => {
+        setSelectedReferrer(value);
+        savedData.elecReq.selectedRefId = value;
+    };
+
+    // Ag-Grid에서 row 선택 시 호출되는 이벤트 핸들러
+    // 수정 조건
+    const onRowSelected = useCallback((event) => {
+        const selectedRows = gridRef.current.api.getSelectedRows();
+        if (selectedRows.length === 1) {
+            setSelectedApprover(selectedRows[0].employeeId);
+            setModalOpen(false);
+            savedData.elecReq.selectedAssigner = selectedRows[0].employeeId
+        } 
+    }, []);
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     const [todayDate, setTodayDate] = useState('');
 
@@ -430,7 +491,43 @@ const ReimbursementRequestView = () => {
                     </div>
                 </div>
 
-                <ApprRefGrid />
+                <ModalContainer>
+                        <FileTitle>결재자</FileTitle><Div/>
+                        <Button type="primary" onClick={() => setModalOpen(true)}>
+                            {selectedApprId ? selectedApprId : '결재자'}
+                        </Button>
+                            <Modal
+                                title="결재자"
+                                centered
+                                open={modalOpen}
+                                onOk={() => setModalOpen(false)}
+                                onCancel={() => setModalOpen(false)}
+                            >
+                                <GridContainer> 
+                                    <div style={{ height: '150px', display: 'flex', flexDirection: 'column' }}>
+                                        
+                                        <div>
+                                        {[approvers]}
+                                        </div>
+                                        <div style={{ flexGrow: '1' }}>
+                                        <div style={gridStyle} className="ag-theme-alpine">
+                                            <AgGridReact
+                                            ref={gridRef}
+                                            rowData={rowData2}
+                                            columnDefs={columnDefs2}
+                                            defaultColDef={defaultColDef}
+                                            rowSelection={'single'}
+                                            animateRows={true}
+                                            onRowSelected={onRowSelected} // 이벤트 핸들러 등록
+                                            />
+                                        </div>
+                                    </div>
+                                    </div>
+                                </GridContainer>
+                            </Modal>
+                    </ModalContainer>
+                    
+                    <ModalComponent selectedRefId={selectedRefId} onChange={ReferrerHandler} />
 
                 <Container>
                     <FileTitle>첨부 파일</FileTitle>
@@ -463,12 +560,24 @@ const Title = styled.div`
 
 const FlexBox = styled.div`
     display: flex;
-`
+`;
 
 const Container = styled.div`
     display: flex;
     flex-direction: row;
     margin-top: 30px;
+`;
+
+const ModalContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    margin-right: 20px;
+`;
+
+const GridContainer = styled.div`
+    width: 400px;
+    height: 100px;
 `;
 
 const Input = styled.input`
@@ -505,7 +614,7 @@ const RequestBtn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 780px;
     float: right;
-`
+`;
 
 const Btn = styled.button`
     width: 90px;
@@ -522,7 +631,7 @@ const Btn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 20px;
     float: right;
-`
+`;
 
 const InputTitle = styled.input`
     width: 1080px; 
@@ -536,20 +645,19 @@ const InputTitle = styled.input`
         color: #C3C3C3;
         font-size: 14px;
     }
-`
+`;
 
 const BtnBox = styled.div`
     margin: 20px 0px 20px 10px;
     display: flex;
     justify-content: flex-end;
-`
+`;
 
 const TableGrid = styled.div`
     width: 1200px;
     height: 260px;
-`
+`;
 
-const ApprReferGrid = styled.div`
-    width: 500px;
-    height: 260px;
-`
+const Div = styled.div`
+    padding: 8px;
+`;

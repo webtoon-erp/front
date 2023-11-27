@@ -32,7 +32,7 @@ for (let i = 10; i < 20; i++) {
     });
 }
 
-const WorkRequestView = () => {
+const CorporateCardUsageView = () => {
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -67,7 +67,7 @@ const WorkRequestView = () => {
         const requestData = {
             title: title,
             content: content,
-            templateName: "연장/휴일근무신청서",
+            templateName: "법인카드사용내역서",
             writeEmployeeId: userId,
             documentRcvRequests: [
                 {
@@ -101,14 +101,14 @@ const WorkRequestView = () => {
             })
             .then((result) => {
                 if (result.status === 200) {
-                    message.success(`연장/휴일근무 신청서 결재 요청이 정상적으로 등록되었습니다.`);
+                    message.success(`법인카드 사용내역서 결재 요청이 정상적으로 등록되었습니다.`);
                     setTimeout(() => {
                         navigate('/epRequestAdd');
                     }, 1000);
                 }
             })
             .catch((error) => {
-                message.error('연장/휴일근무 신청서 결재 요청이 정상적으로 등록되지 않았습니다.');
+                message.error('법인카드 사용내역서 결재 요청이 정상적으로 등록되지 않았습니다.');
             });
     }
 
@@ -404,7 +404,7 @@ const WorkRequestView = () => {
     return (
         <WorkRequestContainer>
             <FlexBox>
-                <Title>연장/휴일근무 신청서</Title>
+                <Title>법인카드 사용내역서</Title>
                 <RequestBtn onClick={handleRequestClick}>요 청</RequestBtn>
             </FlexBox>
 
@@ -417,9 +417,23 @@ const WorkRequestView = () => {
                 onInit={(evt, editor) => editorRef.current = editor}
                 initialValue={`
                     <div>
-                        <h3>문서 종류: 연장/휴일근무 신청서</h3>
+                        <h3>문서 종류: 법인카드 사용내역서</h3>
                         <p>&nbsp;</p>
+                        
+                        <h3>1. 사용자 현황</h3>
+                        <p>- 사용부서: </p>
+                        <p>- 사용자: </p>
+                        <p>- 카드번호: </p>
+                        <p>- 월사용계: </p>
+                        
+                        <p>&nbsp;</p>
+                        <h3>2. 비용항목별 소계</h3>
+                        <div id="insert-sum-table-here"></div>
+                        
+                        <p>&nbsp;</p>
+                        <h3>3. 사용 상세 현황</h3>
                         <div id="insert-table-here"></div>
+                        
                         <p>&nbsp;</p>
                         <p>위와 같이 상신하오니  검토 후 재가 바랍니다.</p>
                     </div>
@@ -533,7 +547,7 @@ const WorkRequestView = () => {
     )
 };
 
-export default WorkRequestView;
+export default CorporateCardUsageView;
 
 const WorkRequestContainer = styled.div`
     display: flex;

@@ -108,7 +108,6 @@ const PurchaseOrderView = () => {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 message.error('구매 품의서 결재 요청이 정상적으로 등록되지 않았습니다.');
             });
     }
@@ -117,8 +116,8 @@ const PurchaseOrderView = () => {
         axios
             .get('http://146.56.98.153:8080/plas/approvers', {
                 headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                },
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
             })
             .then((response) => {
                 if (response.status === 200) {
@@ -419,43 +418,43 @@ const PurchaseOrderView = () => {
                     </div>
                 </div>
 
-                    <ModalContainer>
-                        <FileTitle>결재자</FileTitle><Div/>
-                        <Button type="primary" onClick={() => setModalOpen(true)}>
-                            {selectedApprId ? selectedApprId : '결재자'}
-                        </Button>
-                            <Modal
-                                title="결재자"
-                                centered
-                                open={modalOpen}
-                                onOk={() => setModalOpen(false)}
-                                onCancel={() => setModalOpen(false)}
-                            >
-                                <GridContainer> 
-                                    <div style={{ height: '150px', display: 'flex', flexDirection: 'column' }}>
-                                        
-                                        <div>
-                                        {[approvers]}
-                                        </div>
-                                        <div style={{ flexGrow: '1' }}>
-                                        <div style={gridStyle} className="ag-theme-alpine">
-                                            <AgGridReact
-                                            ref={gridRef}
-                                            rowData={rowData2}
-                                            columnDefs={columnDefs2}
-                                            defaultColDef={defaultColDef}
-                                            rowSelection={'single'}
-                                            animateRows={true}
-                                            onRowSelected={onRowSelected} // 이벤트 핸들러 등록
-                                            />
-                                        </div>
+                <ModalContainer>
+                    <FileTitle>결재자</FileTitle><Div/>
+                    <Button type="primary" onClick={() => setModalOpen(true)}>
+                        {selectedApprId ? selectedApprId : '결재자'}
+                    </Button>
+                        <Modal
+                            title="결재자"
+                            centered
+                            open={modalOpen}
+                            onOk={() => setModalOpen(false)}
+                            onCancel={() => setModalOpen(false)}
+                        >
+                            <GridContainer> 
+                                <div style={{ height: '150px', display: 'flex', flexDirection: 'column' }}>
+                                    
+                                    <div>
+                                    {[approvers]}
                                     </div>
+                                    <div style={{ flexGrow: '1' }}>
+                                    <div style={gridStyle} className="ag-theme-alpine">
+                                        <AgGridReact
+                                        ref={gridRef}
+                                        rowData={rowData2}
+                                        columnDefs={columnDefs2}
+                                        defaultColDef={defaultColDef}
+                                        rowSelection={'single'}
+                                        animateRows={true}
+                                        onRowSelected={onRowSelected} // 이벤트 핸들러 등록
+                                        />
                                     </div>
-                                </GridContainer>
-                            </Modal>
-                    </ModalContainer>
-                    
-                    <ModalComponent selectedRefId={selectedRefId} onChange={ReferrerHandler} />
+                                </div>
+                                </div>
+                            </GridContainer>
+                        </Modal>
+                </ModalContainer>
+                
+                <ModalComponent selectedRefId={selectedRefId} onChange={ReferrerHandler} />
 
                 <Container>
                     <FileTitle>첨부 파일</FileTitle>
@@ -506,7 +505,7 @@ const ModalContainer = styled.div`
 const GridContainer = styled.div`
     width: 400px;
     height: 100px;
-`
+`;
 
 const Input = styled.input`
     height: 30px;
@@ -542,7 +541,7 @@ const RequestBtn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 840px;
     float: right;
-`
+`;
 
 const Btn = styled.button`
     width: 90px;
@@ -559,7 +558,7 @@ const Btn = styled.button`
     cursor: pointer;
     margin: 0px 15px 0px 20px;
     float: right;
-`
+`;
 
 const InputTitle = styled.input`
     width: 1080px; 
@@ -573,18 +572,18 @@ const InputTitle = styled.input`
         color: #C3C3C3;
         font-size: 14px;
     }
-`
+`;
 
 const BtnBox = styled.div`
     margin: 20px 0px 20px 10px;
     display: flex;
     justify-content: flex-end;
-`
+`;
 
 const DetailGrid = styled.div`
     width: 1200px;
     height: 260px;
-`
+`;
 
 const Div = styled.div`
     padding: 8px;
