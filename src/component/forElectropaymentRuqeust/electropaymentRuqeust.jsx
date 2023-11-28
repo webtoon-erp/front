@@ -1,9 +1,12 @@
 import { AgGridReact } from 'ag-grid-react';
+import { useNavigate } from 'react-router-dom';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import styled from 'styled-components';
 
 const ElectropaymentRuqeust = () => {
+    const navigate = useNavigate();
+    
     const rowData = [
         {번호: '1', '결재 양식': '구매 품의서', url: '/epFormPurchaseOrder'},
         {번호: '2', '결재 양식': '법인카드 사용내역서', url: '/epFormCorporateCardUsage'},
@@ -22,7 +25,7 @@ const ElectropaymentRuqeust = () => {
         const requests = event.data;
         const url = requests.url;
         if (column  && url) {
-            window.location.href = url;
+            navigate(url);
         }
     }
 
