@@ -82,7 +82,7 @@ const Header: React.FC = () => {
             .patch(`http://146.56.98.153:8080/message/${messageId}/${stat}`)
             .then((result) => {
                 if (result.status === 200) {
-                    console.log('정상 작동');
+                    message.success(`알림을 읽었습니다.`);
                 }
             })
             .catch((error) => {
