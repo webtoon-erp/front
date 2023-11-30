@@ -172,11 +172,11 @@ const ViewListContainer = styled.div`
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    margin-right: 100px;
+    margin-right: 50px;
 `;
 
 const RequestListGrid = styled.div`
-    width: 500px;
+    width: 620px;
     height: auto;
     overflow: hidden;
 `;
