@@ -11,7 +11,7 @@ import ReferList from './referList';
 import ItemList from './itemList';
 
 const ElectropaymentComponent = ({Id}) => {
-  const [epData, setEpData] = useState({});
+  const [epData, setEpData] = useState([]);
   const [employeeId, setEmployeeId] = useState('');
 
   useEffect(() => {
@@ -34,13 +34,9 @@ const ElectropaymentComponent = ({Id}) => {
   };
       
   useEffect(() => {
-    const data = {
-      webtoonId: Id,
-    };
 
     axios
-      .get(`http://146.56.98.153:8080/notice/${Id}`, {
-        data: data,
+      .get(`http://146.56.98.153:8080/plas/documents/${Id}`, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -48,12 +44,13 @@ const ElectropaymentComponent = ({Id}) => {
       .then((response) => {
         if (response.status === 200) {
           const epInfo = response.data;
+          console.log("response.data", response.data);
           epInfo ? setEpData(epInfo) : setEpData(dummyData);
         } 
       })
       .catch((error) => {
         setEpData(dummyData);
-        console.error('데이터를 불러오는데 실패했습니다.', error);
+        console.error('11: 데이터를 불러오는데 실패했습니다.', error);
       });
   }, []);
 
@@ -66,21 +63,21 @@ const ElectropaymentComponent = ({Id}) => {
       axios
         .delete(`http://146.56.98.153:8080/plas/documents/${Id}`, 
         {
-          noticeId: Id
+          documentId: Id
         }
         ,
         {
           headers: headers,
         })
         .then((response) => {
-          message.success('결제란 삭제 성공');
+          message.success('삭제 성공');
           //setSelectedCellData(null);
           setTimeout(() => {
             navigate('/epMyDocsView');
         }, 3000);
         })
         .catch((error) => {
-          message.error('결제란 삭제 실패', error);
+          message.error('삭제 실패', error);
         });
     }
   };
@@ -93,10 +90,6 @@ const ElectropaymentComponent = ({Id}) => {
   
       axios
         .patch(`http://146.56.98.153:8080/plas/documents/${Id}`, 
-        {
-          noticeId: Id
-        }
-        ,
         {
           headers: headers,
         })
@@ -122,21 +115,17 @@ const ElectropaymentComponent = ({Id}) => {
       axios
         .patch(`http://146.56.98.153:8080/plas/documents/${Id}/${employeeId}`, 
         {
-          noticeId: Id
-        }
-        ,
-        {
           headers: headers,
         })
         .then((response) => {
-          message.success('결제 성공');
+          message.success('승인 성공');
           //setSelectedCellData(null);
           setTimeout(() => {
             navigate('/epHoldenDocsView');
         }, 3000);
         })
         .catch((error) => {
-          message.error('결제 실패', error);
+          message.error('승인 실패', error);
         });
     }
   };
@@ -149,7 +138,7 @@ const ElectropaymentComponent = ({Id}) => {
     <BtnContainer>
         <Btn onClick={() => deleteNoticeHandler()}>삭 제 </Btn>  
         <Btn onClick={() => reportHandler()}>상 신</Btn>
-        <Btn onClick={() => deleteNoticeHandler()}>결 제</Btn>
+        <Btn onClick={() => assignHandler()}>승 인</Btn>
       </BtnContainer>
       <NoticeContainer>
             <ContentTitle>{epData.title}</ContentTitle>
@@ -180,7 +169,7 @@ const ElectropaymentComponent = ({Id}) => {
                   <SmallTitle>결제자</SmallTitle>
                 </Container>
                 <SmallAggridContainer>
-                  <ApprovalList />
+                  <ApprovalList Id={Id}/>
                 </SmallAggridContainer>
               </ContainerBox>
 
@@ -190,7 +179,7 @@ const ElectropaymentComponent = ({Id}) => {
                   <SmallTitle>참조자</SmallTitle>
                 </Container>
                 <SmallAggridContainer>
-                  <ReferList />
+                  <ReferList Id={Id}/>
                 </SmallAggridContainer>
               </ContainerBox>
             </ContainerBox>
@@ -204,13 +193,16 @@ const ElectropaymentComponent = ({Id}) => {
                 </BigAggridContainer>
               </ContainerBox>
 
-            <ContainerBox>
+  */}
+
+<ContainerBox>
+            
               <ContainerBox>
                 <Container>
                   <SmallTitle>시작일</SmallTitle>
                 </Container>
                 <SmallContentContainer>
-                  <SmallContent>{epData.documentDataResponses.fromDate}</SmallContent>
+                  <SmallContent>{epData.documentDataResponses?.[0]?.fromDate}</SmallContent>
                 </SmallContentContainer>
               </ContainerBox>
 
@@ -219,16 +211,16 @@ const ElectropaymentComponent = ({Id}) => {
                   <SmallTitle>종료일</SmallTitle>
                 </Container>
                 <SmallContentContainer>
-                  <SmallContent>{epData.documentDataResponses.toDate}</SmallContent>
+                  <SmallContent>{epData.documentDataResponses?.[0]?.toDate}</SmallContent>
                 </SmallContentContainer>
               </ContainerBox>
             </ContainerBox>
-  */}
+
           <HorizonLine />
           <ContentContainer>{epData.content}</ContentContainer>
 
           <FileContainer>
-            <FileDownloader files={[{ name: '파일', filename: epData.uploadFiles }]}/>
+            <FileDownloader files={[{ name: epData.uploadFiles?.[0]?.originName, filename: epData.uploadFiles?.[0]?.originName }]}/>
           </FileContainer>
           </NoticeContainer>
       </NoticeDetailContainer>

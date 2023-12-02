@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { useNavigate } from 'react-router-dom';
 
 const MyDocsView = () => {    
     const [rowData, setRowData] = useState([]);
@@ -14,6 +15,7 @@ const MyDocsView = () => {
         axios.get(`http://146.56.98.153:8080/plas/documents/my/${employeeId}`)
             .then(response => {
                 if (response.status === 200) {
+                    console.log("response.data", response.data);
                     setRowData(response.data);
                 }
             })
@@ -38,6 +40,14 @@ const MyDocsView = () => {
         }},
     ];
 
+    const navigate = useNavigate();
+
+    const handleRowClick = (event) => {
+        if (event.data.id) {
+          navigate(`/epRequestDetail/${event.data.id}`);
+        }
+      };
+
     return (
         <>
             <Title>내 문서 조회</Title>                
@@ -49,6 +59,7 @@ const MyDocsView = () => {
                         rowSelection='multiple'
                         pagination= {true}
                         paginationPageSize= {20}
+                        onCellClicked={handleRowClick}
                         
                     />
             </EntitlementGrid>

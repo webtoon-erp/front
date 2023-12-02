@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { useNavigate } from 'react-router-dom';
 
 const DepDocsView = () => {
     const [rowData, setRowData] = useState([]);
@@ -38,6 +39,14 @@ const DepDocsView = () => {
         }},
     ];
 
+    const navigate = useNavigate();
+
+    const handleRowClick = (event) => {
+        if (event.data.id) {
+          navigate(`/epRequestDetail/${event.data.id}`);
+        }
+    };
+
     return (
         <>
             <Title>부서 문서 조회</Title>                
@@ -49,6 +58,7 @@ const DepDocsView = () => {
                         rowSelection='multiple'
                         pagination= {true}
                         paginationPageSize= {20}
+                        onCellClicked={handleRowClick}
                     />
             </EntitlementGrid>
         </>

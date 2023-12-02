@@ -1,52 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Modal from './modal';
 import styled from 'styled-components';
 import theme from '../style/theme';
 import { savedData } from '../data.js'; 
 
 const Tab = ({ tabElements, onClose, onOpenModal }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(null);
+  // 탭 상태 및 사용자 데이터 상태 관리
+  const [activeTabIndex, setActiveTabIndex] = useState(JSON.parse(localStorage.getItem('activeTabIndex')) || null);
+  const [tabs, setTabs] = useState(JSON.parse(localStorage.getItem('tabs')) || tabElements);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')) || {});
 
-  const handleOpenModal = (index) => {
-    setActiveTabIndex(index);
-  };
+
+  useEffect(() => {
+    localStorage.setItem('lastVisited', location.pathname);
+    localStorage.setItem('tabs', JSON.stringify(tabs));
+    localStorage.setItem('userData', JSON.stringify(userData)); // 사용자 데이터 저장
+  }, [location, tabs, userData]);
 
   const handleCloseModal = () => {
     setActiveTabIndex(null);
+    localStorage.removeItem('activeTabIndex'); // 모달 닫힐 때 상태 저장 제거
   };
 
   const handleCloseTab = (index) => {
-    if (tabElements[index].fixed) {
+    if (tabs[index].fixed) {
       return;
     }
-
-    const targetTitle = tabElements[index].title;
-    Object.keys(savedData[targetTitle]).forEach(newKey => {
-      savedData[targetTitle][newKey] = null;
-    });
-
-    navigate(tabElements[index - 1].title)
-
+  
+    const updatedTabs = tabs.filter((_, tabIndex) => tabIndex !== index);
+    setTabs(updatedTabs); // 탭 상태 업데이트
+    navigate(tabs[index - 1].title);
+  
     if (activeTabIndex === index) {
       handleCloseModal();
     }
-
+  
     onClose(index);
   };
 
+  // 사용자 데이터 업데이트 함수
+  const updateUserData = (tabIndex, newData) => {
+    const updatedData = { ...userData, [tabs[tabIndex].title]: newData };
+    setUserData(updatedData);
+    localStorage.setItem('userData', JSON.stringify(updatedData)); // 사용자 데이터를 localStorage에 저장
+  };
+  
+  
+  const handleOpenModal = (index) => {
+    setActiveTabIndex(index);
+    localStorage.setItem('activeTabIndex', JSON.stringify(index)); // 모달 열릴 때 상태 저장
+    onOpenModal();
+  };
+  
+
   return (
     <div className="tab-container" style={{ display: 'flex', flexDirection: 'row'}}>
-      {tabElements.map((tab, index) => (
+      {tabs.map((tab, index) => (
         <div
           key={index}
           className={`tab ${tab.fixed ? 'fixed' : ''}`}
           style={{ border: '1px solid #ccc', padding: '5px' }}
         >
 
-          <Link to={ tab.title === 'Home'? `/home` : `/${tab.title}`} className="tab-link" style={{ textDecoration: "none" }}>
+          <Link to={tab.title === 'Home' ? `/home` : `/${tab.title}`} className="tab-link" style={{ textDecoration: "none" }}>
 
             {tab.title}
           </Link>
@@ -55,14 +75,13 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
           )}
           
           {activeTabIndex === index && (
-            <Modal onClose={handleCloseModal} tabInfo={tab} />
+            <Modal onClose={handleCloseModal} tabInfo={tab} userData={userData[tab.title]} updateUserData={updateUserData} />
           )}
         </div>
       ))}
     </div>
   );
 };
-
 export default Tab;
 
 

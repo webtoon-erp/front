@@ -8,9 +8,8 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { message } from 'antd';
 import theme from '../../../style/theme';
 
-const ReferList = () => {
+const ReferList = ({Id}) => {
     const [rowData, setRowData] = useState([]);
-    const Id = 'id';
 
     const columnDefs = [
       { headerName: '참조자', field: 'userPosition', width: 190 },
@@ -26,15 +25,16 @@ const ReferList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          setRowData(response.data);
-          console.log("response.data", response.data);
+          const filteredData = response.data.documentRcvResponses.filter(item => item.receiveType === 'CC');
+    
+          setRowData(filteredData);
+          console.log("filteredData data", filteredData);
         } else {
           message.error('데이터를 불러오는데 실패했습니다.');
         }
       })
       .catch((error) => {
         console.error('데이터를 불러오는데 실패했습니다.', error);
-        message.error('데이터를 불러오는데 실패했습니다.');
       });
     }, []); 
     
