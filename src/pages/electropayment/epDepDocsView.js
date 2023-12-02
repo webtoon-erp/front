@@ -1,10 +1,12 @@
 import { styled } from "styled-components";
 import DepDocsView from "../../component/forElectropayment/depDocsView";
+import { useParams } from 'react-router-dom';
 
 export default function EpDepDocsView (){
+    const { Id } = useParams();
     return(
         <DepDocsViewContainer>
-            <DepDocsView />
+            <DepDocsView Id={Id}/>
         </DepDocsViewContainer>
     )
 }

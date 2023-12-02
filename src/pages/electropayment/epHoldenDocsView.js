@@ -1,10 +1,12 @@
 import { styled } from "styled-components";
 import HoldenDocsView from "../../component/forElectropayment/holdenDocsView";
+import { useParams } from 'react-router-dom';
 
 export default function EpHoldenDocsView (){
+    const { Id } = useParams();
     return(
         <HoldenDocsViewContainer>
-            <HoldenDocsView />
+            <HoldenDocsView Id={Id}/>
         </HoldenDocsViewContainer>
     )
 }

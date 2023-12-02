@@ -8,9 +8,9 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { message } from 'antd';
 import theme from '../../../style/theme';
 
-const ApprovalList = () => {
+const ApprovalList = ({Id}) => {
     const [rowData, setRowData] = useState([]);
-    const Id = 'id';
+    console.log("ApprovalList id", Id);
 
     const columnDefs = [
       { headerName: '결제자', field: 'userPosition', width: 190 },
@@ -26,8 +26,9 @@ const ApprovalList = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          setRowData(response.data);
-          console.log("response.data", response.data);
+          const filteredData = response.data.documentRcvResponses.filter(item => item.receiveType === 'APPV');
+    
+          setRowData(filteredData);
         } else {
           message.error('데이터를 불러오는데 실패했습니다.');
         }
