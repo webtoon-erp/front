@@ -26,9 +26,9 @@ const ViewList = () => {
             filter: true,
             width: '80px',
             cellStyle: params=> {
-                if(params.value === '완료') {
+                if(params.value === '4') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
-                } else if(params.value === '진행') {
+                } else if(params.value === '3') {
                     return {color:'#F8F1F1', 'background-color':'#91F29B', 'font-weight': 'bold'}
                 } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
             }
@@ -72,7 +72,17 @@ const ViewList = () => {
     useEffect(() => {
 
         const chartCanvas = chartRef.current;
-        const chartData = [2, 3, 1];
+        const chartData = [0, 0, 0];
+
+        rowData.forEach((data) => {
+            if (data.step === 1 || data.step === 2 || data.step === 5) {
+                chartData[0]++; // 미완료
+            } else if (data.step === 3) {
+                chartData[1]++; // 진행
+            } else if (data.step === 4) {
+                chartData[2]++; // 완료
+            }
+        });
     
         const chart = new Chart(chartCanvas, {
             type: 'doughnut',
@@ -144,20 +154,25 @@ const ViewList = () => {
                         <OuterBox>
                             <Box>
                                 <h3 style={{ 'margin-top': '0' }}>완료</h3>
-                                <Count style={{ 'background-color': '#91CDF2' }}>3</Count>
+                                <Count style={{ 'background-color': '#91CDF2' }}>
+                                    {rowData.filter(data => data.step === 4).length}
+                                </Count>
                             </Box>
                             <Box>
                                 <h3 style={{ 'margin-top': '0' }}>미완료</h3>
-                                <Count style={{ 'background-color': '#F2ACBF' }}>2</Count>
+                                <Count style={{ 'background-color': '#F2ACBF' }}>
+                                    {rowData.filter(data => data.step === 1 || data.step === 2 || data.step === 5).length}
+                                </Count>
                             </Box>
                         </OuterBox>
                         <Box>
                             <h3 style={{ 'margin-top': '0' }}>진행</h3>
-                            <Count style={{ 'background-color': '#91F29B' }}>1</Count>
+                            <Count style={{ 'background-color': '#91F29B' }}>
+                                {rowData.filter(data => data.step === 3).length}
+                            </Count>
                         </Box>
                     </MoreOuterBox>
                     
-
                     <RequestStateGrid className="ag-theme-alpine" style={{ height: '200px', width: '200px' }}>
                         <canvas ref={chartRef} width="200px" height="200px" />
                     </RequestStateGrid>
