@@ -64,11 +64,12 @@ const EmployeeView = () => {
 
     const navigate = useNavigate();
 
-    const handleProfileClick = (event) => {
-        if (event.data.id) {
-            navigate(`/hrProfileView/${event.data.id}`);
-        }
-    };
+    // const handleProfileClick = (event) => {
+    //     console.log(event);
+    //     if (event.data.id) {
+    //         navigate(`/hrProfileView/${event.}`);
+    //     }
+    // };
 
     return(
         <EmpProfileContainer>
@@ -100,7 +101,7 @@ const EmployeeView = () => {
                 ))
             ) : (
                 filteredEmp.map((emp) => (
-                    <CardButton key={emp.employeeId} onClick={handleProfileClick}>
+                    <CardButton key={emp.employeeId} onClick={() => navigate(`/hrProfileView/${emp.employeeId}`)}>
                         <Img src={emp.photo ? emp.photo : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${emp.position} ${emp.name}의 프로필 사진`} />
                         <EmpInfContainer>
                             <CardRank>{emp.position}</CardRank>
