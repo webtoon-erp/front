@@ -153,7 +153,7 @@ function App() {
                 <Route path="/hrAttendance" element={<HrAttendance/>} />
                 <Route path="/hrMyAttendance" element={<HrMyAttendance/>}/>
                 <Route path="/hrProfileListView" element={<HrProfileListView />} />
-                <Route path="/hrProfileView" element={<HrProfileView />} />
+                <Route path="/hrProfileView/:Id" element={<HrProfileView />} />
                 <Route path="/hrView" element={<HrView />} />
                 <Route path="/hrSalary" element={<HrSalary />} />
                 <Route path="/hrAllSalaryView" element={<HrAllSalaryView />} />

@@ -19,32 +19,9 @@ function createNewRowData() {
     newCount++;
 }
 
-
-const FakeProfileData = [
-    {
-        id: 1,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        name: 'employee 1',
-        dep: '인사부',
-        rank: '사원',
-        empId: 1234,
-        joinDate: '2022-07-13',
-        phone: '010-1234-1234',
-        email: 'employee1@gmail.com',
-        birthDate: '1998-03-14',
-        annualLeave: 5
-    },
-];
-
 const HrProfileDetail = ({Id}) => {
     const gridRef = useRef(null);
-
-    const rowData = [
-        {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
-        {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
-        {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
-        {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
-    ];
+    console.log('아이디좀 ㅜㅜ', Id);
 
     const onCellValueChanged = useCallback((event) => {
         console.log(
@@ -66,9 +43,9 @@ const HrProfileDetail = ({Id}) => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '자격증명', sortable: true, filter: true,  headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: '390px'},
-        {field: '자격증 상세', sortable: true, filter: true, width: '380px'},
-        {field: '만료일자', sortable: true, filter: true},
+        {headerName: '자격증명', field: 'qlfcType', sortable: true, filter: true,  headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: '390px'},
+        {headerName: '자격증 상세', field: 'content', sortable: true, filter: true, width: '380px'},
+        {headerName: '만료일자', field: 'qlfcDate', sortable: true, filter: true},
     ]);
 
     const defaultColDef = useMemo(() => {
@@ -116,28 +93,23 @@ const HrProfileDetail = ({Id}) => {
     const [dayOff, setDayOff] = useState('');
     const [photo, setPhoto] = useState(null);
     const [employeeToken, setEmployeeToken] = useState('');
+    const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
     }, [employeeToken]);
 
     useEffect(() => {
-
-        const data = {
-            empId: Id,
-        };
-
         axios
             .get(`http://146.56.98.153:8080/users/${Id}`, {
-                data: data,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: 'Bearer ' + employeeToken,
-                },
+                }
             })
             .then((response) => {
                 if (response.status === 200) {
-                    const empInfo = response.data.info;
+                    const empInfo = response.data;
                     setEditedName(empInfo.name);
                     setEditedDep(empInfo.deptName);
                     setEditedRank(empInfo.position);
@@ -147,7 +119,8 @@ const HrProfileDetail = ({Id}) => {
                     setEmployeeId(empInfo.employeeId);
                     setJoinDate(empInfo.joinDate);
                     setDayOff(empInfo.dayOff);
-                    setPhoto(response.data.resource);
+                    setPhoto(empInfo.resource);
+                    setRowData(empInfo.qualifications || []);
                 } 
             })
             .catch((error) => {
@@ -192,17 +165,17 @@ const HrProfileDetail = ({Id}) => {
             position : editedRank,
             tel : editedPhone,
             email : editedEmail,
-            birthDate: editedBirthDate,
+            birthDate: editedBirthDate
         },
         {
             headers: {
                 Authorization: 'Bearer ' + employeeToken
-            },
+            }
         })
-        .then((result) => {
-            if (result.planId) {
-            message.success('직원 정보가 정상적으로 수정되었습니다.');
-        } 
+        .then((response) => {
+            if (response.status === 200) {
+                message.success('직원 정보가 정상적으로 수정되었습니다.');
+            } 
         })
         .catch((error) => {
             message.error('직원 정보가 정상적으로 수정되지 않았습니다.');
@@ -257,7 +230,7 @@ const HrProfileDetail = ({Id}) => {
                                 <ProfileInfoBox>생년월일 <InputContainer><InputField type="text" value={editedBirthDate} onChange={handleBirthDateChange} /></InputContainer></ProfileInfoBox>
                             </> 
                         )}
-                            <ProfileInfoBox>잔여연차 <ProfileInfoData>{FakeProfileData[0].annualLeave}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>잔여연차 <ProfileInfoData>{dayOff}</ProfileInfoData></ProfileInfoBox>
                     </>
                 </ProfileInfoContainer>
             </ProfileInHrSalaryContainer>
