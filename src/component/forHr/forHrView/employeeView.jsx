@@ -32,10 +32,7 @@ const EmployeeView = () => {
             .get('http://146.56.98.153:8080/users', {
                 headers: {
                     Authorization: `Bearer ${employeeToken}`
-                },
-                params: {
-                    page: 1,
-                },
+                }
             })
             .then((response) => {
                 if (response.status === 200) {

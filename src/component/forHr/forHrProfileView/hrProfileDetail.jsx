@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
@@ -21,7 +22,6 @@ function createNewRowData() {
 
 const HrProfileDetail = ({Id}) => {
     const gridRef = useRef(null);
-    console.log('아이디좀 ㅜㅜ', Id);
 
     const onCellValueChanged = useCallback((event) => {
         console.log(
@@ -109,7 +109,7 @@ const HrProfileDetail = ({Id}) => {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    const empInfo = response.data;
+                    const empInfo = response.data.info;
                     setEditedName(empInfo.name);
                     setEditedDep(empInfo.deptName);
                     setEditedRank(empInfo.position);
@@ -119,9 +119,9 @@ const HrProfileDetail = ({Id}) => {
                     setEmployeeId(empInfo.employeeId);
                     setJoinDate(empInfo.joinDate);
                     setDayOff(empInfo.dayOff);
-                    setPhoto(empInfo.resource);
+                    setPhoto(response.data.resource);
                     setRowData(empInfo.qualifications || []);
-                } 
+                }
             })
             .catch((error) => {
                 console.error('데이터를 불러오는데 실패했습니다.', error);
@@ -158,7 +158,8 @@ const HrProfileDetail = ({Id}) => {
     };
 
     const handleSaveChanges = () => {
-        (axios.patch('http://146.56.98.153:8080/users'),
+        axios
+        .patch(`http://146.56.98.153:8080/users`,
         {
             name : editedName,
             deptName : editedDep,
@@ -175,6 +176,7 @@ const HrProfileDetail = ({Id}) => {
         .then((response) => {
             if (response.status === 200) {
                 message.success('직원 정보가 정상적으로 수정되었습니다.');
+                setIsEditing(false);
             } 
         })
         .catch((error) => {
@@ -182,13 +184,28 @@ const HrProfileDetail = ({Id}) => {
         })
     }
 
+    const navigate = useNavigate();
+
     const quitterHandler = () => {
         axios
             .patch(`http://146.56.98.153:8080/users/${Id}`, {
             headers: {
                 Authorization: 'Bearer ' + employeeToken
-        }
-    });
+            }
+        })
+        .then((result) => {
+                if (result.status === 200) {
+                    message.success(`퇴사자 처리되었습니다.`);
+                    setTimeout(() => {
+                        navigate('/hrView');
+                    }, 1000);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error('퇴사자 처리에 실패했습니다.');
+            });
+    };
 
     return (
         <>
@@ -271,7 +288,6 @@ const HrProfileDetail = ({Id}) => {
             </EntitlementGridContainer>
         </>
     )
-    }
 };
 
 export default HrProfileDetail;
