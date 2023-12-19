@@ -35,8 +35,19 @@ const RefDocsView = () => {
             cellStyle: params=> {
                 if(params.value === 'Y') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
+                } else if(params.value === 'C') {
+                    return {color:'#F8F1F1', 'background-color':'#70d67a', 'font-weight': 'bold'}
                 } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
-        }},
+            },
+            cellRenderer: params => {
+                if (params.value === 'Y') {
+                    return '상신';
+                } else if (params.value === 'C') {
+                    return '결재 완료';
+                } else {
+                    return '임시 저장';
+                }
+            }},
     ];
 
     const navigate = useNavigate();
