@@ -26,11 +26,30 @@ const ViewList = () => {
             filter: true,
             width: '80px',
             cellStyle: params=> {
-                if(params.value === '4') {
+                if(params.value === 5) {
+                    return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
+                } else if(params.value === 4) {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
-                } else if(params.value === '3') {
+                } else if(params.value === 3) {
                     return {color:'#F8F1F1', 'background-color':'#91F29B', 'font-weight': 'bold'}
-                } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
+                } else if(params.value === 2) {
+                    return {color:'rgb(248, 241, 241)', 'background-color':'#f4f75b', 'font-weight': 'bold'}
+                } else if(params.value === 1) {
+                    return {color:'rgb(248, 241, 241)', 'background-color':'#f5c25d', 'font-weight': 'bold'}
+                }
+            },
+            cellRenderer: params => {
+                if (params.value === 1) {
+                    return '요청';
+                } else if (params.value === 2) {
+                    return '접수';
+                } else if (params.value === 3) {
+                    return '진행';
+                }else if (params.value === 4) {
+                    return '완료';
+                } else if (params.value === 5) {
+                    return '반려';
+                }
             }
         },
     ];
