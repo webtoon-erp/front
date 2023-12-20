@@ -10,6 +10,7 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
   // 탭 상태 및 사용자 데이터 상태 관리
   const [activeTabIndex, setActiveTabIndex] = useState(JSON.parse(localStorage.getItem('activeTabIndex')) || null);
   const [tabs, setTabs] = useState(JSON.parse(localStorage.getItem('tabs')) || tabElements);
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')) || {});
@@ -25,6 +26,11 @@ const Tab = ({ tabElements, onClose, onOpenModal }) => {
     setActiveTabIndex(null);
     localStorage.removeItem('activeTabIndex'); // 모달 닫힐 때 상태 저장 제거
   };
+
+  useEffect(() => {
+    setTabs(tabElements);
+  }, [tabElements]);
+
 
   const handleCloseTab = (index) => {
     if (tabs[index].fixed) {

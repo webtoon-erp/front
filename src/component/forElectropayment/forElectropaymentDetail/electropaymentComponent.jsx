@@ -97,7 +97,7 @@ const ElectropaymentComponent = ({Id}) => {
           message.success('상신 성공');
           //setSelectedCellData(null);
           setTimeout(() => {
-            navigate('/epRefDocsView');
+            navigate('/epMyDocsView');
         }, 3000);
         })
         .catch((error) => {

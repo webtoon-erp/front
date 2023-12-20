@@ -1,9 +1,11 @@
 import ServiceDetailComponent from "../../component/forITSM/forServiceDetail/serviceDetailComponent";
+import { useParams } from 'react-router-dom';
 
 export default function ItRequestDetail (){
-    return(
-        <>
-          <ServiceDetailComponent />
-        </>
-    )
+  const { Id } = useParams();
+  return(
+      <>
+        <ServiceDetailComponent Id={Id}/>
+      </>
+  )
 }
