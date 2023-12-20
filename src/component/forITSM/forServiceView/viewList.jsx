@@ -39,10 +39,9 @@ const ViewList = () => {
 
     const handleRowClick = (event) => {
         if (event.data.id) {
-            navigate(`/itRequesDetail/${event.data.id}`);
-            console.log('확인');
+          navigate(`/itRequestDetail/${event.data.id}`);
         }
-    };
+      };
 
     useEffect(() => {
         const userId = sessionStorage.getItem('employeeId');
@@ -56,6 +55,7 @@ const ViewList = () => {
             .then((response) => {
                 if (response.status === 200) {
                     setRowData(response.data);
+                    console.log("response.data",response.data);
                     console.log("요청 성공");
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');

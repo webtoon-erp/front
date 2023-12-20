@@ -46,7 +46,7 @@ const MyDocsView = () => {
         if (event.data.id) {
           navigate(`/epRequestDetail/${event.data.id}`);
         }
-      };
+    };
 
     return (
         <>

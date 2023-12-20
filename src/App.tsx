@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Home from './pages/common/home';
 import Login from './pages/common/login';
 import PasswordReset from './pages/common/passwordReset';
@@ -74,15 +74,32 @@ function App() {
   const [activeModal, setActiveModal] = useState<{ title: string; fixed: boolean } | null>(null);
 
 
+  // 탭 추가 함수
+  const handleAddTab = (title: string) => {
+    if (!tabElements.some((tab) => tab.title === title)) {
+      const newTabElements = [...tabElements, { title, fixed: false }];
+      setTabElements(newTabElements);
+      // 상태 업데이트 후 약간의 지연을 두고 새로고침
+      //window.location.reload();
+    }
+  };
+  
+
+  // 컴포넌트가 마운트될 때 로컬 스토리지에서 탭 상태를 불러옵니다.
   useEffect(() => {
     const savedTabs = JSON.parse(localStorage.getItem('tabs') || '[]');
-    setTabElements(savedTabs);
-  }, []);
+    if (savedTabs.length > 0 && tabElements.length === 1 && tabElements[0].title === 'Home') {
+      setTabElements(savedTabs);
+    }
+  }, [handleAddTab]);
 
+  // tabElements 상태가 변경될 때마다 이를 로컬 스토리지에 저장합니다.
   useEffect(() => {
     localStorage.setItem('tabs', JSON.stringify(tabElements));
   }, [tabElements]);
 
+  
+  // 탭 닫기 함수
   const handleCloseTab = (index: number) => {
     if (tabElements[index].fixed) {
       return;
@@ -90,21 +107,13 @@ function App() {
 
     const newTabElements = [...tabElements];
     newTabElements.splice(index, 1);
+    setTabElements(newTabElements);
 
     if (tabElements[index].title === activeTab) {
-      setActiveTab(newTabElements[newTabElements.length - 1]?.title || null);
-    }
-
-    setTabElements(newTabElements);
-  };
-
-  const handleAddTab = (title: string) => {
-    if (!tabElements.some((tab) => tab.title === title)) {
-      const newTabElements = [...tabElements, { title, fixed: false }];
-      setTabElements(newTabElements);
-      setActiveTab(title);
+      setActiveTab(newTabElements.length > 0 ? newTabElements[newTabElements.length - 1].title : null);
     }
   };
+
 
   const handleOpenModal = (index: number) => {
     setActiveModal(tabElements[index]);
@@ -116,6 +125,14 @@ function App() {
 
   
   const isLoginPage = window.location.pathname === '/';
+
+  const tabComponent = useMemo(() => (
+    <Tab
+      tabElements={tabElements}
+      onClose={handleCloseTab}
+      onOpenModal={handleOpenModal}
+    />
+  ), [tabElements, handleCloseTab, handleOpenModal]);
 
   return (
     <Router>
@@ -139,11 +156,7 @@ function App() {
               <NavBar onAddTab={handleAddTab} />
             </aside>
             <main style={{ flex: 1, marginTop: '80px' }}>
-              <Tab
-                tabElements={tabElements}
-                onClose={handleCloseTab}
-                onOpenModal={handleOpenModal}
-              />
+              {tabComponent}
               <Routes>
                 <Route path="/home" element={<Home />} />
                 <Route path="/notice" element={<Notice />} />
@@ -161,7 +174,7 @@ function App() {
                 <Route path="/itRequestAdd" element={<ItRequestAdd />} />
                 <Route path="/itRequestListView" element={<ItRequestListView />} />
                 <Route path="/itRequestView" element={<ItRequestView />} />
-                <Route path="/itRequestDetail" element={<ItRequestDetail />} />
+                <Route path="/itRequestDetail:Id" element={<ItRequestDetail />} />
                 <Route path="/toonAdd" element={<ToonAdd/>} />
                 <Route path="/episodeAdd/:Id" element={<EpisodeAdd />} />
                 <Route path="/toonView" element={<ToonView />} />
