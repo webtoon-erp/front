@@ -24,19 +24,30 @@ const RefDocsView = () => {
     }, []);
 
     const columnDefs = [      
-        {field: '문서종류', sortable: true, filter: true, width: '130px'},
-        {field: '작성일', sortable: true, filter: true, width: '150px'},
-        {field: '제목', sortable: true, filter: true, width: '250px'},
-        {field: '부서', sortable: true, filter: true, width: '130px'},
-        {field: '작성자', sortable: true, filter: true, width: '110px'},
-        {field: '결재대기자', sortable: true, filter: true, width: '168px'},
-        {field: '최종결재자', sortable: true, filter: true, width: '130px'},
-        {field: '상태', sortable: true, filter: true, width: '130px', 
+        {headerName: '문서종류', field: 'templateName', sortable: true, filter: true, width: '130px'},
+        {headerName: '작성일', field: 'reg_date', sortable: true, filter: true, width: '150px'},
+        {headerName: '제목', field: 'title', sortable: true, filter: true, width: '250px'},
+        {headerName: '부서', field: 'writeDeptName', sortable: true, filter: true, width: '130px'},
+        {headerName: '작성자', field: 'writeUsername', sortable: true, filter: true, width: '110px'},
+        {headerName: '결재대기자', field: 'currentApprover', sortable: true, filter: true, width: '168px'},
+        {headerName: '최종결재자', field: 'lastApprover', sortable: true, filter: true, width: '130px'},
+        {headerName: '상태', field: 'stat', sortable: true, filter: true, width: '130px', 
             cellStyle: params=> {
                 if(params.value === 'Y') {
                     return {color:'#F8F1F1', 'background-color':'#91CDF2', 'font-weight': 'bold'}
+                } else if(params.value === 'C') {
+                    return {color:'#F8F1F1', 'background-color':'#70d67a', 'font-weight': 'bold'}
                 } else return {color:'#F8F1F1', 'background-color':'#F2ACBF', 'font-weight': 'bold'}
-        }},
+            },
+            cellRenderer: params => {
+                if (params.value === 'Y') {
+                    return '상신';
+                } else if (params.value === 'C') {
+                    return '결재 완료';
+                } else {
+                    return '임시 저장';
+                }
+            }},
     ];
 
     const navigate = useNavigate();

@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import EmployeeView from "../../component/forHr/forHrView/employeeView";
+import { useParams } from 'react-router-dom';
 
 const EmpProfileContainer = styled.div`
     margin-top: 45px;
@@ -15,10 +16,12 @@ const Title = styled.div`
 `;
 
 export default function HrView (){
+    const { Id } = useParams();
+
     return(
         <EmpProfileContainer>
             <Title>전체 직원 관리</Title>
-            <EmployeeView />
+            <EmployeeView Id={Id} />
         </EmpProfileContainer>
     )
 }

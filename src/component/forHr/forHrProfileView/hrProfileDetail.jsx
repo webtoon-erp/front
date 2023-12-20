@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import theme from '../../../style/theme';
@@ -19,32 +20,8 @@ function createNewRowData() {
     newCount++;
 }
 
-
-const FakeProfileData = [
-    {
-        id: 1,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png',
-        name: 'employee 1',
-        dep: '인사부',
-        rank: '사원',
-        empId: 1234,
-        joinDate: '2022-07-13',
-        phone: '010-1234-1234',
-        email: 'employee1@gmail.com',
-        birthDate: '1998-03-14',
-        annualLeave: 5
-    },
-];
-
 const HrProfileDetail = ({Id}) => {
     const gridRef = useRef(null);
-
-    const rowData = [
-        {자격증명: '정보처리기사', '자격증 상세' : '', 만료일자: '2022-09-01'},
-        {자격증명: 'SQLD', '자격증 상세' : '', 만료일자: '2023-02-10'},
-        {자격증명: 'TOEIC', '자격증 상세' : '920', 만료일자: '2023-05-18'},
-        {자격증명: 'JLPT', '자격증 상세' : 'N2', 만료일자: '2021-08-31'},
-    ];
 
     const onCellValueChanged = useCallback((event) => {
         console.log(
@@ -66,9 +43,9 @@ const HrProfileDetail = ({Id}) => {
     }, []);
 
     const [columnDefs, setColumnDefs] = useState([
-        {field: '자격증명', sortable: true, filter: true,  headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: '390px'},
-        {field: '자격증 상세', sortable: true, filter: true, width: '380px'},
-        {field: '만료일자', sortable: true, filter: true},
+        {headerName: '자격증명', field: 'qlfcType', sortable: true, filter: true,  headerCheckboxSelection: true,checkboxSelection: true, showDisabledCheckboxes: true , width: '390px'},
+        {headerName: '자격증 상세', field: 'content', sortable: true, filter: true, width: '380px'},
+        {headerName: '만료일자', field: 'qlfcDate', sortable: true, filter: true},
     ]);
 
     const defaultColDef = useMemo(() => {
@@ -116,24 +93,19 @@ const HrProfileDetail = ({Id}) => {
     const [dayOff, setDayOff] = useState('');
     const [photo, setPhoto] = useState(null);
     const [employeeToken, setEmployeeToken] = useState('');
+    const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
         setEmployeeToken(sessionStorage.getItem("accessToken"));
     }, [employeeToken]);
 
     useEffect(() => {
-
-        const data = {
-            empId: Id,
-        };
-
         axios
             .get(`http://146.56.98.153:8080/users/${Id}`, {
-                data: data,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: 'Bearer ' + employeeToken,
-                },
+                }
             })
             .then((response) => {
                 if (response.status === 200) {
@@ -148,7 +120,8 @@ const HrProfileDetail = ({Id}) => {
                     setJoinDate(empInfo.joinDate);
                     setDayOff(empInfo.dayOff);
                     setPhoto(response.data.resource);
-                } 
+                    setRowData(empInfo.qualifications || []);
+                }
             })
             .catch((error) => {
                 console.error('데이터를 불러오는데 실패했습니다.', error);
@@ -185,37 +158,54 @@ const HrProfileDetail = ({Id}) => {
     };
 
     const handleSaveChanges = () => {
-        (axios.patch('http://146.56.98.153:8080/users'),
+        axios
+        .patch(`http://146.56.98.153:8080/users`,
         {
             name : editedName,
             deptName : editedDep,
             position : editedRank,
             tel : editedPhone,
             email : editedEmail,
-            birthDate: editedBirthDate,
+            birthDate: editedBirthDate
         },
         {
             headers: {
                 Authorization: 'Bearer ' + employeeToken
-            },
+            }
         })
-        .then((result) => {
-            if (result.planId) {
-            message.success('직원 정보가 정상적으로 수정되었습니다.');
-        } 
+        .then((response) => {
+            if (response.status === 200) {
+                message.success('직원 정보가 정상적으로 수정되었습니다.');
+                setIsEditing(false);
+            } 
         })
         .catch((error) => {
             message.error('직원 정보가 정상적으로 수정되지 않았습니다.');
         })
     }
 
+    const navigate = useNavigate();
+
     const quitterHandler = () => {
         axios
             .patch(`http://146.56.98.153:8080/users/${Id}`, {
             headers: {
                 Authorization: 'Bearer ' + employeeToken
-        }
-    });
+            }
+        })
+        .then((result) => {
+                if (result.status === 200) {
+                    message.success(`퇴사자 처리되었습니다.`);
+                    setTimeout(() => {
+                        navigate('/hrView');
+                    }, 1000);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                message.error('퇴사자 처리에 실패했습니다.');
+            });
+    };
 
     return (
         <>
@@ -257,7 +247,7 @@ const HrProfileDetail = ({Id}) => {
                                 <ProfileInfoBox>생년월일 <InputContainer><InputField type="text" value={editedBirthDate} onChange={handleBirthDateChange} /></InputContainer></ProfileInfoBox>
                             </> 
                         )}
-                            <ProfileInfoBox>잔여연차 <ProfileInfoData>{FakeProfileData[0].annualLeave}</ProfileInfoData></ProfileInfoBox>
+                            <ProfileInfoBox>잔여연차 <ProfileInfoData>{dayOff}</ProfileInfoData></ProfileInfoBox>
                     </>
                 </ProfileInfoContainer>
             </ProfileInHrSalaryContainer>
@@ -298,7 +288,6 @@ const HrProfileDetail = ({Id}) => {
             </EntitlementGridContainer>
         </>
     )
-    }
 };
 
 export default HrProfileDetail;

@@ -11,7 +11,6 @@ const NoticeDetailComponent = ({Id}) => {
   const [noticeData, setNoticeData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [selectedTag, setSelectedTag] = useState('');
-  const [selectedDept, setSelectedDept] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
@@ -54,76 +53,43 @@ const NoticeDetailComponent = ({Id}) => {
         });
     }, []);
 
-  const handleToggleEdit = () => {
-    setIsEditing((prevState) => !prevState);
-  };
-
-  const handleTitleChange = (e) => {
-    setSelectedTitle(e.target.value);
-  };
-
-  const handleContentChange = (e) => {
-    setSelectedContent(e.target.value);
-  };
-
-  const handleTagChange = (e) => {
-    setSelectedTag(e.target.value);
-  };
-
-  const handleFilesChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setSelectedFiles(event.target.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSaveChanges = () => {
     // JSON 데이터 객체 생성
     const jsonData = {
-      title: noticeData.selectedTitle,
+      title: selectedTitle,
       content: selectedContent,
-      readCount: selectedReadCount,
+      //readCount: selectedReadCount,
       noticeType: selectedTag,
-      noticeDate: selectedDate,
-      name: selectedAuthor,
+      //noticeDate: selectedDate,
+      //name: selectedAuthor,
       files: selectedFiles
     };
 
-    // FormData 객체 생성
     const formData = new FormData();
 
-    // JSON 데이터를 'dto' 키로 추가
     formData.append('dto', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+    formData.append('files', selectedFiles);
 
-    // notice ID (Path Parameter)
     const noticeId = Id;
 
-    // PUT 요청 보내기
     axios
       .put(`http://146.56.98.153:8080/notice/${noticeId}`, formData, {
-        params: {
-          noticeId: noticeId,
-        },
         headers: {
           'Content-Type': 'multipart/form-data',
-        },
+        }
       })
-      .then((result) => {
-        message.success('공지사항 상세정보가 정상적으로 수정되었습니다.');
-        setIsEditing(false);
-        // 작품 정보 업데이트
-        setNoticeData((prevData) => ({
-          ...prevData,
-          content: selectedContent,
-          noticeType: selectedTag,
-          noticeDate: selectedDate
-        }));
+      .then((response) => {
+        if (response.status === 200) {
+          message.success('공지사항 상세정보가 정상적으로 수정되었습니다.');
+          setIsEditing(false);
+          setNoticeData((prevData) => ({
+            ...prevData,
+            content: selectedContent,
+            noticeType: selectedTag,
+            title: selectedTitle,
+            files: selectedFiles
+          }));
+        }
       })
       .catch((error) => {
         message.error('공지사항 상세정보가 정상적으로 수정되지 않았습니다.');
@@ -158,6 +124,27 @@ const NoticeDetailComponent = ({Id}) => {
         });
     }
   };
+
+  const handleToggleEdit = () => {
+    setIsEditing((prevState) => !prevState);
+  };
+
+  const handleTitleChange = (e) => {
+    setSelectedTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+    setSelectedContent(e.target.value);
+  };
+
+  const handleTagChange = (e) => {
+    setSelectedTag(e.target.value);
+  };
+
+  const handleFilesChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFiles(file);
+};
 
   return (
     <NoticeDetailContainer>
@@ -267,9 +254,12 @@ const NoticeDetailComponent = ({Id}) => {
           <HorizonLine />
           <ContentContainer><InputContainer><InputField type="text" value={selectedContent} onChange={handleContentChange} /></InputContainer></ContentContainer>
 
-          <FileContainer>
-            <FileDownloader files={[{ name: '파일', filename: selectedFiles }]} onChange={handleFilesChange} />
-          </FileContainer>
+          
+          <FileChangeContainer>
+            <FileTitle>첨부 파일</FileTitle>
+            <Input type="file" accept="image/*" onChange={handleFilesChange} />
+          </FileChangeContainer>
+                
           </NoticeContainer>
         )}
       </NoticeDetailContainer>
@@ -303,6 +293,31 @@ const FileContainer = styled.div`
   width: 100%;
   height: 10px;
   margin-top: 80px;
+`;
+
+const FileChangeContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+`;
+
+const FileTitle = styled.div`
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-right: 15px;
+`;
+
+const Input = styled.input`
+    height: 30px;
+    border: transparent;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.20);
+`;
+
+const ImagePreview = styled.img`
+    max-width: 300px;
+    max-height: 200px;
+    margin-top: 10px;
 `;
 
 const ContainerBox = styled.div`
