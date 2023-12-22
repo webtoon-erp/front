@@ -25,7 +25,14 @@ const DepDocsView = () => {
 
     const columnDefs = [      
         {headerName: '문서종류', field: 'templateName', sortable: true, filter: true, width: '130px'},
-        {headerName: '작성일', field: 'reg_date', sortable: true, filter: true, width: '150px'},
+        {headerName: '작성일', field: 'reg_date', sortable: true, filter: true, width: '150px',
+            cellRenderer: (data) => {
+                const year = data.value[0];
+                const month = ("0" + data.value[1]).slice(-2); // 월은 0부터 시작하므로 1을 더해줍니다.
+                const day = ("0" + data.value[2]).slice(-2);
+                return `${year}-${month}-${day}`;
+            }
+        },
         {headerName: '제목', field: 'title', sortable: true, filter: true, width: '250px'},
         {headerName: '부서', field: 'writeDeptName', sortable: true, filter: true, width: '130px'},
         {headerName: '작성자', field: 'writeUsername', sortable: true, filter: true, width: '110px'},
