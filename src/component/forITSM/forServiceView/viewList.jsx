@@ -39,7 +39,7 @@ const ViewList = () => {
                 }
             },
             cellRenderer: params => {
-                if (params.value === 1) {
+                if (params.value === 1) {                                                                                                                                                                                                                          
                     return '요청';
                 } else if (params.value === 2) {
                     return '접수';
