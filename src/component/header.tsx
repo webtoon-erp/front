@@ -89,6 +89,12 @@ const Header: React.FC = () => {
                 console.error('상태 변경 실패', error);
             });
     }
+    
+    useEffect(() => {
+        if (messageId) {
+            statChangeHandler(messageId);
+        }
+    }, [messageId]);
 
     const contentData = (
         <div>
