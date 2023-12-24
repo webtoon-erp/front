@@ -211,6 +211,7 @@ const HrProfileDetail = ({Id}) => {
         axios
         .patch(`http://146.56.98.153:8080/users`,
         {
+            employeeId: employeeId,
             name : editedName,
             deptName : editedDep,
             position : editedRank,
@@ -231,6 +232,7 @@ const HrProfileDetail = ({Id}) => {
         })
         .catch((error) => {
             message.error('직원 정보가 정상적으로 수정되지 않았습니다.');
+            console.log(error);
         })
     }
 
