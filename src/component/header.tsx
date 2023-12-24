@@ -83,6 +83,7 @@ const Header: React.FC = () => {
             .then((result) => {
                 if (result.status === 200) {
                     message.success(`알림을 읽었습니다.`);
+                    window.location.reload();
                 }
             })
             .catch((error) => {
