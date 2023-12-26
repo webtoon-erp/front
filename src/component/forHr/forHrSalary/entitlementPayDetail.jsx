@@ -84,7 +84,7 @@ const EntitlementPayDetail = () => {
     useEffect(() => {
         // 컴포넌트가 마운트될 때 초기 필터 설정
         if (gridRef.current) {
-            gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
+            //gridRef.current.setQuickFilter(document.getElementById('filter-text-box').value);
         }
     }, []);
     
@@ -97,21 +97,21 @@ const EntitlementPayDetail = () => {
             <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
                 <Btn onClick={onBtStopEditing}>완료</Btn>
                 <div style={{ flexGrow: '1' }}>
-                <EntitlementPayGrid className="ag-theme-alpine">
-                    <AgGridReact 
-                        ref={gridRef}
-                        rowData={rowData}
-                        columnDefs={columnDefs}
-                        defaultColDef={defaultColDef}
-                        rowSelection="multiple"
-                        animateRows={true}
-                        editType="fullRow"
-                        onCellValueChanged={onCellValueChanged}
-                        onRowValueChanged={onRowValueChanged}
-                        onGridReady= {onGridReady}
-                    />
-                </EntitlementPayGrid>
-            </div>
+                    <EntitlementPayGrid className="ag-theme-alpine">
+                        <AgGridReact 
+                            ref={gridRef}
+                            rowData={rowData}
+                            columnDefs={columnDefs}
+                            defaultColDef={defaultColDef}
+                            rowSelection="multiple"
+                            animateRows={true}
+                            editType="fullRow"
+                            onCellValueChanged={onCellValueChanged}
+                            onRowValueChanged={onRowValueChanged}
+                            onGridReady= {onGridReady}
+                        />
+                    </EntitlementPayGrid>
+                </div>
             </div>
         </EntitlementPayDetailContainer>
     )
