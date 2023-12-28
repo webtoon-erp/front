@@ -57,8 +57,8 @@ const ViewList = () => {
     const navigate = useNavigate();
 
     const handleRowClick = (event) => {
-        if (event.data.id) {
-          navigate(`/itRequestDetail/${event.data.id}`);
+        if (event.data.reqId) {
+          navigate(`/itRequestDetail/${event.data.reqId}`);
         }
       };
 

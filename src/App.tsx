@@ -174,7 +174,7 @@ function App() {
                 <Route path="/itRequestAdd" element={<ItRequestAdd />} />
                 <Route path="/itRequestListView" element={<ItRequestListView />} />
                 <Route path="/itRequestView" element={<ItRequestView />} />
-                <Route path="/itRequestDetail:Id" element={<ItRequestDetail />} />
+                <Route path="/itRequestDetail/:Id" element={<ItRequestDetail />} />
                 <Route path="/toonAdd" element={<ToonAdd/>} />
                 <Route path="/episodeAdd/:Id" element={<EpisodeAdd />} />
                 <Route path="/toonView" element={<ToonView />} />
