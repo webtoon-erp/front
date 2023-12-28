@@ -17,6 +17,7 @@ const MyPageView = () => {
     const [content, setContent] = useState('');
     const [userId, setUserId] = useState('');
     const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(null);
+    const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
         setUserId(sessionStorage.getItem("employeeId"));
@@ -30,6 +31,7 @@ const MyPageView = () => {
                 if (response.status === 200) {
                     setData(response.data.info);
                     setRowData(response.data.info.qualifications || []);
+                    setPhoto(response.data.resource);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
@@ -136,7 +138,7 @@ const MyPageView = () => {
             </FlexBox>            
             <ProfileInHrSalaryContainer>
                 <ProfileImgContainer>
-                    <Img src={data.imageUrl ? data.imageUrl : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${data.position} ${data.name}의 프로필 사진`} />
+                    <Img src={photo ? photo : 'https://cdn-icons-png.flaticon.com/512/4519/4519678.png'} alt={`${data.position} ${data.name}의 프로필 사진`} />
                 </ProfileImgContainer>
                 <ProfileInfoContainer>
                     <ProfileInfoBox>사원명 <ProfileInfoData>{data.name}</ProfileInfoData></ProfileInfoBox>

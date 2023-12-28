@@ -66,10 +66,40 @@ const HrProfileDetail = ({Id}) => {
             addIndex: addIndex,
         });
     }, []);
+
+    // const [userId, setUserId] = useState('');
+
+    // useEffect(() => {
+    //     const employeeId = sessionStorage.getItem("employeeId");
+    //     setUserId(employeeId || "");
+    // }, []);
     
     //  ag-grid 현재 편집 모드 종료하는 역할
     const onBtStopEditing = useCallback(() => {
         gridRef.current.api.stopEditing();
+
+        // axios
+        //     .post('http://146.56.98.153:8080//users/qualification', 
+        //     {
+        //         employeeId : userId,
+        //         qlfcType : qlfcType,
+        //         content : content,
+        //         qlfcDate : qlfcDate,
+        //     }
+        //     ,
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json;charset=UTF-8',
+        //         },
+        //     })
+        //     .then((response) => {
+        //         if (response.status === 200) {
+        //             message.success('삭제 성공');
+        //             setRowData(null);
+        //         } else {
+        //             message.error('삭제 실패');
+        //         }
+        //     });
     }, []);
     
     const onRemoveSelected = useCallback(() => {
@@ -77,6 +107,26 @@ const HrProfileDetail = ({Id}) => {
         const res = gridRef.current.api.applyTransaction({
             remove: selectedData,
         });
+
+        axios
+            .delete('http://146.56.98.153:8080//users/qualification', 
+            {
+                // qualificationId: Id
+            }
+            ,
+            {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    message.success('삭제 성공');
+                    setRowData(null);
+                } else {
+                    message.error('삭제 실패');
+                }
+            });
     }, []);
 
     let count = 1;
@@ -161,6 +211,7 @@ const HrProfileDetail = ({Id}) => {
         axios
         .patch(`http://146.56.98.153:8080/users`,
         {
+            employeeId: employeeId,
             name : editedName,
             deptName : editedDep,
             position : editedRank,
@@ -181,6 +232,7 @@ const HrProfileDetail = ({Id}) => {
         })
         .catch((error) => {
             message.error('직원 정보가 정상적으로 수정되지 않았습니다.');
+            console.log(error);
         })
     }
 
@@ -254,14 +306,6 @@ const HrProfileDetail = ({Id}) => {
             <EntitlementGridContainer>
                 <Title2>자격증</Title2>
                 <HorizonLine />
-                {/* <EntitlementGrid className="ag-theme-alpine">
-                    <AgGridReact
-                        rowData={rowData}
-                        columnDefs={columnDefs}
-                        animateRows={true}
-                        rowSelection='multiple'
-                    />
-                </EntitlementGrid> */}
 
                 <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
                     <BtnBox>

@@ -63,6 +63,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
     const [tabElements, setTabElements] = useState<{ title: string; fixed: boolean }[]>([]);
     const [activeTab, setActiveTab] = useState<string | null>(null);
     const [data, setData] = useState({});
+    const [photo, setPhoto] = useState(null);
 
     const onClick: MenuProps['onClick'] = (e) => {
         const selectedKey = e.key;
@@ -139,6 +140,7 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
             .then(function (response) {
                 if (response.status === 200) {
                     setData(response.data.info);
+                    setPhoto(response.data.resource);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
@@ -152,8 +154,8 @@ const NavBar: React.FC<NavBarProps> = ({ onAddTab }) => {
     return (
         <Space direction="vertical" size={20}>
             <Space wrap size={16}>
-            {data.photo ? (
-                <ProfileImg src={data.photo} onClick={toMyPage} />
+            {photo ? (
+                <ProfileImg src={photo} onClick={toMyPage} />
             ) : (
                 <Avatar
                     onClick={toMyPage}

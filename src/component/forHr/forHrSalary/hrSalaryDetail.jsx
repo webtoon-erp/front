@@ -29,11 +29,11 @@ const HrSalaryDetail = () => {
             </FlexBox>
             <HorizonLine />
             <DetailContentContainer>
-                <SalaryInfoBox>지급계좌 <SalaryInfoData>{data.bankAccount}</SalaryInfoData></SalaryInfoBox>
-                <SalaryInfoBox>연봉 <SalaryInfoData>{data.yearSalary}</SalaryInfoData></SalaryInfoBox>
-                <SalaryInfoBox>월급 <SalaryInfoData>{data.monthSalary}</SalaryInfoData></SalaryInfoBox>
-                <SalaryInfoBox>추가수당 <SalaryInfoData>{data.addSalary}</SalaryInfoData></SalaryInfoBox>
-                <SalaryInfoBox>자격수당 <SalaryInfoData>{data.qualSalary}</SalaryInfoData></SalaryInfoBox>
+                <SalaryInfoBox>지급계좌 <SalaryInfoData>{data && data.bankAccount}</SalaryInfoData></SalaryInfoBox>
+                <SalaryInfoBox>연봉 <SalaryInfoData>{data && data.yearSalary}</SalaryInfoData></SalaryInfoBox>
+                <SalaryInfoBox>월급 <SalaryInfoData>{data && data.monthSalary}</SalaryInfoData></SalaryInfoBox>
+                <SalaryInfoBox>추가수당 <SalaryInfoData>{data && data.addSalary}</SalaryInfoData></SalaryInfoBox>
+                <SalaryInfoBox>자격수당 <SalaryInfoData>{data && data.qualSalary}</SalaryInfoData></SalaryInfoBox>
             </DetailContentContainer>
         </HrSalaryDetailContainer>
     )
