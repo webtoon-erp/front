@@ -17,7 +17,14 @@ const ViewList = () => {
     const columnDefs = [
         {headerName: '제목', field: 'title', sortable: true, filter: true, width: '150px'},
         {headerName: '요청자', field: 'reqUser', sortable: true, filter: true, width: '130px'},
-        {headerName: '납기일', field: 'LocalDate', sortable: true, filter: true, width: '130px'},
+        {headerName: '납기일', field: 'doneDate', sortable: true, filter: true, width: '130px', 
+            cellRenderer: (data) => {
+                const year = data.value[0];
+                const month = ("0" + data.value[1]).slice(-2); // 월은 0부터 시작하므로 1을 더해줍니다.
+                const day = ("0" + data.value[2]).slice(-2);
+                return `${year}${month}${day}`;
+            }
+        },
         {headerName: '승인자', field: 'itUser', sortable: true, filter: true, width: '130px'},
         {
             headerName: '상태',
@@ -74,8 +81,6 @@ const ViewList = () => {
             .then((response) => {
                 if (response.status === 200) {
                     setRowData(response.data);
-                    console.log("response.data",response.data);
-                    console.log("요청 성공");
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
