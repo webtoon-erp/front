@@ -197,9 +197,9 @@ const ViewList = () => {
                         </Box>
                     </MoreOuterBox>
                     
-                    <RequestStateGrid className="ag-theme-alpine" style={{ height: '200px', width: '200px' }}>
+                    {/* <RequestStateGrid className="ag-theme-alpine" style={{ height: '200px', width: '200px' }}>
                         <canvas ref={chartRef} width="200px" height="200px" />
-                    </RequestStateGrid>
+                    </RequestStateGrid> */}
                 </FlexBox>
             </RequestStateContainer>
         </FlexBox>
