@@ -67,39 +67,45 @@ const HrProfileDetail = ({Id}) => {
         });
     }, []);
 
-    // const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState('');
+    const [qlfcId, setQlfcId] = useState('');
+    const [qlfcType, setQlfcType] = useState('');
+    const [content, setContent] = useState('');
+    const [qlfcDate, setQlfcDate] = useState('');
 
-    // useEffect(() => {
-    //     const employeeId = sessionStorage.getItem("employeeId");
-    //     setUserId(employeeId || "");
-    // }, []);
+
+    useEffect(() => {
+        const employeeId = sessionStorage.getItem("employeeId");
+        setUserId(employeeId || "");
+    }, []);
     
-    //  ag-grid 현재 편집 모드 종료하는 역할
     const onBtStopEditing = useCallback(() => {
-        gridRef.current.api.stopEditing();
+        axios
+            .post('http://146.56.98.153:8080/users/qualification', 
+            {
+                employeeId : userId,
+                qlfcType : qlfcType,
+                content : content,
+                qlfcDate : qlfcDate,
+            }
+            ,
+            {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    message.success('추가 성공');
+                    setRowData(null);
+                } else {
+                    message.error('추가 실패');
+                }
+            }).catch((error) => {
+                console.error('데이터를 불러오는데 실패했습니다.', error);
+            });
 
-        // axios
-        //     .post('http://146.56.98.153:8080//users/qualification', 
-        //     {
-        //         employeeId : userId,
-        //         qlfcType : qlfcType,
-        //         content : content,
-        //         qlfcDate : qlfcDate,
-        //     }
-        //     ,
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json;charset=UTF-8',
-        //         },
-        //     })
-        //     .then((response) => {
-        //         if (response.status === 200) {
-        //             message.success('삭제 성공');
-        //             setRowData(null);
-        //         } else {
-        //             message.error('삭제 실패');
-        //         }
-        //     });
+        gridRef.current.api.stopEditing();
     }, []);
     
     const onRemoveSelected = useCallback(() => {
@@ -111,7 +117,7 @@ const HrProfileDetail = ({Id}) => {
         axios
             .delete('http://146.56.98.153:8080//users/qualification', 
             {
-                // qualificationId: Id
+                qualificationId: qlfcId
             }
             ,
             {
@@ -171,6 +177,10 @@ const HrProfileDetail = ({Id}) => {
                     setDayOff(empInfo.dayOff);
                     setPhoto(response.data.resource);
                     setRowData(empInfo.qualifications || []);
+                    setQlfcId(empInfo.qualifications.qlfcId);
+                    setQlfcType(empInfo.qualifications.qlfcType);
+                    setContent(empInfo.qualifications.content);
+                    setQlfcDate(empInfo.qualifications.qlfcDate);
                 }
             })
             .catch((error) => {
