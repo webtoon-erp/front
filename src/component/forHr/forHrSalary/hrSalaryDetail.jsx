@@ -5,7 +5,7 @@ import theme from '../../../style/theme';
 import HorizonLine from '../../horizonLine';
 
 const HrSalaryDetail = () => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState();
 
     useEffect(() => {
         const userId = sessionStorage.getItem('employeeId');
@@ -14,7 +14,7 @@ const HrSalaryDetail = () => {
             axios
                 .get(`http://146.56.98.153:8080/pays/${userId}`).then((response)=> {
                     setData(response.data.monthPay);
-                    console.log("샐러리 데이터: " + response.data.monthPay);
+                    console.log("샐러리 데이터: " + response.data);
                 })
                 .catch((error) => {
                     console.error('Error fetching attendance data:', error);

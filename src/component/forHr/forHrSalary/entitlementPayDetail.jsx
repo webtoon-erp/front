@@ -57,7 +57,6 @@ const EntitlementPayDetail = () => {
             .then((response) => {
                 if (response.status === 200) {
                     setRowData(response.data.qualificationList);
-                    console.log("response.data", response.data);
                 } else {
                     message.error('데이터를 불러오는데 실패했습니다.');
                 }
