@@ -79,6 +79,7 @@ const HrProfileDetail = ({Id}) => {
         setUserId(employeeId || "");
     }, []);
     
+    const gridApis = [];
     const onBtStopEditing = useCallback(() => {
         axios
             .post('http://146.56.98.153:8080/users/qualification', 
@@ -86,12 +87,12 @@ const HrProfileDetail = ({Id}) => {
                 employeeId : userId,
                 qlfcType : qlfcType,
                 content : content,
-                qlfcDate : qlfcDate,
+                qlfcDate : qlfcDate
             }
             ,
             {
                 headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: 'Bearer ' + employeeToken,
                 },
             })
             .then((response) => {
@@ -106,7 +107,9 @@ const HrProfileDetail = ({Id}) => {
             });
 
         gridRef.current.api.stopEditing();
-    }, []);
+        const gridApi = gridRef.current.api;
+        gridApis.push(gridApi);
+    },  []);
     
     const onRemoveSelected = useCallback(() => {
         const selectedData = gridRef.current.api.getSelectedRows();
@@ -115,7 +118,7 @@ const HrProfileDetail = ({Id}) => {
         });
 
         axios
-            .delete('http://146.56.98.153:8080//users/qualification', 
+            .delete('http://146.56.98.153:8080/users/qualification', 
             {
                 qualificationId: qlfcId
             }
